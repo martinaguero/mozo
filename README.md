@@ -1,2 +1,0 @@
-# mozo
-Dependencies management
