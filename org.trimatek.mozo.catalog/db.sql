@@ -1,0 +1,1 @@
+SET @@global.innodb_large_prefix = 1;
