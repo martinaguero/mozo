@@ -53,9 +53,9 @@ class TCRScannerService {
 			}
 		}
 		if (products != null && products.size() > 0) {
-			return new Manufacturer(getManufacturerId(products.get(0)), snapshot, products);
+			return new Manufacturer(getManufacturerId(products.get(0)), snapshot, path, products);
 		} else if (manufacturers != null && manufacturers.size() > 0) {
-			return new Repository(getRepositoryId(path), snapshot, manufacturers);
+			return new Repository(getRepositoryId(path), snapshot, path, manufacturers);
 		}
 		return entity;
 	}

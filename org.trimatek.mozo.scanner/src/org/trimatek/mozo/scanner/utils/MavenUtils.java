@@ -32,7 +32,7 @@ public class MavenUtils {
 		FileUtils.copyURLToFile(url, file);
 		Model model = modelReader.read(file, params);
 		System.out.println("POM: " + model.getArtifactId());
-		Version version = new Version(buildId(model), snapshot, model.getVersion(), path, file);
+		Version version = new Version(buildId(model), snapshot, path, model.getVersion(), file);
 		for (Dependency d : model.getDependencies()) {
 			Version dep = new Version(buildId(d), snapshot, d.getVersion(), null, null);
 			version.addDependency(dep);
@@ -47,7 +47,7 @@ public class MavenUtils {
 		FileUtils.copyURLToFile(url, file);
 		Metadata metadata = metaReader.read(file, params);
 		System.out.println("XML: " + metadata.getArtifactId());
-		return new Product(metadata.getArtifactId(), snapshot, versions, file, path);
+		return new Product(metadata.getArtifactId(), snapshot, path, versions, file);
 	}
 
 	public static String getManufacturerId(Product product) throws MetadataParseException, IOException {
