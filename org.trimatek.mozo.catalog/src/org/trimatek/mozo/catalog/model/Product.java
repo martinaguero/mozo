@@ -33,7 +33,7 @@ public class Product extends RepoEntity {
 		setArtifactId(artifactId);
 	}
 
-	public Product(String artifactId, long snapshot, List<Version> versions, File dataSource, String path) {
+	public Product(String artifactId, long snapshot, String path, List<Version> versions, File dataSource) {
 		super(snapshot);
 		setArtifactId(artifactId);
 		setDataSource(dataSource);

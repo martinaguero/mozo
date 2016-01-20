@@ -32,9 +32,10 @@ public class Manufacturer extends RepoEntity {
 		setArtifactId(artifactId);
 	}
 	
-	public Manufacturer(String artifactId, long snapshot, List<Product> products){
+	public Manufacturer(String artifactId, long snapshot, String path, List<Product> products){
 		super(snapshot);
 		setArtifactId(artifactId);
+		setUrl(path);
 		this.products = new HashSet<Product>(products);
 		for(Product product : this.products){
 			product.setManufacturer(this);

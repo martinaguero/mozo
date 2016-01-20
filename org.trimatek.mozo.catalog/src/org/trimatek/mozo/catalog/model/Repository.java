@@ -25,9 +25,10 @@ public class Repository extends RepoEntity {
 		setArtifactId(artifactId);
 	}
 
-	public Repository(String artifactId, long snapshot, List<Manufacturer> manufacturers) {
+	public Repository(String artifactId, long snapshot, String path, List<Manufacturer> manufacturers) {
 		super(snapshot);
 		setArtifactId(artifactId);
+		setUrl(path);
 		this.manufacturers = new HashSet<Manufacturer>(manufacturers);
 		for(Manufacturer manufacturer : this.manufacturers){
 			manufacturer.setRepository(this);
