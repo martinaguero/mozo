@@ -1,11 +1,11 @@
 package org.trimatek.mozo.catalog.model;
 
-public enum Repositories {
+public enum RepositoryEnum {
 	TheCentralRepository("https://repo1.maven.org/maven2/");
 
 	public String path;
 
-	Repositories(String path) {
+	RepositoryEnum(String path) {
 		this.path = path;
 	}
 

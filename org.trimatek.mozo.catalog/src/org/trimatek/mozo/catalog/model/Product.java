@@ -36,8 +36,11 @@ public class Product extends RepoEntity {
 	public Product(String artifactId, long snapshot, List<Version> versions, File dataSource) {
 		super(snapshot);
 		setArtifactId(artifactId);
-		this.versions = new HashSet<Version>(versions);
 		setDataSource(dataSource);
+		this.versions = new HashSet<Version>(versions);
+		for(Version version : this.versions){
+			version.setProduct(this);
+		}
 	}
 
 	public Manufacturer getManufacturer() {

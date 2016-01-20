@@ -29,6 +29,9 @@ public class Repository extends RepoEntity {
 		super(snapshot);
 		setArtifactId(artifactId);
 		this.manufacturers = new HashSet<Manufacturer>(manufacturers);
+		for(Manufacturer manufacturer : this.manufacturers){
+			manufacturer.setRepository(this);
+		}
 	}
 
 	public Set<Manufacturer> getManufacturers() {
