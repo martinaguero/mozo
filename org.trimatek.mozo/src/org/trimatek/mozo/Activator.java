@@ -42,12 +42,13 @@ public class Activator implements BundleActivator, ServiceListener {
 		scannerService = (ScannerService) scannerServiceTracker.getService();
 		catalogService = (CatalogService) catalogServiceTracker.getService();
 
-		long snapshot = 4;
+		long snapshot = 8;
 		RepoEntity entity = scannerService.scan("https://repo1.maven.org/maven2/abbot/", snapshot);
 		if (Manufacturer.class.isInstance(entity)) {
 			System.out.println("es manufacturer");
 			Repository repo = new Repository("tcr", snapshot);
 			repo.addManufacturer((Manufacturer) entity);
+			((Manufacturer)entity).setRepository(repo);
 			print(repo);
 			catalogService.save(repo);
 		}
