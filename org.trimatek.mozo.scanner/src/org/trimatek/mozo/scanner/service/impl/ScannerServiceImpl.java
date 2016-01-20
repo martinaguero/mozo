@@ -6,7 +6,7 @@ import static org.trimatek.mozo.scanner.Config.PROXY_PORT;
 import java.io.IOException;
 
 import org.trimatek.mozo.catalog.model.RepoEntity;
-import org.trimatek.mozo.catalog.model.Repositories;
+import org.trimatek.mozo.catalog.model.RepositoryEnum;
 import org.trimatek.mozo.scanner.service.ScannerService;
 
 public class ScannerServiceImpl implements ScannerService {
@@ -27,7 +27,7 @@ public class ScannerServiceImpl implements ScannerService {
 	}
 
 	@Override
-	public RepoEntity scan(Repositories target, long snapshot) throws IOException {
+	public RepoEntity scan(RepositoryEnum target, long snapshot) throws IOException {
 		return scanner.scan(target.path, snapshot);
 	}
 
