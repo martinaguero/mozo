@@ -47,7 +47,7 @@ public class MavenUtils {
 		FileUtils.copyURLToFile(url, file);
 		Metadata metadata = metaReader.read(file, params);
 		System.out.println("XML: " + metadata.getArtifactId());
-		return new Product(metadata.getArtifactId(), snapshot, versions, file);
+		return new Product(metadata.getArtifactId(), snapshot, versions, file, path);
 	}
 
 	public static String getManufacturerId(Product product) throws MetadataParseException, IOException {
