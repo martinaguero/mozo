@@ -42,18 +42,33 @@ public class Activator implements BundleActivator, ServiceListener {
 		scannerService = (ScannerService) scannerServiceTracker.getService();
 		catalogService = (CatalogService) catalogServiceTracker.getService();
 
-		long snapshot = 8;
-		RepoEntity entity = scannerService.scan("https://repo1.maven.org/maven2/abbot/", snapshot);
+		long snapshot = 2;
+		//Repository repo = new Repository("tcr", snapshot);
+		Repository repo = new Repository("TCR", snapshot, "https://repo1.maven.org/maven2/abbot", null);
+		
+		RepoEntity entity = scannerService.scan("https://repo1.maven.org/maven2/abbot", snapshot);
 		if (Manufacturer.class.isInstance(entity)) {
-			System.out.println("es manufacturer");
-			Repository repo = new Repository("tcr", snapshot);
 			repo.addManufacturer((Manufacturer) entity);
-			((Manufacturer)entity).setRepository(repo);
+			((Manufacturer) entity).setRepository(repo);
 			print(repo);
 			catalogService.save(repo);
 		}
-		//save(catalogService);
-
+		
+//		System.out.println("ID " + repo.getId());
+		
+//		Repository r = catalogService.loadRepository(128);
+//		System.out.println("ID " + r.getArtifactId());
+//		
+//		catalogService.saveOrUpdate(r);
+		
+		RepoEntity ac = scannerService.scan("https://repo1.maven.org/maven2/activecluster", snapshot);
+		if (Manufacturer.class.isInstance(ac)) {
+			repo.addManufacturer((Manufacturer) ac);
+			((Manufacturer) ac).setRepository(repo);
+			print(repo);
+			catalogService.saveOrUpdate(repo);
+		}
+//		 save(catalogService);
 
 	}
 
@@ -101,13 +116,12 @@ public class Activator implements BundleActivator, ServiceListener {
 						for (Version v : p.getVersions()) {
 							System.out
 									.println("\t\t\tVERSION: " + "ID: " + v.getId() + " snapshot: " + v.getSnapshot());
-							v.setUrl("http://www.tcr.com");
-							 if (v.getDependencies() != null) {
-							 for (Version d : v.getDependencies()) {
-							 System.out.println("\t\t\t\tDEPENDENCIA: " + "ID:" + d.getId() + " snapshot: "
-							 + d.getSnapshot());
-							 }
-							 }
+							if (v.getDependencies() != null) {
+								for (Version d : v.getDependencies()) {
+									System.out.println("\t\t\t\tDEPENDENCIA: " + "ID:" + d.getId() + " snapshot: "
+											+ d.getSnapshot());
+								}
+							}
 						}
 					}
 				}
