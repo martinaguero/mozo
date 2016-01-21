@@ -12,8 +12,8 @@ import org.trimatek.mozo.catalog.service.CatalogService;
 public class CatalogServiceImpl implements CatalogService {
 
 	private EntityManagerFactory entityManagerFactory;
-	
-	public CatalogServiceImpl(EntityManagerFactory entityManagerFactory){
+
+	public CatalogServiceImpl(EntityManagerFactory entityManagerFactory) {
 		this.entityManagerFactory = entityManagerFactory;
 	}
 
@@ -21,7 +21,7 @@ public class CatalogServiceImpl implements CatalogService {
 	public void save(Repository repository) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		entityManager.getTransaction().begin();
-		
+
 		entityManager.persist(repository);
 
 		entityManager.getTransaction().commit();
@@ -33,10 +33,31 @@ public class CatalogServiceImpl implements CatalogService {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		entityManager.getTransaction().begin();
 		List<Repository> result = entityManager.createQuery("from Repository", Repository.class).getResultList();
-		
+
 		entityManager.getTransaction().commit();
 		entityManager.close();
 		return result;
 	}
-	
+
+	public Repository loadRepository(long id) {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		entityManager.getTransaction().begin();
+		Repository r = entityManager.createNamedQuery("findRepositoryById", Repository.class).setParameter("rid", id)
+				.getSingleResult();
+		entityManager.getTransaction().commit();
+		entityManager.close();
+		return r;
+	}
+
+	@Override
+	public void saveOrUpdate(Repository repository) {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		entityManager.getTransaction().begin();
+
+		entityManager.merge(repository);
+
+		entityManager.getTransaction().commit();
+		entityManager.close();
+	}
+
 }

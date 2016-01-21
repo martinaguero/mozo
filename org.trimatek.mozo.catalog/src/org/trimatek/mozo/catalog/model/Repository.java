@@ -7,11 +7,13 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "REPOSITORY")
+@NamedQuery(name = "findRepositoryById", query = "from Repository r where r.id like :rid")
 public class Repository extends RepoEntity {
 
 	@OneToMany(mappedBy = "repository", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -29,9 +31,11 @@ public class Repository extends RepoEntity {
 		super(snapshot);
 		setArtifactId(artifactId);
 		setUrl(path);
-		this.manufacturers = new HashSet<Manufacturer>(manufacturers);
-		for(Manufacturer manufacturer : this.manufacturers){
-			manufacturer.setRepository(this);
+		if (manufacturers != null) {
+			this.manufacturers = new HashSet<Manufacturer>(manufacturers);
+			for (Manufacturer manufacturer : this.manufacturers) {
+				manufacturer.setRepository(this);
+			}
 		}
 	}
 

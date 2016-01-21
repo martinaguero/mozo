@@ -8,6 +8,10 @@ public interface CatalogService {
 
 	public void save(Repository repository);
 	
+	public void saveOrUpdate(Repository repository);
+	
 	public Collection<Repository> listAllRepositories();
+	
+	public Repository loadRepository(long id);
 	
 }
