@@ -42,33 +42,47 @@ public class Activator implements BundleActivator, ServiceListener {
 		scannerService = (ScannerService) scannerServiceTracker.getService();
 		catalogService = (CatalogService) catalogServiceTracker.getService();
 
-		long snapshot = 2;
-		//Repository repo = new Repository("tcr", snapshot);
-		Repository repo = new Repository("TCR", snapshot, "https://repo1.maven.org/maven2/abbot", null);
-		
-		RepoEntity entity = scannerService.scan("https://repo1.maven.org/maven2/abbot", snapshot);
-		if (Manufacturer.class.isInstance(entity)) {
-			repo.addManufacturer((Manufacturer) entity);
-			((Manufacturer) entity).setRepository(repo);
-			print(repo);
-			catalogService.save(repo);
-		}
-		
-//		System.out.println("ID " + repo.getId());
-		
-//		Repository r = catalogService.loadRepository(128);
-//		System.out.println("ID " + r.getArtifactId());
-//		
-//		catalogService.saveOrUpdate(r);
-		
-		RepoEntity ac = scannerService.scan("https://repo1.maven.org/maven2/activecluster", snapshot);
-		if (Manufacturer.class.isInstance(ac)) {
-			repo.addManufacturer((Manufacturer) ac);
-			((Manufacturer) ac).setRepository(repo);
-			print(repo);
-			catalogService.saveOrUpdate(repo);
-		}
-//		 save(catalogService);
+//		Repository repo = new Repository();
+//		repo.setSnapshot(new Long(1));
+//		catalogService.save(repo);
+
+		Repository repo = catalogService.loadRepository(new Long(1));
+		System.out.println("ID " + repo.getId());
+
+		RepoEntity ac = scannerService.scan(repo, "https://repo1.maven.org/maven2/HTTPClient", catalogService);
+
+		// RepoEntity entity =
+		// scannerService.scan(repo,"https://repo1.maven.org/maven2",
+		// catalogService);
+		//
+		// System.out.println(entity.getId());
+
+		// if (Manufacturer.class.isInstance(entity)) {
+		// repo.addManufacturer((Manufacturer) entity);
+		// ((Manufacturer) entity).setRepository(repo);
+		// print(repo);
+		// catalogService.save(repo);
+		// } else if (Repository.class.isInstance(entity)) {
+		// print((Repository) entity);
+		// catalogService.save((Repository) entity);
+		// }
+
+		// System.out.println("ID " + repo.getId());
+
+		// Repository r = catalogService.loadRepository(new Long(16));
+		// System.out.println("ID " + r.getArtifactId());
+		// scannerService.scan(r,"xx",catalogService);
+
+		// RepoEntity ac =
+		// scannerService.scan("https://repo1.maven.org/maven2/activecluster",
+		// snapshot);
+		// if (Manufacturer.class.isInstance(ac)) {
+		// repo.addManufacturer((Manufacturer) ac);
+		// ((Manufacturer) ac).setRepository(repo);
+		// print(repo);
+		// catalogService.saveOrUpdate(repo);
+		// }
+		// save(catalogService);
 
 	}
 
