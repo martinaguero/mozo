@@ -6,7 +6,10 @@ import static org.trimatek.mozo.scanner.Config.PROXY_PORT;
 import java.io.IOException;
 
 import org.trimatek.mozo.catalog.model.RepoEntity;
+import org.trimatek.mozo.catalog.model.Repository;
 import org.trimatek.mozo.catalog.model.RepositoryEnum;
+import org.trimatek.mozo.catalog.service.CatalogService;
+import org.trimatek.mozo.scanner.exception.ScannerException;
 import org.trimatek.mozo.scanner.service.ScannerService;
 
 public class ScannerServiceImpl implements ScannerService {
@@ -29,6 +32,14 @@ public class ScannerServiceImpl implements ScannerService {
 	@Override
 	public RepoEntity scan(RepositoryEnum target, long snapshot) throws IOException {
 		return scanner.scan(target.path, snapshot);
+	}
+
+	@Override
+	public RepoEntity scan(Repository repository, String path, CatalogService catalogService) throws IOException, ScannerException {
+		if (repository.getId() == null) {
+			throw new ScannerException("The repository object is not associated with a persistence context.");
+		}
+		return scanner.scan(repository, path, catalogService);
 	}
 
 }

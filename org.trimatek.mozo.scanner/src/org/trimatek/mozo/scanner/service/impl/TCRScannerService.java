@@ -1,7 +1,7 @@
 package org.trimatek.mozo.scanner.service.impl;
 
-import static org.trimatek.mozo.scanner.Config.MVN_POM;
 import static org.trimatek.mozo.scanner.Config.CONNECTION_TIMEOUT;
+import static org.trimatek.mozo.scanner.Config.MVN_POM;
 import static org.trimatek.mozo.scanner.utils.MavenUtils.getManufacturerId;
 import static org.trimatek.mozo.scanner.utils.StringUtils.getRepositoryId;
 
@@ -18,6 +18,7 @@ import org.trimatek.mozo.catalog.model.Product;
 import org.trimatek.mozo.catalog.model.RepoEntity;
 import org.trimatek.mozo.catalog.model.Repository;
 import org.trimatek.mozo.catalog.model.Version;
+import org.trimatek.mozo.catalog.service.CatalogService;
 import org.trimatek.mozo.scanner.utils.MavenUtils;
 import org.trimatek.mozo.scanner.utils.StringUtils;
 
@@ -70,6 +71,12 @@ class TCRScannerService {
 			entity = MavenUtils.processMetadata(path, snapshot, versions);
 		}
 		return entity;
+	}
+	
+	RepoEntity scan(Repository repository, String path, CatalogService catalogService){
+		catalogService.saveOrUpdate(repository);
+		
+		return null;
 	}
 
 }
