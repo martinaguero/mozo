@@ -12,6 +12,6 @@ public interface CatalogService {
 	
 	public Collection<Repository> listAllRepositories();
 	
-	public Repository loadRepository(long id);
+	public Repository loadRepository(Long id);
 	
 }

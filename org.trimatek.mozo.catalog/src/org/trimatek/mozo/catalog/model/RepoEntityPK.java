@@ -4,41 +4,41 @@ import java.io.Serializable;
 
 public class RepoEntityPK implements Serializable {
 
-	private long id;
-	private long snapshot;
+	private Long id;
+	private Long snapshot;
 
 	public RepoEntityPK() {
 	}
-	
-	public long getId() {
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public long getSnapshot() {
+	public Long getSnapshot() {
 		return snapshot;
 	}
 
-	public void setSnapshot(long snapshot) {
+	public void setSnapshot(Long snapshot) {
 		this.snapshot = snapshot;
 	}
 
 	@Override
 	public int hashCode() {
-		return new Long(id).hashCode() + new Long(snapshot).hashCode();
+		return id.hashCode() + snapshot.hashCode();
 	}
 
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof RepoEntityPK) {
 			RepoEntityPK rePk = (RepoEntityPK) obj;
-			if (!new Long(rePk.getId()).equals(getId())) {
+			if (!rePk.getId().equals(getId())) {
 				return false;
 			}
-			if (!new Long(rePk.getSnapshot()).equals(getSnapshot())) {
+			if (!rePk.getSnapshot().equals(getSnapshot())) {
 				return false;
 			}
 			return true;

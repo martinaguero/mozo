@@ -16,9 +16,9 @@ public class RepoEntity implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	protected long id;
+	protected Long id;
 	@Id
-	protected long snapshot;
+	protected Long snapshot;
 	protected String artifactId;
 	protected String url;
 	protected File dataSource;
@@ -26,25 +26,25 @@ public class RepoEntity implements Serializable {
 	protected RepoEntity() {
 	}
 
-	protected RepoEntity(long snapshot) {
+	protected RepoEntity(Long snapshot) {
 		setSnapshot(snapshot);
 	}
 
 	@Column(name="id")
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
 	@Column(name="snapshot")
-	public long getSnapshot() {
+	public Long getSnapshot() {
 		return snapshot;
 	}
 
-	public void setSnapshot(long snapshot) {
+	public void setSnapshot(Long snapshot) {
 		this.snapshot = snapshot;
 	}
 
