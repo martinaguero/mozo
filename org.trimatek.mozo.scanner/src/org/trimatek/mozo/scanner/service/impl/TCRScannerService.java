@@ -1,18 +1,15 @@
 package org.trimatek.mozo.scanner.service.impl;
 
-import static org.trimatek.mozo.scanner.Config.CONNECTION_TIMEOUT;
 import static org.trimatek.mozo.scanner.Config.MVN_POM;
 import static org.trimatek.mozo.scanner.utils.MavenUtils.getManufacturerId;
 import static org.trimatek.mozo.scanner.utils.StringUtils.getRepositoryId;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.maven.model.io.ModelParseException;
-import org.jsoup.Jsoup;
 import org.trimatek.mozo.catalog.model.Manufacturer;
 import org.trimatek.mozo.catalog.model.Product;
 import org.trimatek.mozo.catalog.model.RepoEntity;
@@ -20,6 +17,7 @@ import org.trimatek.mozo.catalog.model.Repository;
 import org.trimatek.mozo.catalog.model.Version;
 import org.trimatek.mozo.catalog.service.CatalogService;
 import org.trimatek.mozo.scanner.utils.MavenUtils;
+import org.trimatek.mozo.scanner.utils.RemoteUtils;
 import org.trimatek.mozo.scanner.utils.StringUtils;
 
 class TCRScannerService {
@@ -31,8 +29,7 @@ class TCRScannerService {
 		List<Version> versions = new ArrayList<Version>();
 		List<Product> products = new ArrayList<Product>();
 		List<Manufacturer> manufacturers = new ArrayList<Manufacturer>();
-		BufferedReader br = new BufferedReader(
-				new StringReader(Jsoup.connect(path).timeout(CONNECTION_TIMEOUT).get().body().text()));
+		BufferedReader br = RemoteUtils.read(path);
 		while ((line = br.readLine()) != null) {
 			token = StringUtils.getMVNEntity(line);
 			System.out.println("LÍNEA:" + line);
@@ -72,11 +69,26 @@ class TCRScannerService {
 		}
 		return entity;
 	}
-	
-	RepoEntity scan(Repository repository, String path, CatalogService catalogService){
-		catalogService.saveOrUpdate(repository);
-		
-		return null;
+
+	RepoEntity scan(Repository repository, String path, CatalogService catalogService) throws IOException {
+		RepoEntity entity;
+		String line;
+		String token;
+		BufferedReader br = RemoteUtils.read(path);
+		while ((line = br.readLine()) != null) {
+			System.out.println("LÍNEA:" + line);
+			token = StringUtils.getDirectory(line);
+			if (StringUtils.getMVNEntity(line) == null && token != null) {
+				entity = scan(path + "/" + token, repository.getSnapshot());
+				if (entity != null && Manufacturer.class.isInstance(entity)) {
+					repository.addManufacturer((Manufacturer) entity);
+					((Manufacturer)entity).setRepository(repository);
+					catalogService.saveOrUpdate(repository);
+					repository = catalogService.loadRepository(repository.getId());
+				}
+			}
+		}
+		return repository;
 	}
 
 }
