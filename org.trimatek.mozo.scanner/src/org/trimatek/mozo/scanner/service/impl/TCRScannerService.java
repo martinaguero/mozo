@@ -34,6 +34,7 @@ class TCRScannerService {
 				new StringReader(Jsoup.connect(path).timeout(CONNECTION_TIMEOUT).get().body().text()));
 		while ((line = br.readLine()) != null) {
 			token = StringUtils.getMVNEntity(line);
+			System.out.println("LÍNEA:" + line);
 			if (token != null) {
 				System.out.println("ENTIDAD:" + token);
 				br.close();

@@ -8,5 +8,6 @@ public class Config {
 	public static final String PROXY_PORT = "8080";
 	public static final String MVN_METADATA = "maven-metadata.xml";
 	public static final String MVN_POM = ".pom";
-	public static final int CONNECTION_TIMEOUT = 5*1000;
+	public static final int CONNECTION_TIMEOUT = 5*2000;
+	public static final String PARSE_ERROR = "<null>";
 }

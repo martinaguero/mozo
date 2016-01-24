@@ -21,7 +21,7 @@ public class StringUtils {
 	public static String getMVNEntity(String line) {
 		String[] parts = line.split(" ");
 		for (String part : parts) {
-			if (part.equals(MVN_METADATA) || part.contains(MVN_POM)) {
+			if (part.equals(MVN_METADATA) || part.endsWith(MVN_POM)) {
 				return part.trim();
 			}
 		}
