@@ -39,7 +39,7 @@ public class MavenUtils {
 			System.out.println("POM: " + model.getArtifactId());
 			version = new Version(buildId(model), snapshot, path, model.getVersion(), file);
 			for (Dependency d : model.getDependencies()) {
-				Version dep = new Version(buildId(d), snapshot, d.getVersion(), null, null);
+				Version dep = new Version(buildId(d), snapshot, null, d.getVersion(), null);
 				version.addDependency(dep);
 			}
 		} catch (Exception e) {
