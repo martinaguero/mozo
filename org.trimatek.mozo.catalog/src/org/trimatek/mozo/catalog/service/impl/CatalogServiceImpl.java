@@ -39,11 +39,11 @@ public class CatalogServiceImpl implements CatalogService {
 		return result;
 	}
 
-	public Repository loadRepository(Long id) {
+	public Repository loadRepository(Long id, Long snapshot) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		entityManager.getTransaction().begin();
-		Repository r = entityManager.createNamedQuery("findRepositoryById", Repository.class).setParameter("rid", id)
-				.getSingleResult();
+		Repository r = entityManager.createNamedQuery("findRepositoryByIdAndSnapshot", Repository.class)
+				.setParameter("rid", id).setParameter("rsnapshot", snapshot).getSingleResult();
 		entityManager.getTransaction().commit();
 		entityManager.close();
 		return r;

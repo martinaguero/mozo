@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "REPOSITORY")
-@NamedQuery(name = "findRepositoryById", query = "from Repository r where r.id = :rid")
+@NamedQuery(name = "findRepositoryByIdAndSnapshot", query = "from Repository r where r.id = :rid and r.snapshot = :rsnapshot")
 public class Repository extends RepoEntity {
 
 	@OneToMany(mappedBy = "repository", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
