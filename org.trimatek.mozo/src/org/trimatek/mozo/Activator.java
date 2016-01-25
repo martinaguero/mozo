@@ -42,14 +42,14 @@ public class Activator implements BundleActivator, ServiceListener {
 		scannerService = (ScannerService) scannerServiceTracker.getService();
 		catalogService = (CatalogService) catalogServiceTracker.getService();
 
-//		Repository repo = new Repository();
-//		repo.setSnapshot(new Long(1));
-//		catalogService.save(repo);
+//		 Repository repo = new Repository();
+//		 repo.setSnapshot(new Long(0));
+//		 catalogService.save(repo);
 
-		Repository repo = catalogService.loadRepository(new Long(1));
-		System.out.println("ID " + repo.getId());
+		Repository repo = catalogService.loadRepository(new Long(1), new Long(0));
+		System.out.println("ID " + repo.getId() + " SNAPSHOT: " + repo.getSnapshot());
 
-		RepoEntity ac = scannerService.scan(repo, "https://repo1.maven.org/maven2/HTTPClient", catalogService);
+//		RepoEntity ac = scannerService.scan(repo, "https://repo1.maven.org/maven2", catalogService);
 
 		// RepoEntity entity =
 		// scannerService.scan(repo,"https://repo1.maven.org/maven2",
