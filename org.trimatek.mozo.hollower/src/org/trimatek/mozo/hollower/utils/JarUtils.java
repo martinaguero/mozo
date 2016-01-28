@@ -3,6 +3,7 @@ package org.trimatek.mozo.hollower.utils;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.jar.JarEntry;
@@ -34,7 +35,7 @@ public class JarUtils {
 				jarPath.lastIndexOf("."));
 	}
 	
-	public static void extractFile(ZipInputStream zipIn, String filePath, int BUFFER_SIZE) throws IOException {
+	public static OutputStream extractFile(ZipInputStream zipIn, String filePath, int BUFFER_SIZE) throws IOException {
         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(filePath));
         byte[] bytesIn = new byte[BUFFER_SIZE];
         int read = 0;
@@ -42,6 +43,7 @@ public class JarUtils {
             bos.write(bytesIn, 0, read);
         }
         bos.close();
+        return bos;
     }
 
 }
