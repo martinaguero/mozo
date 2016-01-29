@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
+import org.apache.bcel.classfile.ClassParser;
+import org.apache.bcel.classfile.JavaClass;
+import org.trimatek.mozo.hollower.tools.Hollower;
 import org.trimatek.mozo.hollower.utils.JarUtils;
 
 public class ExtractTest {
@@ -23,11 +26,20 @@ public class ExtractTest {
 			}
 			if (!jarEntry.isDirectory()) {
 				File file = JarUtils.extractFile(jarFile, jarEntry.getName());
+				if (jarEntry.getName().contains(".class")) {
+					ClassParser cp = new ClassParser(new FileInputStream(file),
+							jarEntry.getName());
+					JavaClass javaClass = cp.parse();
+					if (!javaClass.isInterface()) {
+						Hollower hollower = new Hollower();						
+						javaClass = hollower.hollow(javaClass);
+						javaClass.dump(file);
+					}
+				}
 			}
 
 		}
 		jarFile.close();
 
 	}
-
 }

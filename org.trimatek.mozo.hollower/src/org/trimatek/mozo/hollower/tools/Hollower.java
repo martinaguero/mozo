@@ -47,9 +47,13 @@ public class Hollower {
 		for (int i = 0; i < methods.length; i++) {
 			MethodGen mg = new MethodGen(methods[i], javaClass.getClassName(),
 					cp);
-			Method stripped = deleteInstructions(mg);
-			if (stripped != null)
-				methods[i] = stripped;
+			System.out.println("quitando instrucciones de: " + javaClass.getClassName());
+			System.out.println("método :" + mg.getName());
+			if (mg.getInstructionList()!=null && mg.getInstructionList().size() > 3) {
+				Method stripped = deleteInstructions(mg);
+				if (stripped != null)
+					methods[i] = stripped;
+			}
 		}
 		javaClass.setConstantPool(cp.getFinalConstantPool());
 		return javaClass;
@@ -57,7 +61,6 @@ public class Hollower {
 
 	private Method deleteInstructions(MethodGen mg) {
 		InstructionList il = mg.getInstructionList();
-		//int count = il.size() - 1;
 		Method m = null;
 		InstructionHandle[] handles = il.getInstructionHandles();
 		InstructionHandle ini = handles[0];
