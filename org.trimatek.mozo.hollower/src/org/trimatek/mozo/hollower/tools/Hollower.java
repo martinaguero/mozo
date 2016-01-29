@@ -1,5 +1,8 @@
 package org.trimatek.mozo.hollower.tools;
 
+import org.apache.bcel.classfile.Constant;
+import org.apache.bcel.classfile.ConstantPool;
+import org.apache.bcel.classfile.ConstantUtf8;
 import org.apache.bcel.classfile.Field;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
@@ -16,7 +19,8 @@ public class Hollower {
 	public JavaClass hollow(JavaClass javaClass) {
 		javaClass = deleteNonPublicFields(javaClass);
 		javaClass = deleteNonPublicMethods(javaClass);
-		return hollowMethods(javaClass);
+		javaClass = hollowMethods(javaClass);
+		return hollowConstantPool(javaClass);
 	}
 
 	private JavaClass deleteNonPublicFields(JavaClass javaClass) {
@@ -80,6 +84,36 @@ public class Hollower {
 		m = mg.getMethod();
 		il.dispose();
 		return m;
+	}
+	
+	private JavaClass hollowConstantPool(JavaClass javaClass) {
+		ConstantPool cp = javaClass.getConstantPool();
+		Constant[] constants = cp.getConstantPool();
+		Constant[] newconst = new Constant[constants.length];
+		for (int i = 0; i < constants.length; i++) {
+//			if(ConstantString.class.isInstance(constants[i])){
+//				ConstantString cs = (ConstantString)constants[i];
+//				System.out.println("IDX: " + cs.getStringIndex());
+//				System.out.println(cs.toString());				
+//				ConstantString newcs = new ConstantString(cs.getStringIndex());
+//				newconst[i] = newcs;
+//			} else {
+//				newconst[i] = constants[i];
+//			}
+			if(ConstantUtf8.class.isInstance(constants[i])){
+				ConstantUtf8 cu = (ConstantUtf8)constants[i];
+				System.out.println(cu.toString());
+				System.out.println("bytes:" + cu.getBytes());				
+				ConstantUtf8 newcu = new ConstantUtf8(cu.getBytes());
+				newconst[i] = newcu;
+			} else {
+				newconst[i] = constants[i];
+			}
+			
+		}
+		cp.setConstantPool(newconst);
+		javaClass.setConstantPool(cp);
+		return javaClass;
 	}
 
 }
