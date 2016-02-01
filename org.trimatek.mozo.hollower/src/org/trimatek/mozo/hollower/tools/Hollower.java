@@ -1,7 +1,11 @@
 package org.trimatek.mozo.hollower.tools;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.bcel.classfile.Constant;
 import org.apache.bcel.classfile.ConstantPool;
+import org.apache.bcel.classfile.ConstantString;
 import org.apache.bcel.classfile.ConstantUtf8;
 import org.apache.bcel.classfile.Field;
 import org.apache.bcel.classfile.JavaClass;
@@ -51,9 +55,11 @@ public class Hollower {
 		for (int i = 0; i < methods.length; i++) {
 			MethodGen mg = new MethodGen(methods[i], javaClass.getClassName(),
 					cp);
-			System.out.println("quitando instrucciones de: " + javaClass.getClassName());
+			System.out.println("quitando instrucciones de: "
+					+ javaClass.getClassName());
 			System.out.println("método :" + mg.getName());
-			if (mg.getInstructionList()!=null && mg.getInstructionList().size() > 3) {
+			if (mg.getInstructionList() != null
+					&& mg.getInstructionList().size() > 3) {
 				Method stripped = deleteInstructions(mg);
 				if (stripped != null)
 					methods[i] = stripped;
@@ -85,32 +91,37 @@ public class Hollower {
 		il.dispose();
 		return m;
 	}
-	
+
 	private JavaClass hollowConstantPool(JavaClass javaClass) {
 		ConstantPool cp = javaClass.getConstantPool();
 		Constant[] constants = cp.getConstantPool();
 		Constant[] newconst = new Constant[constants.length];
+		List<Integer> indexes = new ArrayList<Integer>();
+
 		for (int i = 0; i < constants.length; i++) {
-//			if(ConstantString.class.isInstance(constants[i])){
-//				ConstantString cs = (ConstantString)constants[i];
-//				System.out.println("IDX: " + cs.getStringIndex());
-//				System.out.println(cs.toString());				
-//				ConstantString newcs = new ConstantString(cs.getStringIndex());
-//				newconst[i] = newcs;
-//			} else {
-//				newconst[i] = constants[i];
-//			}
-			if(ConstantUtf8.class.isInstance(constants[i])){
-				ConstantUtf8 cu = (ConstantUtf8)constants[i];
+			if (ConstantString.class.isInstance(constants[i])) {
+				ConstantString cs = (ConstantString) constants[i];
+				System.out.println("IDX: " + cs.getStringIndex());
+				indexes.add(new Integer(cs.getStringIndex()));
+			}
+		}
+		for (int i = 0; i < constants.length; i++) {
+			if (ConstantUtf8.class.isInstance(constants[i])) {
+				ConstantUtf8 cu = (ConstantUtf8) constants[i];
 				System.out.println(cu.toString());
-				System.out.println("bytes:" + cu.getBytes());				
-				ConstantUtf8 newcu = new ConstantUtf8(cu.getBytes());
+				System.out.println("bytes:" + cu.getBytes());
+				ConstantUtf8 newcu = null;
+				if (indexes.contains(new Integer(i))) {
+					newcu = new ConstantUtf8("");
+				} else {
+					newcu = new ConstantUtf8(cu.getBytes());
+				}
 				newconst[i] = newcu;
 			} else {
 				newconst[i] = constants[i];
 			}
-			
 		}
+
 		cp.setConstantPool(newconst);
 		javaClass.setConstantPool(cp);
 		return javaClass;
