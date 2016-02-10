@@ -16,7 +16,7 @@ public class ExtractTest {
 	public static void main(String[] args) throws IOException {
 
 		FileInputStream inputStream = new FileInputStream(
-				"F:\\Temp\\lib\\spring.jar");
+				"F:\\Temp\\mozo\\mja.jar");
 		JarInputStream jarFile = new JarInputStream(inputStream);
 		JarEntry jarEntry;
 		while (true) {

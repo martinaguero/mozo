@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.bcel.classfile.Constant;
+import org.apache.bcel.classfile.ConstantClass;
+import org.apache.bcel.classfile.ConstantFieldref;
+import org.apache.bcel.classfile.ConstantInterfaceMethodref;
+import org.apache.bcel.classfile.ConstantMethodref;
+import org.apache.bcel.classfile.ConstantNameAndType;
 import org.apache.bcel.classfile.ConstantPool;
 import org.apache.bcel.classfile.ConstantString;
 import org.apache.bcel.classfile.ConstantUtf8;
@@ -96,8 +101,18 @@ public class Hollower {
 		ConstantPool cp = javaClass.getConstantPool();
 		Constant[] constants = cp.getConstantPool();
 		Constant[] newconst = new Constant[constants.length];
-		List<Integer> indexes = new ArrayList<Integer>();
+		List<Integer> indexes = loadStringIndexes(constants);
+		// newconst = hollowStringLiterals(constants, indexes);
+		// newconst = hollowNameAndType(constants);
+		// newconst = hollowAll(constants);
+		newconst = hollowClass(constants);
+		cp.setConstantPool(newconst);
+		javaClass.setConstantPool(cp);
+		return javaClass;
+	}
 
+	private List<Integer> loadStringIndexes(Constant[] constants) {
+		List<Integer> indexes = new ArrayList<Integer>();
 		for (int i = 0; i < constants.length; i++) {
 			if (ConstantString.class.isInstance(constants[i])) {
 				ConstantString cs = (ConstantString) constants[i];
@@ -105,6 +120,12 @@ public class Hollower {
 				indexes.add(new Integer(cs.getStringIndex()));
 			}
 		}
+		return indexes;
+	}
+
+	private Constant[] hollowStringLiterals(Constant[] constants,
+			List<Integer> indexes) {
+		Constant[] newconst = new Constant[constants.length];
 		for (int i = 0; i < constants.length; i++) {
 			if (ConstantUtf8.class.isInstance(constants[i])) {
 				ConstantUtf8 cu = (ConstantUtf8) constants[i];
@@ -121,10 +142,60 @@ public class Hollower {
 				newconst[i] = constants[i];
 			}
 		}
-
-		cp.setConstantPool(newconst);
-		javaClass.setConstantPool(cp);
-		return javaClass;
+		return newconst;
 	}
 
+	private Constant[] hollowClass(Constant[] constants) {
+		Constant[] newconst = new Constant[constants.length];
+		for (int i = 0; i < constants.length; i++) {
+			if (constants[i] != null)
+				newconst[i] = getInstance(constants[i]);
+		}
+		return newconst;
+	}
+
+	private Constant getInstance(Constant constant) {
+		System.out.println(constant.getClass().getName());
+		switch (constant.getClass().getName()) {
+		case "org.apache.bcel.classfile.ConstantClass":
+			System.out.println("es class");
+			int idx = ((ConstantClass) constant).getNameIndex();
+			return new ConstantClass((ConstantClass)constant);
+		case "org.apache.bcel.classfile.ConstantUtf8":
+			System.out.println("es UTF8");
+			return new ConstantUtf8("");
+		case "org.apache.bcel.classfile.ConstantString":
+			System.out.println("es string");
+			int string_idx = ((ConstantString) constant).getStringIndex();
+			return new ConstantString(string_idx);
+		case "org.apache.bcel.classfile.ConstantMethodref":
+			System.out.println("es method ref");
+			int class_index = ((ConstantMethodref) constant).getClassIndex();
+			int name_and_type_index = ((ConstantMethodref) constant)
+					.getNameAndTypeIndex();
+			return new ConstantMethodref(class_index, name_and_type_index);
+		case "org.apache.bcel.classfile.ConstantNameAndType":
+			System.out.println("es name and type");
+			int name_index = ((ConstantNameAndType) constant).getNameIndex();
+			int signature_index = ((ConstantNameAndType) constant)
+					.getSignatureIndex();
+			return new ConstantNameAndType(name_index, signature_index);
+		case "org.apache.bcel.classfile.ConstantFieldref":
+			System.out.println("es field ref");
+			int ci = ((ConstantFieldref) constant).getClassIndex();
+			int nti = ((ConstantFieldref) constant).getNameAndTypeIndex();
+			return new ConstantFieldref(ci, nti);
+		case "org.apache.bcel.classfile.ConstantInterfaceMethodref":
+			System.out.println("es interface method ref");
+			int class_idx = ((ConstantInterfaceMethodref) constant)
+					.getClassIndex();
+			int name_type_idx = ((ConstantInterfaceMethodref) constant)
+					.getNameAndTypeIndex();
+			return new ConstantInterfaceMethodref(class_idx, name_type_idx);
+		default:
+			System.out.println("NINGUNA");
+			break;
+		}
+		return null;
+	}
 }

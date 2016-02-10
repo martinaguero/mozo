@@ -30,32 +30,32 @@ public class GenerateClassTest {
         //The list of instructions for a method. 
         InstructionList instructionList=new InstructionList();
         
-        //Add the appropriate instructions.
-        
-        //Get the reference to static field out in class java.lang.System.
-        instructionList.append(new GETSTATIC(constantPoolGen.addFieldref("java.lang.System", "out", "Ljava/io/PrintStream;")));
-        
-        //Load the constant
-        instructionList.append(new LDC(constantPoolGen.addString(" You are a real geek!")));
-        
-        //Invoke the method.
-        instructionList.append(new INVOKEVIRTUAL(constantPoolGen.addMethodref("java.io.PrintStream", "println", "(Ljava/lang/String;)V")));
-        
+//        //Add the appropriate instructions.
+//        
+//        //Get the reference to static field out in class java.lang.System.
+//        instructionList.append(new GETSTATIC(constantPoolGen.addFieldref("java.lang.System", "out", "Ljava/io/PrintStream;")));
+//        
+//        //Load the constant
+//        instructionList.append(new LDC(constantPoolGen.addString(" You are a real geek!")));
+//        
+//        //Invoke the method.
+//        instructionList.append(new INVOKEVIRTUAL(constantPoolGen.addMethodref("java.io.PrintStream", "println", "(Ljava/lang/String;)V")));
+//        
         //Return from the method
         instructionList.append(new RETURN());
         
-        MethodGen methodGen=new MethodGen(Constants.ACC_PUBLIC|Constants.ACC_STATIC, Type.VOID, new Type[]{new ArrayType(Type.STRING, 1)}, new String[]{"args"}, "main", "SyntheticClass", instructionList, constantPoolGen);
-        
-        methodGen.setMaxLocals();//Calculate the maximum number of local variables. 
-        methodGen.setMaxStack();//Very important: must calculate the maximum size of the stack.
-        
-        classGen.addMethod(methodGen.getMethod()); //Add the method to the class
+//        MethodGen methodGen=new MethodGen(Constants.ACC_PUBLIC|Constants.ACC_STATIC, Type.VOID, new Type[]{new ArrayType(Type.STRING, 1)}, new String[]{"args"}, "main", "SyntheticClass", instructionList, constantPoolGen);
+//        
+//        methodGen.setMaxLocals();//Calculate the maximum number of local variables. 
+//        methodGen.setMaxStack();//Very important: must calculate the maximum size of the stack.
+//        
+//        classGen.addMethod(methodGen.getMethod()); //Add the method to the class
         
         //Print a few things.
         System.out.println("********Constant Pool**********");
         System.out.println(constantPoolGen.getFinalConstantPool());
         System.out.println("********Method**********");
-        System.out.println(methodGen);
+//        System.out.println(methodGen);
         System.out.println("********Instruction List**********");
         System.out.println(instructionList);
         
