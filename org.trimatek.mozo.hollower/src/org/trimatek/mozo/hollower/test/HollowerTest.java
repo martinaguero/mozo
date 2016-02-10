@@ -11,7 +11,7 @@ public class HollowerTest {
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		HollowerService hs = new HollowerServiceImpl();
-		FileInputStream fi = new FileInputStream(new File("F:\\Temp\\mozo\\mja.jar"));
+		FileInputStream fi = new FileInputStream(new File("F:\\Temp\\mozo\\tester.jar"));
 		hs.hollow(fi);
 
 	}
