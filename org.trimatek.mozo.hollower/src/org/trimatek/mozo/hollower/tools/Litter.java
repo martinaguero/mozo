@@ -18,7 +18,7 @@ public class Litter {
 			throws ClassNotFoundException {
 
 		ClassGen classGen = new ClassGen(javaClass.getClassName(), javaClass
-				.getSuperClass().getClassName(), Config.OUTPUT_DIR
+				.getSuperclassName(), Config.OUTPUT_DIR
 				+ javaClass.getClassName(), Constants.ACC_PUBLIC,
 				javaClass.getInterfaceNames());
 		ConstantPoolGen constantPoolGen = classGen.getConstantPool();
