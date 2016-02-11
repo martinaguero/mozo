@@ -1,12 +1,8 @@
 package org.trimatek.mozo.hollower.tools;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.bcel.Constants;
 import org.apache.bcel.classfile.Field;
 import org.apache.bcel.classfile.JavaClass;
-import org.apache.bcel.classfile.LocalVariable;
 import org.apache.bcel.classfile.Method;
 import org.apache.bcel.generic.ClassGen;
 import org.apache.bcel.generic.ConstantPoolGen;
@@ -36,9 +32,20 @@ public class Litter {
 			}
 		}
 		Field[] fields = javaClass.getFields();
+		int flags;
 		for (Field field : fields) {
 			if (field.isPublic()) {
-				FieldGen fg = new FieldGen(field, constantPoolGen);
+				FieldGen fg;
+				if (field.isStatic()) {
+					flags = Constants.ACC_STATIC;
+					if (field.isFinal()) {
+						flags = flags | Constants.ACC_FINAL;
+					}
+					fg = new FieldGen(flags, field.getType(), field.getName(),
+							constantPoolGen);
+				} else {
+					fg = new FieldGen(field, constantPoolGen);
+				}
 				classGen.addField(fg.getField());
 			}
 		}
@@ -52,10 +59,10 @@ public class Litter {
 		InstructionList instructionList = new InstructionList();
 		instructionList.append(new RETURN());
 
+		// TODO Pendiente obtener el nombre original de los argumentos
 		MethodGen methodGen = new MethodGen(method.getAccessFlags(),
-				method.getReturnType(), method.getArgumentTypes(),
-				getArgNames(method), method.getName(), className,
-				instructionList, constantPoolGen);
+				method.getReturnType(), method.getArgumentTypes(), null,
+				method.getName(), className, instructionList, constantPoolGen);
 
 		if (method.getExceptionTable() != null) {
 			for (String eName : method.getExceptionTable().getExceptionNames()) {
@@ -66,16 +73,13 @@ public class Litter {
 		return methodGen;
 	}
 
-	private String[] getArgNames(Method method) {
-		List<String> argNames = new ArrayList<String>();
-		LocalVariable[] locals = method.getLocalVariableTable()
-				.getLocalVariableTable();
-		for (LocalVariable lv : locals) {
-			if (lv.getStartPC() == 0 && lv.getIndex() > 0) {
-				argNames.add(lv.getName());
-			}
-		}
-		return argNames.toArray(new String[argNames.size()]);
-	}
-
+	/*
+	 * private String[] getArgNames(Method method) { List<String> argNames = new
+	 * ArrayList<String>(); if (!method.getName().equals("<init>")) {
+	 * LocalVariable[] locals = method.getLocalVariableTable()
+	 * .getLocalVariableTable(); for (LocalVariable lv : locals) { if
+	 * (lv.getStartPC() == 0 && lv.getIndex() >= 0 &&
+	 * !lv.getName().equals("this")) { argNames.add(lv.getName()); } } } return
+	 * argNames.toArray(new String[argNames.size()]); }
+	 */
 }
