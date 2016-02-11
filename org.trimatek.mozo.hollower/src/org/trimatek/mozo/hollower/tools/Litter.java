@@ -31,21 +31,9 @@ public class Litter {
 				classGen.addMethod(mg.getMethod());
 			}
 		}
-		Field[] fields = javaClass.getFields();
-		int flags;
-		for (Field field : fields) {
+		for (Field field : javaClass.getFields()) {
 			if (field.isPublic()) {
-				FieldGen fg;
-				if (field.isStatic()) {
-					flags = Constants.ACC_STATIC;
-					if (field.isFinal()) {
-						flags = flags | Constants.ACC_FINAL;
-					}
-					fg = new FieldGen(flags, field.getType(), field.getName(),
-							constantPoolGen);
-				} else {
-					fg = new FieldGen(field, constantPoolGen);
-				}
+				FieldGen fg = generateField(field, constantPoolGen);
 				classGen.addField(fg.getField());
 			}
 		}
@@ -71,6 +59,22 @@ public class Litter {
 		}
 
 		return methodGen;
+	}
+
+	private FieldGen generateField(Field field, ConstantPoolGen constantPoolGen) {
+		FieldGen fg;
+		int flags;
+		if (field.isStatic()) {
+			flags = Constants.ACC_STATIC;
+			if (field.isFinal()) {
+				flags = flags | Constants.ACC_FINAL;
+			}
+			fg = new FieldGen(flags, field.getType(), field.getName(),
+					constantPoolGen);
+		} else {
+			fg = new FieldGen(field, constantPoolGen);
+		}
+		return fg;
 	}
 
 	/*
