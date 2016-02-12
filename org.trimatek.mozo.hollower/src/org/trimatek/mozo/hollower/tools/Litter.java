@@ -63,9 +63,9 @@ public class Litter {
 
 	private FieldGen generateField(Field field, ConstantPoolGen constantPoolGen) {
 		FieldGen fg;
-		int flags;
+		int flags = Constants.ACC_PUBLIC;
 		if (field.isStatic()) {
-			flags = Constants.ACC_STATIC;
+			flags = flags | Constants.ACC_STATIC;
 			if (field.isFinal()) {
 				flags = flags | Constants.ACC_FINAL;
 			}
