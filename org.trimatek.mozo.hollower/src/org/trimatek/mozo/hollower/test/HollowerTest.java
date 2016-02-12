@@ -13,7 +13,7 @@ public class HollowerTest {
 		HollowerService hs = new HollowerServiceImpl();
 		String path = "F:\\Temp\\mozo\\deep.jar";
 		FileInputStream fi = new FileInputStream(new File(path));
-		hs.hollow(fi,path.substring(path.lastIndexOf("\\")));
+		hs.hollow(fi,path.substring(path.lastIndexOf("\\")+1));
 
 	}
 
