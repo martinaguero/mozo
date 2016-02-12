@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
@@ -20,7 +19,7 @@ public class HollowerServiceImpl implements HollowerService {
 	Litter litter = new Litter();
 
 	@Override
-	public OutputStream hollow(InputStream inputStream, String jarName) throws IOException, ClassNotFoundException {
+	public InputStream hollow(InputStream inputStream, String jarName) throws IOException, ClassNotFoundException {
 		Context ctx = new Context(jarName);
 		JarInputStream jarFile = new JarInputStream(inputStream);
 		JarEntry jarEntry;

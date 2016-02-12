@@ -7,7 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.jar.Attributes;
@@ -65,21 +65,16 @@ public class JarUtils {
 		return file;
 	}
 
-	// public static OutputStream buildHollowedJar(Context ctx){
-	// return null;
-	// }
-
-	public static OutputStream buildHollowedJar(Context ctx)
+	public static InputStream buildHollowedJar(Context ctx)
 			throws FileNotFoundException, IOException {
 		Manifest manifest = new Manifest();
 		manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION,
 				"1.0");
 		JarOutputStream target = new JarOutputStream(new FileOutputStream(
-				"f:\\Temp\\mozo\\prueba\\output.jar"), manifest);
+				Config.JARS_DIR + ctx.jarName), manifest);
 		add(new File(ctx.OUTPUT_DIR), target, ctx);
 		target.close();
-
-		return null;
+		return new FileInputStream(Config.JARS_DIR + ctx.jarName);
 	}
 
 	private static void add(File source, JarOutputStream target, Context ctx)
