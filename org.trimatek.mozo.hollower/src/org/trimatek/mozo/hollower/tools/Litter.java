@@ -10,15 +10,15 @@ import org.apache.bcel.generic.FieldGen;
 import org.apache.bcel.generic.InstructionList;
 import org.apache.bcel.generic.MethodGen;
 import org.apache.bcel.generic.RETURN;
-import org.trimatek.mozo.hollower.Config;
+import org.trimatek.mozo.hollower.Context;
 
 public class Litter {
 
-	public JavaClass buildLiteVersion(JavaClass javaClass)
+	public JavaClass buildLiteVersion(JavaClass javaClass, Context ctx)
 			throws ClassNotFoundException {
 
 		ClassGen classGen = new ClassGen(javaClass.getClassName(), javaClass
-				.getSuperclassName(), Config.OUTPUT_DIR
+				.getSuperclassName(), ctx.OUTPUT_DIR
 				+ javaClass.getClassName(), Constants.ACC_PUBLIC,
 				javaClass.getInterfaceNames());
 		ConstantPoolGen constantPoolGen = classGen.getConstantPool();

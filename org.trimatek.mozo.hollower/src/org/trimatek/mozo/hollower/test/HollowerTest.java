@@ -11,8 +11,9 @@ public class HollowerTest {
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		HollowerService hs = new HollowerServiceImpl();
-		FileInputStream fi = new FileInputStream(new File("F:\\Temp\\mozo\\lexer.jar"));
-		hs.hollow(fi);
+		String path = "F:\\Temp\\mozo\\deep.jar";
+		FileInputStream fi = new FileInputStream(new File(path));
+		hs.hollow(fi,path.substring(path.lastIndexOf("\\")));
 
 	}
 
