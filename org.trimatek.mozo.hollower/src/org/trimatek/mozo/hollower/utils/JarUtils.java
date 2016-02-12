@@ -76,13 +76,13 @@ public class JarUtils {
 				"1.0");
 		JarOutputStream target = new JarOutputStream(new FileOutputStream(
 				"f:\\Temp\\mozo\\prueba\\output.jar"), manifest);
-		add(new File(ctx.OUTPUT_DIR), target);
+		add(new File(ctx.OUTPUT_DIR), target, ctx);
 		target.close();
 
 		return null;
 	}
 
-	private static void add(File source, JarOutputStream target)
+	private static void add(File source, JarOutputStream target, Context ctx)
 			throws IOException {
 		BufferedInputStream in = null;
 		try {
@@ -91,19 +91,20 @@ public class JarUtils {
 				if (!name.isEmpty()) {
 					if (!name.endsWith("/"))
 						name += "/";
-					JarEntry entry = new JarEntry(putMask(name,
-							Config.OUTPUT_DIR));
-					entry.setTime(source.lastModified());
-					target.putNextEntry(entry);
-					target.closeEntry();
+					JarEntry entry = new JarEntry(putMask(name, ctx.OUTPUT_DIR));
+					if (!entry.getName().equals("")) {
+						entry.setTime(source.lastModified());
+						target.putNextEntry(entry);
+						target.closeEntry();
+					}
 				}
 				for (File nestedFile : source.listFiles())
-					add(nestedFile, target);
+					add(nestedFile, target, ctx);
 				return;
 			}
 
 			JarEntry entry = new JarEntry(putMask(
-					source.getPath().replace("\\", "/"), Config.OUTPUT_DIR));
+					source.getPath().replace("\\", "/"), ctx.OUTPUT_DIR));
 			entry.setTime(source.lastModified());
 			target.putNextEntry(entry);
 			in = new BufferedInputStream(new FileInputStream(source));
