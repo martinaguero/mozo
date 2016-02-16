@@ -19,7 +19,7 @@ public class Litter {
 
 		ClassGen classGen = new ClassGen(javaClass.getClassName(), javaClass
 				.getSuperclassName(), ctx.OUTPUT_DIR
-				+ javaClass.getClassName(), Constants.ACC_PUBLIC,
+				+ javaClass.getClassName(), javaClass.getAccessFlags(),
 				javaClass.getInterfaceNames());
 		ConstantPoolGen constantPoolGen = classGen.getConstantPool();
 
