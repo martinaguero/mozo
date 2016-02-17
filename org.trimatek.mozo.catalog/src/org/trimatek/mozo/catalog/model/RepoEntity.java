@@ -23,7 +23,7 @@ public class RepoEntity implements Serializable {
 	protected Long snapshot;
 	protected String artifactId;
 	protected String url;
-	protected File dataSource;
+	protected File data;
 
 	protected RepoEntity() {
 	}
@@ -73,13 +73,13 @@ public class RepoEntity implements Serializable {
 	}
 
 	@Basic(fetch=FetchType.LAZY)
-	@Column(name = "datasource")
-	public File getDataSource() {
-		return dataSource;
+	@Column(name = "data")
+	public File getData() {
+		return data;
 	}
 
-	public void setDataSource(File dataSource) {
-		this.dataSource = dataSource;
+	public void setData(File data) {
+		this.data = data;
 	}
 
 }

@@ -18,6 +18,7 @@
         <class>org.trimatek.mozo.catalog.model.Group</class>
         <class>org.trimatek.mozo.catalog.model.Product</class>
         <class>org.trimatek.mozo.catalog.model.Version</class>
+        <class>org.trimatek.mozo.catalog.model.Class</class>
 
         <properties>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />

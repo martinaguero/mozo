@@ -12,6 +12,7 @@ import javax.persistence.JoinColumns;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -20,16 +21,19 @@ public class Version extends RepoEntity {
 
 	private String version;
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumns({ @JoinColumn(name = "product_id", referencedColumnName = "id"),
+	@JoinColumns({
+			@JoinColumn(name = "product_id", referencedColumnName = "id"),
 			@JoinColumn(name = "product_snapshot", referencedColumnName = "snapshot") })
 	private Product product;
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "VERSION_DEPENDENCY", joinColumns = {
 			@JoinColumn(name = "version_id", referencedColumnName = "id"),
 			@JoinColumn(name = "version_snapshot", referencedColumnName = "snapshot") }, inverseJoinColumns = {
-					@JoinColumn(name = "dependency_id", referencedColumnName = "id"),
-					@JoinColumn(name = "dependency_snapshot", referencedColumnName = "snapshot") })
+			@JoinColumn(name = "dependency_id", referencedColumnName = "id"),
+			@JoinColumn(name = "dependency_snapshot", referencedColumnName = "snapshot") })
 	private Set<Version> dependencies;
+	@OneToMany(mappedBy = "version", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<Class> classes;
 
 	public Version() {
 	}
@@ -39,12 +43,13 @@ public class Version extends RepoEntity {
 		setArtifactId(artifactId);
 	}
 
-	public Version(String artifactId, long snapshot, String url, String version, File dataSource) {
+	public Version(String artifactId, long snapshot, String url,
+			String version, File dataSource) {
 		super(snapshot);
 		setArtifactId(artifactId);
 		setVersion(version);
 		setUrl(url);
-		setDataSource(dataSource);
+		setData(data);
 	}
 
 	public String getVersion() {
@@ -76,6 +81,21 @@ public class Version extends RepoEntity {
 			dependencies = new HashSet<Version>();
 		}
 		dependencies.add(dependency);
+	}
+
+	public Set<Class> getClasses() {
+		return classes;
+	}
+
+	public void setClasses(Set<Class> classes) {
+		this.classes = classes;
+	}
+	
+	public void addClass(Class clazz) {
+		if (classes == null) {
+			classes = new HashSet<Class>();
+		}
+		classes.add(clazz);
 	}
 
 }
