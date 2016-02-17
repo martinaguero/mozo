@@ -1,4 +1,4 @@
-package org.trimatek.mozo.hollower.test;
+package org.trimatek.mozo.bytecoder.test;
 
 import java.io.IOException;
 

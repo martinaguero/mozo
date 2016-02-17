@@ -1,11 +1,11 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Hollower
-Bundle-SymbolicName: org.trimatek.mozo.hollower
+Bundle-SymbolicName: org.trimatek.mozo.bytecoder
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: org.trimatek.mozo.hollower.Activator
+Bundle-Activator: org.trimatek.mozo.bytecoder.Activator
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: org.osgi.framework;version="1.3.0"
 Bundle-ClassPath: .,
  lib/bcel-5.2.jar
-Export-Package: org.trimatek.mozo.hollower.service
+Export-Package: org.trimatek.mozo.bytecoder.service

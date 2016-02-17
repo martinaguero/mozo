@@ -1,4 +1,4 @@
-package org.trimatek.mozo.hollower.utils;
+package org.trimatek.mozo.bytecoder.utils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -17,8 +17,8 @@ import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 import java.util.zip.ZipInputStream;
 
-import org.trimatek.mozo.hollower.Config;
-import org.trimatek.mozo.hollower.Context;
+import org.trimatek.mozo.bytecoder.Config;
+import org.trimatek.mozo.bytecoder.Context;
 
 public class JarUtils {
 

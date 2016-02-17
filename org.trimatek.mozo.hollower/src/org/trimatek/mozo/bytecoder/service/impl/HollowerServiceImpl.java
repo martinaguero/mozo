@@ -1,4 +1,4 @@
-package org.trimatek.mozo.hollower.service.impl;
+package org.trimatek.mozo.bytecoder.service.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,10 +9,10 @@ import java.util.jar.JarInputStream;
 
 import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.JavaClass;
-import org.trimatek.mozo.hollower.Context;
-import org.trimatek.mozo.hollower.service.HollowerService;
-import org.trimatek.mozo.hollower.tools.Litter;
-import org.trimatek.mozo.hollower.utils.JarUtils;
+import org.trimatek.mozo.bytecoder.Context;
+import org.trimatek.mozo.bytecoder.service.HollowerService;
+import org.trimatek.mozo.bytecoder.tools.Litter;
+import org.trimatek.mozo.bytecoder.utils.JarUtils;
 
 public class HollowerServiceImpl implements HollowerService {
 	

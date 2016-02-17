@@ -1,4 +1,4 @@
-package org.trimatek.mozo.hollower.test;
+package org.trimatek.mozo.bytecoder.test;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.trimatek.mozo.hollower.service.HollowerService;
-import org.trimatek.mozo.hollower.service.impl.HollowerServiceImpl;
+import org.trimatek.mozo.bytecoder.service.HollowerService;
+import org.trimatek.mozo.bytecoder.service.impl.HollowerServiceImpl;
 
 public class HollowerTest {
 

@@ -1,4 +1,4 @@
-package org.trimatek.mozo.hollower;
+package org.trimatek.mozo.bytecoder;
 
 public class Config {
 

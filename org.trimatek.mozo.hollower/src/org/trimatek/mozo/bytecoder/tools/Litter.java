@@ -1,4 +1,4 @@
-package org.trimatek.mozo.hollower.tools;
+package org.trimatek.mozo.bytecoder.tools;
 
 import org.apache.bcel.Constants;
 import org.apache.bcel.classfile.Field;
@@ -10,7 +10,7 @@ import org.apache.bcel.generic.FieldGen;
 import org.apache.bcel.generic.InstructionList;
 import org.apache.bcel.generic.MethodGen;
 import org.apache.bcel.generic.RETURN;
-import org.trimatek.mozo.hollower.Context;
+import org.trimatek.mozo.bytecoder.Context;
 
 public class Litter {
 

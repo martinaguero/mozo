@@ -1,11 +1,11 @@
-package org.trimatek.mozo.hollower;
+package org.trimatek.mozo.bytecoder;
 
 import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.trimatek.mozo.hollower.service.HollowerService;
-import org.trimatek.mozo.hollower.service.impl.HollowerServiceImpl;
+import org.trimatek.mozo.bytecoder.service.HollowerService;
+import org.trimatek.mozo.bytecoder.service.impl.HollowerServiceImpl;
 
 public class Activator implements BundleActivator {
 
