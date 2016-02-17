@@ -122,7 +122,7 @@ class TCRScannerService {
 
 	private Repository setVersion(Repository repository, Version version, String path)
 			throws ModelParseException, IOException {
-		Model model = new DefaultModelReader().read(version.getDataSource(), null);
+		Model model = new DefaultModelReader().read(version.getData(), null);
 		Product product = new Product();
 		product.setArtifactId(model.getArtifactId());
 		product.setSnapshot(repository.getSnapshot());

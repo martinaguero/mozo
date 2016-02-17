@@ -59,7 +59,7 @@ public class MavenUtils {
 	}
 
 	public static String getGroupId(Product product) throws MetadataParseException, IOException {
-		return metaReader.read(product.getDataSource(), params).getGroupId();
+		return metaReader.read(product.getData(), params).getGroupId();
 	}
 
 	private static String buildId(Model model) {
