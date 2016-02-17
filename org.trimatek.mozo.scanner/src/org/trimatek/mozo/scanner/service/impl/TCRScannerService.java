@@ -1,7 +1,7 @@
 package org.trimatek.mozo.scanner.service.impl;
 
 import static org.trimatek.mozo.scanner.Config.MVN_POM;
-import static org.trimatek.mozo.scanner.utils.MavenUtils.getManufacturerId;
+import static org.trimatek.mozo.scanner.utils.MavenUtils.getGroupId;
 import static org.trimatek.mozo.scanner.utils.StringUtils.getRepositoryId;
 
 import java.io.BufferedReader;
@@ -13,7 +13,7 @@ import org.apache.maven.artifact.repository.metadata.io.MetadataParseException;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.DefaultModelReader;
 import org.apache.maven.model.io.ModelParseException;
-import org.trimatek.mozo.catalog.model.Manufacturer;
+import org.trimatek.mozo.catalog.model.Group;
 import org.trimatek.mozo.catalog.model.Product;
 import org.trimatek.mozo.catalog.model.RepoEntity;
 import org.trimatek.mozo.catalog.model.Repository;
@@ -31,7 +31,7 @@ class TCRScannerService {
 		RepoEntity entity = null;
 		List<Version> versions = new ArrayList<Version>();
 		List<Product> products = new ArrayList<Product>();
-		List<Manufacturer> manufacturers = new ArrayList<Manufacturer>();
+		List<Group> manufacturers = new ArrayList<Group>();
 		BufferedReader br = RemoteUtils.read(path);
 		while ((line = br.readLine()) != null) {
 			token = StringUtils.getMVNEntity(line);
@@ -49,15 +49,15 @@ class TCRScannerService {
 					versions.add((Version) entity);
 				} else if (Product.class.isInstance(entity)) {
 					products.add((Product) entity);
-				} else if (Manufacturer.class.isInstance(entity)) {
-					manufacturers.add((Manufacturer) entity);
+				} else if (Group.class.isInstance(entity)) {
+					manufacturers.add((Group) entity);
 				}
 			}
 		}
 		if (manufacturers != null && manufacturers.size() > 0) {
 			return new Repository(getRepositoryId(path), snapshot, path, manufacturers);
 		} else if (products != null && products.size() > 0) {
-			return new Manufacturer(getManufacturerId(products.get(0)), snapshot, path, products);
+			return new Group(getGroupId(products.get(0)), snapshot, path, products);
 		} else if (versions != null && versions.size() > 0) {
  
 		}
@@ -87,13 +87,13 @@ class TCRScannerService {
 				entity = scan(path + "/" + token, repository.getSnapshot());
 				if (entity != null) {
 					if (Repository.class.isInstance(entity)) {
-						for (Manufacturer manufacturer : ((Repository) entity).getManufacturers()) {
-							repository.addManufacturer(manufacturer);
+						for (Group manufacturer : ((Repository) entity).getGroups()) {
+							repository.addGroup(manufacturer);
 							manufacturer.setRepository(repository);
 						}
-					} else if (Manufacturer.class.isInstance(entity)) {
-						repository.addManufacturer((Manufacturer) entity);
-						((Manufacturer) entity).setRepository(repository);
+					} else if (Group.class.isInstance(entity)) {
+						repository.addGroup((Group) entity);
+						((Group) entity).setRepository(repository);
 					} else if (Product.class.isInstance(entity)) {
 						repository = setProduct(repository, (Product) entity, path);
 					} else if (Version.class.isInstance(entity)) {
@@ -109,14 +109,14 @@ class TCRScannerService {
 
 	private Repository setProduct(Repository repository, Product product, String path)
 			throws MetadataParseException, IOException {
-		Manufacturer m = new Manufacturer();
+		Group m = new Group();
 		m.setUrl(path);
-		product.setManufacturer(m);
+		product.setGroup(m);
 		m.addProduct(product);
-		m.setArtifactId(getManufacturerId(product));
+		m.setArtifactId(getGroupId(product));
 		m.setSnapshot(repository.getSnapshot());
 		m.setRepository(repository);
-		repository.addManufacturer(m);
+		repository.addGroup(m);
 		return repository;
 	}
 
@@ -128,13 +128,13 @@ class TCRScannerService {
 		product.setSnapshot(repository.getSnapshot());
 		version.setProduct(product);
 		product.addVersion(version);
-		Manufacturer manufacturer = new Manufacturer();
-		manufacturer.setArtifactId(model.getArtifactId());
-		manufacturer.setSnapshot(repository.getSnapshot());
-		product.setManufacturer(manufacturer);
-		manufacturer.addProduct(product);
-		manufacturer.setRepository(repository);
-		repository.addManufacturer(manufacturer);
+		Group group = new Group();
+		group.setArtifactId(model.getArtifactId());
+		group.setSnapshot(repository.getSnapshot());
+		product.setGroup(group);
+		group.addProduct(product);
+		group.setRepository(repository);
+		repository.addGroup(group);
 		return repository;
 	}
 

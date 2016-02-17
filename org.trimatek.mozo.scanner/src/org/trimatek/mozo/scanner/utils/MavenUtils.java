@@ -58,7 +58,7 @@ public class MavenUtils {
 		return new Product(metadata.getArtifactId(), snapshot, path, versions, file);
 	}
 
-	public static String getManufacturerId(Product product) throws MetadataParseException, IOException {
+	public static String getGroupId(Product product) throws MetadataParseException, IOException {
 		return metaReader.read(product.getDataSource(), params).getGroupId();
 	}
 
