@@ -19,9 +19,9 @@ import javax.persistence.Table;
 public class Product extends RepoEntity {
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumns({ @JoinColumn(name = "manufacturer_id", referencedColumnName = "id"),
-			@JoinColumn(name = "manufacturer_snapshot", referencedColumnName = "snapshot") })
-	private Manufacturer manufacturer;
+	@JoinColumns({ @JoinColumn(name = "group_id", referencedColumnName = "id"),
+			@JoinColumn(name = "group_snapshot", referencedColumnName = "snapshot") })
+	private Group group;
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Version> versions;
 
@@ -44,12 +44,12 @@ public class Product extends RepoEntity {
 		}
 	}
 
-	public Manufacturer getManufacturer() {
-		return manufacturer;
+	public Group getGroup() {
+		return group;
 	}
 
-	public void setManufacturer(Manufacturer manufacturer) {
-		this.manufacturer = manufacturer;
+	public void setGroup(Group group) {
+		this.group = group;
 	}
 
 	public Set<Version> getVersions() {

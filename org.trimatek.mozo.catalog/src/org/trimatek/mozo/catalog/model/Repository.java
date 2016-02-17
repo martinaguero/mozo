@@ -17,7 +17,7 @@ import javax.persistence.Table;
 public class Repository extends RepoEntity {
 
 	@OneToMany(mappedBy = "repository", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<Manufacturer> manufacturers;
+	private Set<Group> groups;
 
 	public Repository() {
 	}
@@ -27,31 +27,31 @@ public class Repository extends RepoEntity {
 		setArtifactId(artifactId);
 	}
 
-	public Repository(String artifactId, long snapshot, String path, List<Manufacturer> manufacturers) {
+	public Repository(String artifactId, long snapshot, String path, List<Group> manufacturers) {
 		super(snapshot);
 		setArtifactId(artifactId);
 		setUrl(path);
 		if (manufacturers != null) {
-			this.manufacturers = new HashSet<Manufacturer>(manufacturers);
-			for (Manufacturer manufacturer : this.manufacturers) {
+			this.groups = new HashSet<Group>(groups);
+			for (Group manufacturer : this.groups) {
 				manufacturer.setRepository(this);
 			}
 		}
 	}
 
-	public Set<Manufacturer> getManufacturers() {
-		return manufacturers;
+	public Set<Group> getGroups() {
+		return groups;
 	}
 
-	public void setManufacturers(Set<Manufacturer> manufacturers) {
-		this.manufacturers = manufacturers;
+	public void setGroups(Set<Group> groups) {
+		this.groups = groups;
 	}
 
-	public void addManufacturer(Manufacturer manufacturer) {
-		if (manufacturers == null) {
-			manufacturers = new HashSet<Manufacturer>();
+	public void addGroup(Group group) {
+		if (groups == null) {
+			groups = new HashSet<Group>();
 		}
-		manufacturers.add(manufacturer);
+		groups.add(group);
 	}
 
 }

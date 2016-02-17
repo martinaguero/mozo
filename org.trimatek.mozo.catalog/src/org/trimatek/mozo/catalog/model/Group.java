@@ -14,31 +14,31 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "MANUFACTURER")
-public class Manufacturer extends RepoEntity {
+@Table(name = "GROUPO")
+public class Group extends RepoEntity {
 
-	@OneToMany(mappedBy = "manufacturer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "group", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Product> products;
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumns({ @JoinColumn(name = "repository_id", referencedColumnName = "id"),
 			@JoinColumn(name = "repository_snapshot", referencedColumnName = "snapshot") })
 	private Repository repository;
 
-	public Manufacturer() {
+	public Group() {
 	}
 
-	public Manufacturer(String artifactId, long snapshot) {
+	public Group(String artifactId, long snapshot) {
 		super(snapshot);
 		setArtifactId(artifactId);
 	}
 	
-	public Manufacturer(String artifactId, long snapshot, String path, List<Product> products){
+	public Group(String artifactId, long snapshot, String path, List<Product> products){
 		super(snapshot);
 		setArtifactId(artifactId);
 		setUrl(path);
 		this.products = new HashSet<Product>(products);
 		for(Product product : this.products){
-			product.setManufacturer(this);
+			product.setGroup(this);
 		}
 	}
 
