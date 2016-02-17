@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 import org.trimatek.mozo.catalog.model.Repository;
+import org.trimatek.mozo.catalog.model.Version;
 import org.trimatek.mozo.catalog.service.CatalogService;
 
 public class CatalogServiceImpl implements CatalogService {
@@ -19,7 +20,8 @@ public class CatalogServiceImpl implements CatalogService {
 
 	@Override
 	public void save(Repository repository) {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		EntityManager entityManager = entityManagerFactory
+				.createEntityManager();
 		entityManager.getTransaction().begin();
 
 		entityManager.persist(repository);
@@ -30,9 +32,11 @@ public class CatalogServiceImpl implements CatalogService {
 
 	@Override
 	public Collection<Repository> listAllRepositories() {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		EntityManager entityManager = entityManagerFactory
+				.createEntityManager();
 		entityManager.getTransaction().begin();
-		List<Repository> result = entityManager.createQuery("from Repository", Repository.class).getResultList();
+		List<Repository> result = entityManager.createQuery("from Repository",
+				Repository.class).getResultList();
 
 		entityManager.getTransaction().commit();
 		entityManager.close();
@@ -40,10 +44,13 @@ public class CatalogServiceImpl implements CatalogService {
 	}
 
 	public Repository loadRepository(Long id, Long snapshot) {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		EntityManager entityManager = entityManagerFactory
+				.createEntityManager();
 		entityManager.getTransaction().begin();
-		Repository r = entityManager.createNamedQuery("findRepositoryByIdAndSnapshot", Repository.class)
-				.setParameter("rid", id).setParameter("rsnapshot", snapshot).getSingleResult();
+		Repository r = entityManager
+				.createNamedQuery("findRepositoryByIdAndSnapshot",
+						Repository.class).setParameter("rid", id)
+				.setParameter("rsnapshot", snapshot).getSingleResult();
 		entityManager.getTransaction().commit();
 		entityManager.close();
 		return r;
@@ -51,13 +58,25 @@ public class CatalogServiceImpl implements CatalogService {
 
 	@Override
 	public void saveOrUpdate(Repository repository) {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		EntityManager entityManager = entityManagerFactory
+				.createEntityManager();
 		entityManager.getTransaction().begin();
 
 		entityManager.merge(repository);
 
 		entityManager.getTransaction().commit();
 		entityManager.close();
+	}
+
+	@Override
+	public Version fillClasses(Version version) {
+		if (version.getData() == null) {
+			if (version.getUrl() == null) {
+				throw new NullPointerException("POM file URL can not be null.");
+			}
+
+		}
+		return null;
 	}
 
 }
