@@ -1,5 +1,11 @@
 package org.trimatek.mozo.catalog.service.impl;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.util.Collection;
 import java.util.List;
 
@@ -68,15 +74,6 @@ public class CatalogServiceImpl implements CatalogService {
 		entityManager.close();
 	}
 
-	@Override
-	public Version fillClasses(Version version) {
-		if (version.getData() == null) {
-			if (version.getUrl() == null) {
-				throw new NullPointerException("POM file URL can not be null.");
-			}
 
-		}
-		return null;
-	}
 
 }
