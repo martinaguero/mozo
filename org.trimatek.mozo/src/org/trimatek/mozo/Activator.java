@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -20,6 +21,8 @@ import org.trimatek.mozo.catalog.model.Product;
 import org.trimatek.mozo.catalog.model.Repository;
 import org.trimatek.mozo.catalog.model.Version;
 import org.trimatek.mozo.catalog.service.CatalogService;
+import org.trimatek.mozo.service.MozoService;
+import org.trimatek.mozo.service.impl.MozoServiceImpl;
 
 public class Activator implements BundleActivator, ServiceListener {
 
@@ -35,6 +38,9 @@ public class Activator implements BundleActivator, ServiceListener {
 	 * BundleContext)
 	 */
 	public void start(BundleContext context) throws Exception {
+		context.registerService(MozoService.class.getName(),
+				new MozoServiceImpl(context), new Hashtable());
+		
 		// fContext = context;
 
 		// have a service listener to implement the whiteboard pattern
@@ -43,7 +49,8 @@ public class Activator implements BundleActivator, ServiceListener {
 
 		
 		//testHollower(context);
-		print(testCatalog(context));
+//		print(testCatalog(context));
+
 	}
 
 	/*
@@ -132,8 +139,6 @@ public class Activator implements BundleActivator, ServiceListener {
 	}
 
 	private Repository testCatalog(BundleContext context) {
-		catalogServiceTracker = new ServiceTracker(context,
-				CatalogService.class.getName(), null);
 		catalogServiceTracker = new ServiceTracker(context,
 				CatalogService.class.getName(), null);
 		catalogServiceTracker.open();
