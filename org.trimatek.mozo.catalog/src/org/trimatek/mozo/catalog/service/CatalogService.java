@@ -16,6 +16,6 @@ public interface CatalogService {
 	
 	public Repository loadRepository(Long id, Long snahpshot);
 	
-	public Version buildVersion(String pomPath, long snapshot) throws IOException;
+	public Version loadVersion(String pomPath, long snapshot) throws IOException;
 	
 }

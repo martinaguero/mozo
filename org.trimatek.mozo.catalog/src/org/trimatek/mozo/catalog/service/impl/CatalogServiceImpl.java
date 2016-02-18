@@ -77,8 +77,10 @@ public class CatalogServiceImpl implements CatalogService {
 		entityManager.close();
 	}
 
-	public Version buildVersion(String pomPath, long snapshot)
+	public Version loadVersion(String pomPath, long snapshot)
 			throws ModelParseException, IOException {
+		//TODO implementar acceso a caché local
+		
 		return (Version) MavenUtils.processPom(pomPath, snapshot);
 	}
 
