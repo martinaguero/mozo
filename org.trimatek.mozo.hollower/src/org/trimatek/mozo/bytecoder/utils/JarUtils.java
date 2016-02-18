@@ -8,6 +8,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.jar.Attributes;
@@ -19,6 +22,7 @@ import java.util.zip.ZipInputStream;
 
 import org.trimatek.mozo.bytecoder.Config;
 import org.trimatek.mozo.bytecoder.Context;
+import org.trimatek.mozo.catalog.model.Version;
 
 public class JarUtils {
 
@@ -120,6 +124,20 @@ public class JarUtils {
 
 	private static String putMask(String dir, String mask) {
 		return dir.replace(mask.replace("\\", "/"), "");
+	}
+
+	public static Version loadJar(Version version) throws IOException {
+		String path = version.getUrl();
+		path = path.replace(".pom", ".jar");
+		URL website = new URL(path);
+		ReadableByteChannel rbc = Channels.newChannel(website.openStream());
+		File file = new File(Config.TEMP_DIR
+				+ path.substring(path.lastIndexOf("/")));
+		FileOutputStream fos = new FileOutputStream(file);
+		fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+		fos.close();
+		version.setData(file);
+		return version;
 	}
 
 }

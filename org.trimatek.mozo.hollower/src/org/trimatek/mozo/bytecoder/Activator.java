@@ -5,24 +5,34 @@ import java.util.Hashtable;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.trimatek.mozo.bytecoder.service.HollowerService;
+import org.trimatek.mozo.bytecoder.service.BytecodeService;
 import org.trimatek.mozo.bytecoder.service.impl.HollowerServiceImpl;
+import org.trimatek.mozo.bytecoder.service.impl.BytecodeServiceImpl;
 
 public class Activator implements BundleActivator {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
+	 * 
+	 * @see
+	 * org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext
+	 * )
 	 */
 	public void start(BundleContext context) throws Exception {
-		context.registerService(HollowerService.class.getName(), new HollowerServiceImpl(), new Hashtable());
+		context.registerService(HollowerService.class.getName(),
+				new HollowerServiceImpl(), new Hashtable());
+		context.registerService(BytecodeService.class.getName(),
+				new BytecodeServiceImpl(), new Hashtable());
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
+	 * 
+	 * @see
+	 * org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) throws Exception {
-		
+
 	}
 
 }
