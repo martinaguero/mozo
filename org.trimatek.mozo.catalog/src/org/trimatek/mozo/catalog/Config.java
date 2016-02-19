@@ -10,4 +10,5 @@ public class Config {
 	public static final String MVN_POM = ".pom";
 	public static final int CONNECTION_TIMEOUT = 5*2000;
 	public static final String PARSE_ERROR = "<null>";
+	public static final long CURRENT_SNAPSHOT = 0;
 }

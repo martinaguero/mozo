@@ -11,11 +11,14 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "PRODUCT")
+//TODO mejorar la query para que no traiga todas las instancias
+@NamedQuery(name = "findProductByArtifactId", query = "from Product p where p.artifactId = :paid order by p.snapshot")
 public class Product extends RepoEntity {
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

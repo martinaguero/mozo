@@ -47,10 +47,11 @@ public class Version extends RepoEntity {
 		setArtifactId(artifactId);
 	}
 
-	public Version(String artifactId, long snapshot, String url,
+	public Version(String artifactId, String groupId, long snapshot, String url,
 			String version, File dataSource) {
 		super(snapshot);
 		setArtifactId(artifactId);
+		setGroupId(groupId);
 		setVersion(version);
 		setUrl(url);
 		setData(data);

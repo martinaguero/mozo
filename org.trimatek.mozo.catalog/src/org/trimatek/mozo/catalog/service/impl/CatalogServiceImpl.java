@@ -11,8 +11,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 import org.apache.maven.model.io.ModelParseException;
+import org.trimatek.mozo.catalog.Config;
+import org.trimatek.mozo.catalog.model.Group;
+import org.trimatek.mozo.catalog.model.Product;
 import org.trimatek.mozo.catalog.model.Repository;
 import org.trimatek.mozo.catalog.model.Version;
+import org.trimatek.mozo.catalog.repositories.GroupRepository;
+import org.trimatek.mozo.catalog.repositories.ProductRepository;
 import org.trimatek.mozo.catalog.repositories.VersionRepository;
 import org.trimatek.mozo.catalog.service.CatalogService;
 import org.trimatek.mozo.catalog.utils.MavenUtils;
@@ -21,6 +26,8 @@ public class CatalogServiceImpl implements CatalogService {
 
 	private EntityManagerFactory entityManagerFactory;
 	private VersionRepository versionRepository;
+	private GroupRepository groupRepository;
+	private ProductRepository productRepository;
 
 	public CatalogServiceImpl(EntityManagerFactory entityManagerFactory) {
 		this.entityManagerFactory = entityManagerFactory;
@@ -55,17 +62,20 @@ public class CatalogServiceImpl implements CatalogService {
 		return result;
 	}
 
-	public Repository loadRepository(Long id, Long snapshot) {
+	public Repository loadRepository() {
 		EntityManager entityManager = entityManagerFactory
 				.createEntityManager();
+		Repository result = null;
 		entityManager.getTransaction().begin();
-		Repository r = entityManager
-				.createNamedQuery("findRepositoryByIdAndSnapshot",
-						Repository.class).setParameter("rid", id)
-				.setParameter("rsnapshot", snapshot).getSingleResult();
+		List<Repository> results = entityManager
+				.createNamedQuery("loadRepository",
+						Repository.class).getResultList();
+		if (!results.isEmpty()) {
+			result = results.get(0);
+		}
 		entityManager.getTransaction().commit();
 		entityManager.close();
-		return r;
+		return result;
 	}
 
 	@Override
@@ -87,15 +97,45 @@ public class CatalogServiceImpl implements CatalogService {
 		return versionRepository;
 	}
 
+	public GroupRepository getGroupRepository() {
+		if (groupRepository == null) {
+			groupRepository = new GroupRepository(entityManagerFactory);
+		}
+		return groupRepository;
+	}
+	
+	public ProductRepository getProductRepository() {
+		if (productRepository == null) {
+			productRepository = new ProductRepository(entityManagerFactory);
+		}
+		return productRepository;
+	}
+
 	public Version loadVersion(String artifactId, String version)
 			throws ModelParseException, IOException {
-		return getVersionRepository()
-				.findVersionByArtifactIdAndVersion(artifactId, version);
+		return getVersionRepository().findVersionByArtifactIdAndVersion(
+				artifactId, version);
 	}
 
 	@Override
-	public Version buildVersionFromPom(String path, long snapshot) throws Exception {
+	public Version buildVersionFromPom(String path, long snapshot)
+			throws Exception {
 		return (Version) MavenUtils.processPom(path, snapshot);
+	}
+
+	@Override
+	public Group loadGroup(String groupId) {
+		return getGroupRepository().findGroupByGroupId(groupId);
+	}
+
+	@Override
+	public Product loadProduct(String artifactId) {
+		return getProductRepository().findProductByArtifactId(artifactId);
+	}
+
+	@Override
+	public long getCurrentSnapshot() {
+		return Config.CURRENT_SNAPSHOT;
 	}
 
 }

@@ -21,6 +21,7 @@ public class RepoEntity implements Serializable {
 	protected Long id;
 	@Id
 	protected Long snapshot;
+	protected String groupId;
 	protected String artifactId;
 	protected String url;
 	protected File data;
@@ -61,6 +62,15 @@ public class RepoEntity implements Serializable {
 
 	public void setArtifactId(String artifactId) {
 		this.artifactId = artifactId;
+	}
+	
+	@Column(name = "groupid")
+	public String getGroupId() {
+		return groupId;
+	}
+
+	public void setGroupId(String groupId) {
+		this.groupId = groupId;
 	}
 
 	@Column(name = "url")

@@ -10,11 +10,14 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "GROUPO")
+// TODO mejorar la query para que no traiga todas las instancias
+@NamedQuery(name = "findGroupByGroupId", query = "from Group g where g.groupId = :gid order by g.snapshot")
 public class Group extends RepoEntity {
 
 	@OneToMany(mappedBy = "group", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
