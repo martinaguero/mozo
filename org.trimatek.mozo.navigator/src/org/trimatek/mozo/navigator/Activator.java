@@ -1,11 +1,14 @@
 package org.trimatek.mozo.navigator;
 
+import java.util.Hashtable;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 import org.trimatek.mozo.bytecoder.service.BytecodeService;
-import org.trimatek.mozo.catalog.model.Version;
 import org.trimatek.mozo.catalog.service.CatalogService;
+import org.trimatek.mozo.navigator.service.NavigatorService;
+import org.trimatek.mozo.navigator.service.impl.NavigatorServiceImpl;
 
 public class Activator implements BundleActivator {
 
@@ -30,21 +33,9 @@ public class Activator implements BundleActivator {
 		catalogServiceTracker.open();
 		bytecodeService = (BytecodeService) bytecodeServiceTracker.getService();
 		catalogService = (CatalogService) catalogServiceTracker.getService();
-
-		Version version = catalogService
-				.buildVersion(
-						"https://repo1.maven.org/maven2/org/apache/bcel/bcel/5.2/bcel-5.2.pom",
-						1);
-
-		for (Version v : version.getDependencies()) {
-			System.out.println(v.getArtifactId());
-		}
-
-		version = bytecodeService.fillClasses(version);
-
-		for (org.trimatek.mozo.catalog.model.Class c : version.getClasses()) {
-			System.out.println(c.getClassName());
-		}
+		context.registerService(NavigatorService.class.getName(),
+				new NavigatorServiceImpl(catalogService, bytecodeService),
+				new Hashtable());
 
 	}
 
