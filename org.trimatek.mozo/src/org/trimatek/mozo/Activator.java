@@ -14,7 +14,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.util.tracker.ServiceTracker;
-import org.trimatek.mozo.bytecoder.service.HollowerService;
+import org.trimatek.mozo.bytecoder.service.BytecodeService;
 import org.trimatek.mozo.catalog.model.Class;
 import org.trimatek.mozo.catalog.model.Group;
 import org.trimatek.mozo.catalog.model.Product;
@@ -27,9 +27,9 @@ import org.trimatek.mozo.service.impl.MozoServiceImpl;
 public class Activator implements BundleActivator, ServiceListener {
 
 	private CatalogService catalogService;
-	private HollowerService hollowerService;
+	private BytecodeService bytecodeService;
 	private ServiceTracker catalogServiceTracker;
-	private ServiceTracker hollowerServiceTracker;
+	private ServiceTracker bytecodeServiceTracker;
 
 	/*
 	 * (non-Javadoc)
@@ -40,16 +40,15 @@ public class Activator implements BundleActivator, ServiceListener {
 	public void start(BundleContext context) throws Exception {
 		context.registerService(MozoService.class.getName(),
 				new MozoServiceImpl(context), new Hashtable());
-		
+
 		// fContext = context;
 
 		// have a service listener to implement the whiteboard pattern
 		// fContext.addServiceListener(this, "(objectclass=" +
 		// Dictionary.class.getName() + ")");
 
-		
-		//testHollower(context);
-		//print(testCatalog(context));
+		// testHollower(context);
+		// print(testCatalog(context));
 
 	}
 
@@ -64,9 +63,9 @@ public class Activator implements BundleActivator, ServiceListener {
 		catalogServiceTracker.close();
 		catalogServiceTracker = null;
 		catalogService = null;
-		hollowerServiceTracker.close();
-		hollowerServiceTracker = null;
-		hollowerService = null;
+		bytecodeServiceTracker.close();
+		bytecodeServiceTracker = null;
+		bytecodeService = null;
 	}
 
 	public void serviceChanged(ServiceEvent ev) {
@@ -90,8 +89,8 @@ public class Activator implements BundleActivator, ServiceListener {
 		System.out.println("REPOSITORIO: " + "ID: " + repo.getId()
 				+ " snapshot: " + repo.getSnapshot());
 		for (Group m : repo.getGroups()) {
-			System.out.println("\tGRUPO:" + "ID: " + m.getId()
-					+ " snapshot: " + m.getSnapshot());
+			System.out.println("\tGRUPO:" + "ID: " + m.getId() + " snapshot: "
+					+ m.getSnapshot());
 			if (m.getProducts() != null) {
 				for (Product p : m.getProducts()) {
 					System.out.println("\t\tPRODUCTO: " + "ID: " + p.getId()
@@ -118,23 +117,23 @@ public class Activator implements BundleActivator, ServiceListener {
 
 	private void testHollower(BundleContext context)
 			throws ClassNotFoundException, FileNotFoundException, IOException {
-		hollowerServiceTracker = new ServiceTracker(context,
-				HollowerService.class.getName(), null);
-		hollowerServiceTracker.open();
-		hollowerService = (HollowerService) hollowerServiceTracker.getService();
-
-		String target = "standard.jar";
-
-		InputStream input = hollowerService.hollow(new FileInputStream(
-				"F:\\Temp\\mozo\\originales\\" + target), target);
-
-		byte[] buffer = new byte[input.available()];
-		input.read(buffer);
-
-		File targetFile = new File("f:\\Temp\\mozo\\ahuecados\\" + target);
-		OutputStream outStream = new FileOutputStream(targetFile);
-		outStream.write(buffer);
-		outStream.close();
+//		bytecodeServiceTracker = new ServiceTracker(context,
+//				BytecodeService.class.getName(), null);
+//		bytecodeServiceTracker.open();
+//		bytecodeService = (BytecodeService) bytecodeServiceTracker.getService();
+//
+//		String target = "standard.jar";
+//
+//		InputStream input = bytecodeService.buildJarProxy(new FileInputStream(
+//				"F:\\Temp\\mozo\\originales\\" + target), target);
+//
+//		byte[] buffer = new byte[input.available()];
+//		input.read(buffer);
+//
+//		File targetFile = new File("f:\\Temp\\mozo\\ahuecados\\" + target);
+//		OutputStream outStream = new FileOutputStream(targetFile);
+//		outStream.write(buffer);
+//		outStream.close();
 		System.out.println("GENERADO");
 	}
 

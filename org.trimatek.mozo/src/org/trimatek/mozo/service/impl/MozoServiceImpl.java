@@ -7,7 +7,7 @@ import java.util.Map;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 import org.trimatek.mozo.catalog.model.Version;
-import org.trimatek.mozo.catalog.service.CatalogService;
+import org.trimatek.mozo.exception.BytecodeException;
 import org.trimatek.mozo.exception.ExternalResourceException;
 import org.trimatek.mozo.exception.MozoException;
 import org.trimatek.mozo.exception.NullDataException;
@@ -44,6 +44,9 @@ public class MozoServiceImpl implements MozoService {
 		} catch (IOException e) {
 			throw new ExternalResourceException(
 					"MOZO: External resource exception", e);
+		} catch (ClassNotFoundException e) {
+			throw new BytecodeException(
+					"MOZO: Error while processing bytecode", e);
 		}
 	}
 }
