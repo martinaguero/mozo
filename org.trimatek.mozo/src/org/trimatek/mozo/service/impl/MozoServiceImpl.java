@@ -11,20 +11,20 @@ import org.trimatek.mozo.catalog.service.CatalogService;
 import org.trimatek.mozo.exception.ExternalResourceException;
 import org.trimatek.mozo.exception.MozoException;
 import org.trimatek.mozo.exception.NullDataException;
+import org.trimatek.mozo.navigator.service.NavigatorService;
 import org.trimatek.mozo.service.MozoService;
 
 public class MozoServiceImpl implements MozoService {
 
-	private BundleContext context;
-	private CatalogService catalogService;
-	private ServiceTracker catalogServiceTracker;
+	private NavigatorService navigatorService;
+	private ServiceTracker navigatorServiceTracker;
 
 	public MozoServiceImpl(BundleContext context) {
-		this.context = context;
-		catalogServiceTracker = new ServiceTracker(context,
-				CatalogService.class.getName(), null);
-		catalogServiceTracker.open();
-		catalogService = (CatalogService) catalogServiceTracker.getService();
+		navigatorServiceTracker = new ServiceTracker(context,
+				NavigatorService.class.getName(), null);
+		navigatorServiceTracker.open();
+		navigatorService = (NavigatorService) navigatorServiceTracker
+				.getService();
 	}
 
 	@Override
@@ -34,20 +34,16 @@ public class MozoServiceImpl implements MozoService {
 	}
 
 	@Override
-	public Version loadJarProxy(Version target) throws MozoException {
-		if (target.getUrl() == null) {
-			throw new NullDataException("MOZO: POM file URL address is null.");
+	public Version loadJarProxy(Version version) throws MozoException {
+		if (version.getArtifactId() == null || version.getVersion() == null) {
+			throw new NullDataException(
+					"MOZO: ArtifactId or version is missing.");
 		}
 		try {
-			target = catalogService.loadVersion(target.getUrl(), 1);
+			return navigatorService.loadJarProxy(version);
 		} catch (IOException e) {
 			throw new ExternalResourceException(
-					"MOZO: External resource access error.", e);
-		} catch (Exception e){
-			throw new MozoException(
-					"MOZO: " + e.getMessage(), e);
+					"MOZO: External resource exception", e);
 		}
-		return target;
 	}
-
 }
