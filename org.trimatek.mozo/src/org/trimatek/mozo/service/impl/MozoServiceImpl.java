@@ -45,7 +45,7 @@ public class MozoServiceImpl implements MozoService {
 					"MOZO: External resource access error.", e);
 		} catch (Exception e){
 			throw new MozoException(
-					"MOZO: Undetermined internal error.", e);
+					"MOZO: " + e.getMessage(), e);
 		}
 		return target;
 	}

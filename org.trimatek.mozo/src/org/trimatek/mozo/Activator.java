@@ -49,7 +49,7 @@ public class Activator implements BundleActivator, ServiceListener {
 
 		
 		//testHollower(context);
-//		print(testCatalog(context));
+		//print(testCatalog(context));
 
 	}
 
