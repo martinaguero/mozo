@@ -4,12 +4,17 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 import org.trimatek.mozo.catalog.model.Version;
+import org.trimatek.mozo.catalog.service.CatalogService;
 import org.trimatek.mozo.service.MozoService;
 
 public class Activator implements BundleActivator {
 
 	private MozoService mozoService;
 	private ServiceTracker mozoServiceTracker;
+	// provisorio
+	private CatalogService catalogService;
+	private ServiceTracker catalogServiceTracker;
+	// hasta acá provisiorio
 
 	/*
 	 * (non-Javadoc)
@@ -23,14 +28,21 @@ public class Activator implements BundleActivator {
 				MozoService.class.getName(), null);
 		mozoServiceTracker.open();
 		mozoService = (MozoService) mozoServiceTracker.getService();
+		// provisorio
+		catalogServiceTracker = new ServiceTracker(context,
+				CatalogService.class.getName(), null);
+		catalogServiceTracker.open();
+		catalogService = (CatalogService) catalogServiceTracker.getService();
+		// hasta acá provisiorio
 		
-		Version proxy = new Version();
-		proxy.setUrl("https://repo1.maven.org/maven2/org/apache/bcel/bcel/5.2/bcel-5.2.pom");
-		proxy = mozoService.loadJarProxy(proxy);
+		String path = "https://repo1.maven.org/maven2/org/apache/bcel/bcel/5.2/bcel-5.2.pom";
+		Version version = catalogService.buildVersionFromPom(path, 0);
 		
-		System.out.println(proxy.getArtifactId());
+		version = mozoService.loadJarProxy(version);
 		
-		//mozoService.fill(null);
+		System.out.println("PROXY: " + version.getArtifactId());
+
+		// mozoService.fill(null);
 	}
 
 	/*
