@@ -69,7 +69,7 @@ public class JarUtils {
 		return file;
 	}
 
-	public static InputStream buildHollowedJar(Context ctx)
+	public static File buildHollowedJar(Context ctx)
 			throws FileNotFoundException, IOException {
 		Manifest manifest = new Manifest();
 		manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION,
@@ -78,7 +78,7 @@ public class JarUtils {
 				Config.JARS_DIR + ctx.jarName), manifest);
 		add(new File(ctx.OUTPUT_DIR), target, ctx);
 		target.close();
-		return new FileInputStream(Config.JARS_DIR + ctx.jarName);
+		return new File(Config.JARS_DIR + ctx.jarName);
 	}
 
 	private static void add(File source, JarOutputStream target, Context ctx)
