@@ -6,6 +6,6 @@ import org.trimatek.mozo.catalog.model.Version;
 
 public interface NavigatorService {
 
-	public Version loadJarProxy(Version version) throws IOException;
+	public Version loadJarProxy(Version version) throws IOException, ClassNotFoundException;
 	
 }
