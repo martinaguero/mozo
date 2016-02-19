@@ -12,11 +12,14 @@ import javax.persistence.JoinColumns;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "VERSION")
+// TODO cambiar el order by por algo que obtenga el max(snapshot)
+@NamedQuery(name = "findVersionByArtifactIdAndVersion", query = "from Version v where v.artifactId = :vaid and v.version = :vv order by v.snapshot")
 public class Version extends RepoEntity {
 
 	private String version;

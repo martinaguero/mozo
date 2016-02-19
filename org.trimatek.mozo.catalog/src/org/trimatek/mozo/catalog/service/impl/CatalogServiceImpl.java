@@ -1,5 +1,8 @@
 package org.trimatek.mozo.catalog.service.impl;
 
+import static org.trimatek.mozo.catalog.Config.PROXY_HOST;
+import static org.trimatek.mozo.catalog.Config.PROXY_PORT;
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
@@ -10,14 +13,14 @@ import javax.persistence.EntityManagerFactory;
 import org.apache.maven.model.io.ModelParseException;
 import org.trimatek.mozo.catalog.model.Repository;
 import org.trimatek.mozo.catalog.model.Version;
+import org.trimatek.mozo.catalog.repositories.VersionRepository;
 import org.trimatek.mozo.catalog.service.CatalogService;
 import org.trimatek.mozo.catalog.utils.MavenUtils;
-import static org.trimatek.mozo.catalog.Config.PROXY_HOST;
-import static org.trimatek.mozo.catalog.Config.PROXY_PORT;
 
 public class CatalogServiceImpl implements CatalogService {
 
 	private EntityManagerFactory entityManagerFactory;
+	private VersionRepository versionRepository;
 
 	public CatalogServiceImpl(EntityManagerFactory entityManagerFactory) {
 		this.entityManagerFactory = entityManagerFactory;
@@ -77,11 +80,24 @@ public class CatalogServiceImpl implements CatalogService {
 		entityManager.close();
 	}
 
+	public VersionRepository getVersionRepository() {
+		if (versionRepository == null) {
+			versionRepository = new VersionRepository(entityManagerFactory);
+		}
+		return versionRepository;
+	}
+
 	public Version loadVersion(String pomPath, long snapshot)
 			throws ModelParseException, IOException {
-		//TODO implementar acceso a caché local
-		
-		return (Version) MavenUtils.processPom(pomPath, snapshot);
+
+		Version mavenVersion = (Version) MavenUtils.processPom(pomPath, 0);
+		Version repositoryVersion = getVersionRepository()
+				.findVersionByArtifactIdAndVersion(mavenVersion);
+		if (repositoryVersion.getId() == null) {
+			// obtiene el jar
+			// persiste la versión maven
+		}
+		return repositoryVersion;
 	}
 
 }
