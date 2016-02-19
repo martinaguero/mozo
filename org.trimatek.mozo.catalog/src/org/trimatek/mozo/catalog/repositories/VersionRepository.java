@@ -15,21 +15,22 @@ public class VersionRepository {
 		this.entityManagerFactory = entityManagerFactory;
 	}
 
-	public Version findVersionByArtifactIdAndVersion(Version version) {
+	public Version findVersionByArtifactIdAndVersion(String artifactId,
+			String version) {
 		EntityManager entityManager = entityManagerFactory
 				.createEntityManager();
 		entityManager.getTransaction().begin();
 		List<Version> results = entityManager
 				.createNamedQuery("findVersionByArtifactIdAndVersion",
-						Version.class)
-				.setParameter("vaid", version.getArtifactId())
-				.setParameter("vv", version.getVersion()).getResultList();
+						Version.class).setParameter("vaid", artifactId)
+				.setParameter("vv", version).getResultList();
+		Version result = null;
 		if (!results.isEmpty()) {
-			version = results.get(0);
+			result = results.get(0);
 		}
 		entityManager.getTransaction().commit();
 		entityManager.close();
-		return version;
+		return result;
 	}
 
 }

@@ -87,17 +87,15 @@ public class CatalogServiceImpl implements CatalogService {
 		return versionRepository;
 	}
 
-	public Version loadVersion(String pomPath, long snapshot)
+	public Version loadVersion(String artifactId, String version)
 			throws ModelParseException, IOException {
+		return getVersionRepository()
+				.findVersionByArtifactIdAndVersion(artifactId, version);
+	}
 
-		Version mavenVersion = (Version) MavenUtils.processPom(pomPath, 0);
-		Version repositoryVersion = getVersionRepository()
-				.findVersionByArtifactIdAndVersion(mavenVersion);
-		if (repositoryVersion.getId() == null) {
-			// obtiene el jar
-			// persiste la versión maven
-		}
-		return repositoryVersion;
+	@Override
+	public Version buildVersionFromPom(String path, long snapshot) throws Exception {
+		return (Version) MavenUtils.processPom(path, snapshot);
 	}
 
 }

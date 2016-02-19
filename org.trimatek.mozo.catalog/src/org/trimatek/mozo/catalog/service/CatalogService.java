@@ -3,6 +3,7 @@ package org.trimatek.mozo.catalog.service;
 import java.io.IOException;
 import java.util.Collection;
 
+import org.apache.maven.model.io.ModelParseException;
 import org.trimatek.mozo.catalog.model.Repository;
 import org.trimatek.mozo.catalog.model.Version;
 
@@ -16,6 +17,8 @@ public interface CatalogService {
 	
 	public Repository loadRepository(Long id, Long snahpshot);
 	
-	public Version loadVersion(String pomPath, long snapshot) throws IOException;
+	public Version loadVersion(String artifactId, String version) throws IOException;
+	
+	public Version buildVersionFromPom(String path, long snapshot) throws Exception;
 	
 }

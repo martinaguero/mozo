@@ -37,6 +37,7 @@ public class Version extends RepoEntity {
 	private Set<Version> dependencies;
 	@OneToMany(mappedBy = "version", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Class> classes;
+	private File dataProxy;
 
 	public Version() {
 	}
@@ -53,6 +54,14 @@ public class Version extends RepoEntity {
 		setVersion(version);
 		setUrl(url);
 		setData(data);
+	}
+
+	public File getDataProxy() {
+		return dataProxy;
+	}
+
+	public void setDataProxy(File dataProxy) {
+		this.dataProxy = dataProxy;
 	}
 
 	public String getVersion() {
@@ -93,7 +102,7 @@ public class Version extends RepoEntity {
 	public void setClasses(Set<Class> classes) {
 		this.classes = classes;
 	}
-	
+
 	public void addClass(Class clazz) {
 		if (classes == null) {
 			classes = new HashSet<Class>();
