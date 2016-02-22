@@ -25,19 +25,14 @@ public class NavigatorServiceImpl implements NavigatorService {
 			ClassNotFoundException {
 		Version catalogVersion = catalogService.loadVersion(
 				version.getArtifactId(), version.getVersion());
-		if (catalogVersion == null) {
+		if (catalogVersion == null || catalogVersion.getJar() == null) {
 			version = bytecodeService.loadJar(version);
-			version = CatalogTools.save(version, catalogService);
-
 			version = bytecodeService.buildJarProxy(version);
-		} else if (catalogVersion.getData() == null) {
-			version = bytecodeService.loadJar(catalogVersion);
-			// persistir
+			version = CatalogTools.save(version, catalogService);
+		} else if (catalogVersion.getJarProxy() == null) {
 			version = bytecodeService.buildJarProxy(catalogVersion);
-		} else if (catalogVersion.getDataProxy() == null) {
-			version = bytecodeService.buildJarProxy(catalogVersion);
-		}
-
+			version = CatalogTools.save(version, catalogService);
+		} 
 		return version;
 	}
 
