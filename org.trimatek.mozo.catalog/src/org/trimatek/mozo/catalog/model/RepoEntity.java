@@ -24,7 +24,6 @@ public class RepoEntity implements Serializable {
 	protected String groupId;
 	protected String artifactId;
 	protected String url;
-	protected File data;
 
 	protected RepoEntity() {
 	}
@@ -80,16 +79,6 @@ public class RepoEntity implements Serializable {
 
 	public void setUrl(String url) {
 		this.url = url;
-	}
-
-	@Basic(fetch=FetchType.LAZY)
-	@Column(name = "data")
-	public File getData() {
-		return data;
-	}
-
-	public void setData(File data) {
-		this.data = data;
 	}
 
 }

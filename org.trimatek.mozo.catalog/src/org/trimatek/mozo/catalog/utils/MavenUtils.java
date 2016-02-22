@@ -58,13 +58,12 @@ public class MavenUtils {
 		FileUtils.copyURLToFile(url, file);
 		Metadata metadata = metaReader.read(file, params);
 		System.out.println("XML: " + metadata.getArtifactId());
-		return new Product(metadata.getArtifactId(), snapshot, path, versions,
-				file);
+		return new Product(metadata.getArtifactId(), snapshot, path, versions);
 	}
 
 	public static String getGroupId(Product product)
 			throws MetadataParseException, IOException {
-		return metaReader.read(product.getData(), params).getGroupId();
+		return metaReader.read(new File(product.getUrl()), params).getGroupId();
 	}
 
 	private static String buildId(Model model) {

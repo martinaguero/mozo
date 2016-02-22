@@ -5,11 +5,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
@@ -37,7 +39,12 @@ public class Version extends RepoEntity {
 	private Set<Version> dependencies;
 	@OneToMany(mappedBy = "version", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Class> classes;
-	private File dataProxy;
+	@Lob
+	@Column(name="jar")
+	private byte[] jar;
+	@Lob
+	@Column(name="jarProxy")
+	private byte[] jarProxy;
 
 	public Version() {
 	}
@@ -47,22 +54,29 @@ public class Version extends RepoEntity {
 		setArtifactId(artifactId);
 	}
 
-	public Version(String artifactId, String groupId, long snapshot, String url,
-			String version, File dataSource) {
+	public Version(String artifactId, String groupId, long snapshot,
+			String url, String version, File dataSource) {
 		super(snapshot);
 		setArtifactId(artifactId);
 		setGroupId(groupId);
 		setVersion(version);
 		setUrl(url);
-		setData(data);
 	}
 
-	public File getDataProxy() {
-		return dataProxy;
+	public byte[] getJar() {
+		return jar;
 	}
 
-	public void setDataProxy(File dataProxy) {
-		this.dataProxy = dataProxy;
+	public void setJar(byte[] jar) {
+		this.jar = jar;
+	}
+
+	public byte[] getJarProxy() {
+		return jarProxy;
+	}
+
+	public void setJarProxy(byte[] jarProxy) {
+		this.jarProxy = jarProxy;
 	}
 
 	public String getVersion() {
