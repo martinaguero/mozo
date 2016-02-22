@@ -1,11 +1,10 @@
 package org.trimatek.mozo.bytecoder.test;
 
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
+import org.apache.commons.io.IOUtils;
 import org.trimatek.mozo.bytecoder.service.BytecodeService;
 import org.trimatek.mozo.bytecoder.service.impl.BytecodeServiceImpl;
 import org.trimatek.mozo.catalog.model.Version;
@@ -17,10 +16,10 @@ public class HollowerTest {
 		String path = "F:\\Temp\\mozo\\originales\\standard.jar";
 		File jarFile = new File(path);
 		Version version = new Version();
-		version.setData(jarFile);
+		version.setJarProxy(IOUtils.toByteArray(new FileInputStream(jarFile)));
 		version = hs.buildJarProxy(version);
 		
-		System.out.println(version.getDataProxy().getName());
+		System.out.println(version.getJarProxy());
 		
 //		InputStream input = hs.buildJarProxy(version);
 //	    byte[] buffer = new byte[input.available()];

@@ -20,6 +20,7 @@ import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 import java.util.zip.ZipInputStream;
 
+import org.apache.commons.io.IOUtils;
 import org.trimatek.mozo.bytecoder.Config;
 import org.trimatek.mozo.bytecoder.Context;
 import org.trimatek.mozo.catalog.model.Version;
@@ -136,7 +137,10 @@ public class JarUtils {
 		FileOutputStream fos = new FileOutputStream(file);
 		fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 		fos.close();
-		version.setData(file);
+		FileInputStream fis = new FileInputStream(file);
+		version.setJar(IOUtils.toByteArray(fis));
+		fis.close();
+		file.delete();
 		return version;
 	}
 
