@@ -40,7 +40,9 @@ public class MozoServiceImpl implements MozoService {
 					"MOZO: ArtifactId or version is missing.");
 		}
 		try {
-			return navigatorService.loadJarProxy(version);
+			version = navigatorService.loadJarProxy(version);
+			version.setJar(null);
+			return version;
 		} catch (IOException e) {
 			throw new ExternalResourceException(
 					"MOZO: External resource exception", e);
