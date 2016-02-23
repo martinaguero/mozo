@@ -1,5 +1,7 @@
 package org.trimatek.mozo.ui;
 
+import java.io.FileOutputStream;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
@@ -39,6 +41,10 @@ public class Activator implements BundleActivator {
 		Version version = catalogService.buildVersionFromPom(path, 0);
 		
 		version = mozoService.loadJarProxy(version);
+		
+		FileOutputStream fos = new FileOutputStream("f:\\Temp\\"+version.getArtifactId()+".jar");
+		fos.write(version.getJarProxy());
+		fos.close();
 		
 		System.out.println("PROXY: " + version.getArtifactId());
 
