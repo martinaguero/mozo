@@ -3,7 +3,6 @@ package org.trimatek.mozo.navigator.service.impl;
 import java.io.IOException;
 
 import org.trimatek.mozo.bytecoder.service.BytecodeService;
-import org.trimatek.mozo.catalog.model.Repository;
 import org.trimatek.mozo.catalog.model.Version;
 import org.trimatek.mozo.catalog.service.CatalogService;
 import org.trimatek.mozo.navigator.service.NavigatorService;
@@ -32,7 +31,9 @@ public class NavigatorServiceImpl implements NavigatorService {
 		} else if (catalogVersion.getJarProxy() == null) {
 			version = bytecodeService.buildJarProxy(catalogVersion);
 			version = CatalogTools.save(version, catalogService);
-		} 
+		} else {
+			version = catalogVersion;
+		}
 		return version;
 	}
 
