@@ -1,9 +1,11 @@
 package org.trimatek.mozo.navigator.service.impl;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.trimatek.mozo.bytecoder.service.BytecodeService;
 import org.trimatek.mozo.catalog.model.Version;
+import org.trimatek.mozo.catalog.model.Class;
 import org.trimatek.mozo.catalog.service.CatalogService;
 import org.trimatek.mozo.navigator.service.NavigatorService;
 import org.trimatek.mozo.navigator.tools.CatalogTools;
@@ -35,6 +37,17 @@ public class NavigatorServiceImpl implements NavigatorService {
 			version = catalogVersion;
 		}
 		return version;
+	}
+
+	@Override
+	public List<Version> loadDependencies(Version version) {
+		Class catalogClass;
+		for (Class clazz : version.getClasses()) {
+			catalogClass = catalogService.loadClass(clazz.getArtifactId(),
+					clazz.getClassName());
+			System.out.println(catalogClass.getClassName());
+		}
+		return null;
 	}
 
 }
