@@ -22,7 +22,7 @@ import javax.persistence.Table;
 @Table(name = "VERSION")
 // TODO cambiar el order by por algo que obtenga el max(snapshot)
 // TODO agregar la condición de que traiga únicamente las clases públicas
-@NamedQuery(name = "findVersionByArtifactIdAndVersion", query = "from Version v where v.artifactId = :vaid and v.version = :vv order by v.snapshot")
+@NamedQuery(name = "findVersionByArtifactIdAndVersion", query = "from Version v JOIN FETCH v.classes where v.artifactId = :vaid and v.version = :vv order by v.snapshot")
 public class Version extends RepoEntity {
 
 	private String version;
@@ -38,7 +38,7 @@ public class Version extends RepoEntity {
 			@JoinColumn(name = "dependency_id", referencedColumnName = "id"),
 			@JoinColumn(name = "dependency_snapshot", referencedColumnName = "snapshot") })
 	private Set<Version> dependencies;
-	@OneToMany(mappedBy = "version", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "version", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Class> classes;
 	@Lob
 	@Column(name="jar")

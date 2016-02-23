@@ -12,10 +12,12 @@ import javax.persistence.EntityManagerFactory;
 
 import org.apache.maven.model.io.ModelParseException;
 import org.trimatek.mozo.catalog.Config;
+import org.trimatek.mozo.catalog.model.Class;
 import org.trimatek.mozo.catalog.model.Group;
 import org.trimatek.mozo.catalog.model.Product;
 import org.trimatek.mozo.catalog.model.Repository;
 import org.trimatek.mozo.catalog.model.Version;
+import org.trimatek.mozo.catalog.repositories.ClassRepository;
 import org.trimatek.mozo.catalog.repositories.GroupRepository;
 import org.trimatek.mozo.catalog.repositories.ProductRepository;
 import org.trimatek.mozo.catalog.repositories.VersionRepository;
@@ -28,6 +30,7 @@ public class CatalogServiceImpl implements CatalogService {
 	private VersionRepository versionRepository;
 	private GroupRepository groupRepository;
 	private ProductRepository productRepository;
+	private ClassRepository classRepository;
 
 	public CatalogServiceImpl(EntityManagerFactory entityManagerFactory) {
 		this.entityManagerFactory = entityManagerFactory;
@@ -67,9 +70,8 @@ public class CatalogServiceImpl implements CatalogService {
 				.createEntityManager();
 		Repository result = null;
 		entityManager.getTransaction().begin();
-		List<Repository> results = entityManager
-				.createNamedQuery("loadRepository",
-						Repository.class).getResultList();
+		List<Repository> results = entityManager.createNamedQuery(
+				"loadRepository", Repository.class).getResultList();
 		if (!results.isEmpty()) {
 			result = results.get(0);
 		}
@@ -103,12 +105,19 @@ public class CatalogServiceImpl implements CatalogService {
 		}
 		return groupRepository;
 	}
-	
+
 	public ProductRepository getProductRepository() {
 		if (productRepository == null) {
 			productRepository = new ProductRepository(entityManagerFactory);
 		}
 		return productRepository;
+	}
+
+	public ClassRepository getClassRepository() {
+		if (classRepository == null) {
+			classRepository = new ClassRepository(entityManagerFactory);
+		}
+		return classRepository;
 	}
 
 	public Version loadVersion(String artifactId, String version)
@@ -136,6 +145,12 @@ public class CatalogServiceImpl implements CatalogService {
 	@Override
 	public long getCurrentSnapshot() {
 		return Config.CURRENT_SNAPSHOT;
+	}
+
+	@Override
+	public Class loadClass(String artifactId, String className) {
+		return getClassRepository().findClassByArtifactIdAndClassName(
+				artifactId, className);
 	}
 
 }

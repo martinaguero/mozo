@@ -1,5 +1,6 @@
 package org.trimatek.mozo.catalog.model;
 
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,13 +9,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "CLASS")
+@NamedQuery(name = "findClassByArtifactIdAndClassName", query = "from Class c where c.artifactId = :caid and c.className = :cn order by c.snapshot")
 public class Class extends RepoEntity {
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumns({
 			@JoinColumn(name = "version_id", referencedColumnName = "id"),
 			@JoinColumn(name = "version_snapshot", referencedColumnName = "snapshot") })

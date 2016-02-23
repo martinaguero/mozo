@@ -7,6 +7,7 @@ import org.trimatek.mozo.catalog.model.Group;
 import org.trimatek.mozo.catalog.model.Product;
 import org.trimatek.mozo.catalog.model.Repository;
 import org.trimatek.mozo.catalog.model.Version;
+import org.trimatek.mozo.catalog.model.Class;
 
 public interface CatalogService {
 
@@ -25,6 +26,8 @@ public interface CatalogService {
 	public Product loadProduct(String artifactId);
 	
 	public Version buildVersionFromPom(String path, long snapshot) throws Exception;
+	
+	public Class loadClass(String artifactId, String className);
 	
 	public long getCurrentSnapshot();
 	
