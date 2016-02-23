@@ -73,6 +73,7 @@ public class BytecodeServiceImpl implements BytecodeService {
 					FileInputStream is = new FileInputStream(file);
 					clazz.setBytecode(IOUtils.toByteArray(is));
 					is.close();
+					clazz.setArtifactId(version.getArtifactId());
 					clazz.setVersion(version);
 					version.addClass(clazz);
 				}
