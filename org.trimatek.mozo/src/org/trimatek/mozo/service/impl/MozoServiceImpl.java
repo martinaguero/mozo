@@ -44,10 +44,12 @@ public class MozoServiceImpl implements MozoService {
 		}
 		try {
 			version = navigatorService.loadJarProxy(version);
-			// TODO al modificar el query para que traiga sólo las clases públicas se borra 
+			// TODO al modificar el query para que traiga sólo las clases públicas se borra. 
+			// Mantiene el borrado de bytecode 
 			Set<Class> classes = new HashSet<Class>();
 			for (Class c : version.getClasses()) {
 				if(c.getPublicClass()){
+					c.setBytecode(null);
 					classes.add(c);
 				}
 			}
