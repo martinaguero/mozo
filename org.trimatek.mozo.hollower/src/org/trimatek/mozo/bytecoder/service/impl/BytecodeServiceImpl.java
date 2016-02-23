@@ -63,10 +63,15 @@ public class BytecodeServiceImpl implements BytecodeService {
 					ClassParser cp = new ClassParser(new FileInputStream(file),
 							jarEntry.getName());
 					JavaClass javaClass = cp.parse();
+					Class clazz = new Class(javaClass.getClassName(),version.getSnapshot());
+					clazz.setPublicClass(Boolean.FALSE);
 					if (javaClass.isPublic()) {
+						clazz.setPublicClass(Boolean.TRUE);
 						javaClass = litter.buildLiteVersion(javaClass, ctx);
 						javaClass.dump(ctx.OUTPUT_DIR + jarEntry.getName());
 					}
+					clazz.setVersion(version);
+					version.addClass(clazz);
 				}
 			}
 		}
