@@ -70,6 +70,9 @@ public class BytecodeServiceImpl implements BytecodeService {
 						javaClass = litter.buildLiteVersion(javaClass, ctx);
 						javaClass.dump(ctx.OUTPUT_DIR + jarEntry.getName());
 					}
+					FileInputStream is = new FileInputStream(file);
+					clazz.setBytecode(IOUtils.toByteArray(is));
+					is.close();
 					clazz.setVersion(version);
 					version.addClass(clazz);
 				}
