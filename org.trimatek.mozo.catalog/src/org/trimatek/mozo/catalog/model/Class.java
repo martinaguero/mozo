@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -19,8 +20,11 @@ public class Class extends RepoEntity {
 			@JoinColumn(name = "version_snapshot", referencedColumnName = "snapshot") })
 	private Version version;
 	private String className;
-	@Column(name="public")
+	@Column(name = "public")
 	private Boolean publicClass;
+	@Lob
+	@Column(name="bytecode")
+	private byte[] bytecode;
 
 	public Class() {
 	}
@@ -53,8 +57,16 @@ public class Class extends RepoEntity {
 	public void setPublicClass(Boolean publicClass) {
 		this.publicClass = publicClass;
 	}
-	
-	public String toString(){
+
+	public byte[] getBytecode() {
+		return bytecode;
+	}
+
+	public void setBytecode(byte[] bytecode) {
+		this.bytecode = bytecode;
+	}
+
+	public String toString() {
 		return getClassName();
 	}
 
