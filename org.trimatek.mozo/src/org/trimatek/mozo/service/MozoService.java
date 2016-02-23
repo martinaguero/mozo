@@ -12,6 +12,6 @@ public interface MozoService {
 
 	public Version loadJarProxy(Version target) throws MozoException;
 	
-	public List<Version> loadDependencies(Version target);
+	public List<Version> fetchDependencies(Version target);
 
 }

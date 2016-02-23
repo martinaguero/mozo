@@ -67,7 +67,7 @@ public class MozoServiceImpl implements MozoService {
 	}
 
 	@Override
-	public List<Version> loadDependencies(Version target) {
-		return navigatorService.loadDependencies(target);
+	public List<Version> fetchDependencies(Version target) {
+		return navigatorService.fetchDependencies(target);
 	}
 }
