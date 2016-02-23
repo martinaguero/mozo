@@ -65,4 +65,9 @@ public class MozoServiceImpl implements MozoService {
 					"MOZO: Error while processing bytecode", e);
 		}
 	}
+
+	@Override
+	public List<Version> loadDependencies(Version target) {
+		return navigatorService.loadDependencies(target);
+	}
 }
