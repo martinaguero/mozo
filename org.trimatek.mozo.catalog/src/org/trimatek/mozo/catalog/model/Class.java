@@ -1,6 +1,7 @@
 package org.trimatek.mozo.catalog.model;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -18,8 +19,13 @@ public class Class extends RepoEntity {
 			@JoinColumn(name = "version_snapshot", referencedColumnName = "snapshot") })
 	private Version version;
 	private String className;
-	
-	public Class(String className, long snapshot){
+	@Column(name="public")
+	private Boolean publicClass;
+
+	public Class() {
+	}
+
+	public Class(String className, long snapshot) {
 		super(snapshot);
 		setClassName(className);
 	}
@@ -38,6 +44,18 @@ public class Class extends RepoEntity {
 
 	public void setClassName(String className) {
 		this.className = className;
+	}
+
+	public Boolean getPublicClass() {
+		return publicClass;
+	}
+
+	public void setPublicClass(Boolean publicClass) {
+		this.publicClass = publicClass;
+	}
+	
+	public String toString(){
+		return getClassName();
 	}
 
 }

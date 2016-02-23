@@ -1,6 +1,5 @@
 package org.trimatek.mozo.catalog.model;
 
-import java.io.File;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;

@@ -21,6 +21,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "VERSION")
 // TODO cambiar el order by por algo que obtenga el max(snapshot)
+// TODO agregar la condición de que traiga únicamente las clases públicas
 @NamedQuery(name = "findVersionByArtifactIdAndVersion", query = "from Version v where v.artifactId = :vaid and v.version = :vv order by v.snapshot")
 public class Version extends RepoEntity {
 
