@@ -1,11 +1,14 @@
 package org.trimatek.mozo.service.impl;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
+import org.trimatek.mozo.catalog.model.Class;
 import org.trimatek.mozo.catalog.model.Version;
 import org.trimatek.mozo.exception.BytecodeException;
 import org.trimatek.mozo.exception.ExternalResourceException;
@@ -41,6 +44,15 @@ public class MozoServiceImpl implements MozoService {
 		}
 		try {
 			version = navigatorService.loadJarProxy(version);
+			// TODO al modificar el query para que traiga sólo las clases públicas se borra 
+			Set<Class> classes = new HashSet<Class>();
+			for (Class c : version.getClasses()) {
+				if(c.getPublicClass()){
+					classes.add(c);
+				}
+			}
+			version.setClasses(classes);
+			// TODO al modificar el query para que traiga sólo las clases públicas se borra
 			version.setJar(null);
 			return version;
 		} catch (IOException e) {
