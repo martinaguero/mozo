@@ -63,6 +63,7 @@ public class Activator implements BundleActivator {
 		
 		Version target = new Version();
 		target.setArtifactId("bcel-5.2");
+		target.setGroupId("org.apache.bcel");
 		
 		List<String> references = new ArrayList<String>();
 		references.add("org.apache.bcel.generic.JSR");
