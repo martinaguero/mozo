@@ -41,10 +41,10 @@ public class Version extends RepoEntity {
 	@OneToMany(mappedBy = "version", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Class> classes;
 	@Lob
-	@Column(name="jar")
+	@Column(name = "jar")
 	private byte[] jar;
 	@Lob
-	@Column(name="jarProxy")
+	@Column(name = "jarProxy")
 	private byte[] jarProxy;
 
 	public Version() {
@@ -124,6 +124,17 @@ public class Version extends RepoEntity {
 			classes = new HashSet<Class>();
 		}
 		classes.add(clazz);
+	}
+
+	public boolean contains(Class clazz) {
+		if (classes != null) {
+			for (Class cl : classes) {
+				if (cl.getId().equals(clazz.getId())) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 }
