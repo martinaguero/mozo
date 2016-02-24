@@ -94,8 +94,8 @@ public class BytecodeServiceImpl implements BytecodeService {
 	}
 
 	@Override
-	public List<String> listReferences(String className, byte[] bytecode)
-			throws ClassFormatException, IOException {
+	public List<String> listReferences(String className, byte[] bytecode,
+			String groupId) throws ClassFormatException, IOException {
 		List<String> references = new ArrayList<String>();
 		ClassParser cp = new ClassParser(new ByteArrayInputStream(bytecode),
 				className);
@@ -104,7 +104,11 @@ public class BytecodeServiceImpl implements BytecodeService {
 			if (ConstantUtf8.class.isInstance(constant)) {
 				String bytes = ((ConstantUtf8) constant).getBytes();
 				if (bytes.startsWith("L") && bytes.endsWith(";")) {
-					references.add(bytes.substring(1, bytes.length() - 1));
+					bytes = bytes.substring(1, bytes.length() - 1);
+					bytes = bytes.replace("/",".");
+					if (bytes.startsWith(groupId)) {
+						references.add(bytes);
+					}
 				}
 			}
 		}
