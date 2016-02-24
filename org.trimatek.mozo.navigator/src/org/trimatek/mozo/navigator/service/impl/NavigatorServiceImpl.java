@@ -12,6 +12,7 @@ import org.trimatek.mozo.catalog.service.CatalogService;
 import org.trimatek.mozo.navigator.service.NavigatorService;
 import org.trimatek.mozo.navigator.tools.BytecodeTools;
 import org.trimatek.mozo.navigator.tools.CatalogTools;
+import org.trimatek.mozo.navigator.utils.NavigatorUtils;
 
 public class NavigatorServiceImpl implements NavigatorService {
 
@@ -46,20 +47,27 @@ public class NavigatorServiceImpl implements NavigatorService {
 	public Version fetchDependencies(List<String> references, Version version)
 			throws Exception {
 		Class catalogClass;
+		int count = 0;
 		for (String clazz : references) {
 			catalogClass = catalogService.loadClass(version.getArtifactId(),
 					clazz);
 			if (catalogClass != null) {
-				version.addClass(catalogClass);
+				count++;
+				if (!version.contains(catalogClass)) {
+					version.addClass(catalogClass);
+				}
 			}
 		}
-		if (references.size() != version.getClasses().size()) {
+		if (references.size() != count) {
 			throw new RuntimeException(
 					"MOZO: Required and fetched number of classes are not equal.");
 		}
-
-		List<String> refs = BytecodeTools.findReferences(version.getClasses(),
-				version, bytecodeService);
+		List<String> selfReferences = BytecodeTools.findReferences(
+				version.getClasses(), version.getGroupId(), bytecodeService);
+		selfReferences = NavigatorUtils.removeRepeated(selfReferences,version.getClasses());
+		if (!selfReferences.isEmpty()) {
+			version = fetchDependencies(selfReferences, version);
+		}
 		return version;
 	}
 
