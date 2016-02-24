@@ -4,11 +4,15 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
+import org.apache.bcel.classfile.ClassFormatException;
 import org.apache.bcel.classfile.ClassParser;
+import org.apache.bcel.classfile.Constant;
+import org.apache.bcel.classfile.ConstantUtf8;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.commons.io.IOUtils;
 import org.trimatek.mozo.bytecoder.Context;
@@ -63,7 +67,8 @@ public class BytecodeServiceImpl implements BytecodeService {
 					ClassParser cp = new ClassParser(new FileInputStream(file),
 							jarEntry.getName());
 					JavaClass javaClass = cp.parse();
-					Class clazz = new Class(javaClass.getClassName(),version.getSnapshot());
+					Class clazz = new Class(javaClass.getClassName(),
+							version.getSnapshot());
 					clazz.setPublicClass(Boolean.FALSE);
 					if (javaClass.isPublic()) {
 						clazz.setPublicClass(Boolean.TRUE);
@@ -86,5 +91,23 @@ public class BytecodeServiceImpl implements BytecodeService {
 		fis.close();
 		lite.delete();
 		return version;
+	}
+
+	@Override
+	public List<String> listReferences(String className, byte[] bytecode)
+			throws ClassFormatException, IOException {
+		List<String> references = new ArrayList<String>();
+		ClassParser cp = new ClassParser(new ByteArrayInputStream(bytecode),
+				className);
+		Constant[] constants = cp.parse().getConstantPool().getConstantPool();
+		for (Constant constant : constants) {
+			if (ConstantUtf8.class.isInstance(constant)) {
+				String bytes = ((ConstantUtf8) constant).getBytes();
+				if (bytes.startsWith("L") && bytes.endsWith(";")) {
+					references.add(bytes.substring(1, bytes.length() - 1));
+				}
+			}
+		}
+		return references;
 	}
 }
