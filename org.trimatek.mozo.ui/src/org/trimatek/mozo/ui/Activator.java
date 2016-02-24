@@ -43,9 +43,8 @@ public class Activator implements BundleActivator {
 		catalogService = (CatalogService) catalogServiceTracker.getService();
 		// hasta acá provisiorio
 
-//		testLoadJarProxy();
+		// testLoadJarProxy();
 		testLoadDependencies();
-
 
 	}
 
@@ -58,23 +57,33 @@ public class Activator implements BundleActivator {
 	public void stop(BundleContext context) throws Exception {
 		System.out.println("Goodbye World!!");
 	}
-	
-	private void testLoadDependencies() throws ParityCheckException, BytecodeException{
-		
+
+	private void testLoadDependencies() throws ParityCheckException,
+			BytecodeException {
+
 		Version target = new Version();
 		target.setArtifactId("bcel-5.2");
 		target.setGroupId("org.apache.bcel");
-		
+ 
 		List<String> references = new ArrayList<String>();
-		references.add("org.apache.bcel.generic.JSR");
-		references.add("org.apache.bcel.verifier.Verifier");
-		
-		target = mozoService.fetchDependencies(references,target);
-		
+//		references.add("org.apache.bcel.generic.JSR");
+//		references.add("org.apache.bcel.generic.NamedAndTyped");
+//		references.add("org.apache.bcel.generic.DRETURN");
+//		references.add("org.apache.bcel.util.ClassPath");
+//		references.add("org.apache.bcel.generic.Type");
+		references.add("org.apache.bcel.classfile.Visitor");
+//		references.add("org.apache.bcel.verifier.Verifier");
+//		references.add("org.apache.bcel.classfile.Signature");
+
+		target = mozoService.fetchDependencies(references, target);
+
 		for (Class clazz : target.getClasses()) {
 			System.out.println(clazz.getClassName());
 		}
-		
+
+		System.out.println("TOTAL DE CLASES RECUPERADAS: "
+				+ target.getClasses().size());
+
 	}
 
 	private void testLoadJarProxy() throws Exception {
