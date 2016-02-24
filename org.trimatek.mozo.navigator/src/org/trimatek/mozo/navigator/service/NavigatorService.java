@@ -9,6 +9,6 @@ public interface NavigatorService {
 
 	public Version loadJarProxy(Version version) throws IOException, ClassNotFoundException;
 	
-	public List<Version> fetchDependencies(Version version);
+	public Version fetchDependencies(List<String> references, Version version) throws Exception;
 	
 }
