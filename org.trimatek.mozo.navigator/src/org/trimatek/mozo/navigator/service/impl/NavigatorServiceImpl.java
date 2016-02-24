@@ -48,14 +48,17 @@ public class NavigatorServiceImpl implements NavigatorService {
 			throws Exception {
 		Class catalogClass;
 		int count = 0;
-		for (String clazz : references) {
+		for (String className : references) {
 			catalogClass = catalogService.loadClass(version.getArtifactId(),
-					clazz);
+					className);
 			if (catalogClass != null) {
 				count++;
 				if (!version.contains(catalogClass)) {
 					version.addClass(catalogClass);
 				}
+			} else {
+				throw new RuntimeException("MOZO: Could not load class "
+						+ className + " from catalog.");
 			}
 		}
 		if (references.size() != count) {
@@ -64,7 +67,8 @@ public class NavigatorServiceImpl implements NavigatorService {
 		}
 		List<String> selfReferences = BytecodeTools.findReferences(
 				version.getClasses(), version.getGroupId(), bytecodeService);
-		selfReferences = NavigatorUtils.removeRepeated(selfReferences,version.getClasses());
+		selfReferences = NavigatorUtils.removeRepeated(selfReferences,
+				version.getClasses());
 		if (!selfReferences.isEmpty()) {
 			version = fetchDependencies(selfReferences, version);
 		}
