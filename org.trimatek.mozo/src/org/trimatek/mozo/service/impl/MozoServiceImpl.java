@@ -14,6 +14,7 @@ import org.trimatek.mozo.exception.BytecodeException;
 import org.trimatek.mozo.exception.ExternalResourceException;
 import org.trimatek.mozo.exception.MozoException;
 import org.trimatek.mozo.exception.NullDataException;
+import org.trimatek.mozo.exception.ParityCheckException;
 import org.trimatek.mozo.navigator.service.NavigatorService;
 import org.trimatek.mozo.service.MozoService;
 
@@ -44,17 +45,19 @@ public class MozoServiceImpl implements MozoService {
 		}
 		try {
 			version = navigatorService.loadJarProxy(version);
-			// TODO al modificar el query para que traiga sólo las clases públicas se borra. 
-			// Mantiene el borrado de bytecode 
+			// TODO al modificar el query para que traiga sólo las clases
+			// públicas se borra.
+			// Mantiene el borrado de bytecode
 			Set<Class> classes = new HashSet<Class>();
 			for (Class c : version.getClasses()) {
-				if(c.getPublicClass()){
+				if (c.getPublicClass()) {
 					c.setBytecode(null);
 					classes.add(c);
 				}
 			}
 			version.setClasses(classes);
-			// TODO al modificar el query para que traiga sólo las clases públicas se borra
+			// TODO al modificar el query para que traiga sólo las clases
+			// públicas se borra
 			version.setJar(null);
 			return version;
 		} catch (IOException e) {
@@ -67,7 +70,15 @@ public class MozoServiceImpl implements MozoService {
 	}
 
 	@Override
-	public List<Version> fetchDependencies(Version target) {
-		return navigatorService.fetchDependencies(target);
+	public Version fetchDependencies(List<String> references, Version target)
+			throws ParityCheckException, BytecodeException {
+		try {
+			target = navigatorService.fetchDependencies(references,target);
+		} catch (RuntimeException re) {
+			throw new ParityCheckException(re.getMessage(), re);
+		} catch (Exception e) {
+			throw new BytecodeException("MOZO: Error while analyzing class bytecode.",e);
+		}
+		return target;
 	}
 }

@@ -4,14 +4,17 @@ import java.util.List;
 import java.util.Map;
 
 import org.trimatek.mozo.catalog.model.Version;
+import org.trimatek.mozo.exception.BytecodeException;
 import org.trimatek.mozo.exception.MozoException;
+import org.trimatek.mozo.exception.ParityCheckException;
 
 public interface MozoService {
 
 	public List<Version> fill(Map<Version, List<String>> target);
 
 	public Version loadJarProxy(Version target) throws MozoException;
-	
-	public List<Version> fetchDependencies(Version target);
+
+	public Version fetchDependencies(List<String> references, Version target)
+			throws ParityCheckException, BytecodeException;
 
 }
