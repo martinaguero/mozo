@@ -103,11 +103,14 @@ public class BytecodeServiceImpl implements BytecodeService {
 		for (Constant constant : constants) {
 			if (ConstantUtf8.class.isInstance(constant)) {
 				String bytes = ((ConstantUtf8) constant).getBytes();
+				// TODO mejorar el pattern matcher
 				if (bytes.startsWith("L") && bytes.endsWith(";")) {
 					bytes = bytes.substring(1, bytes.length() - 1);
-					bytes = bytes.replace("/",".");
+					bytes = bytes.replace("/", ".");
 					if (bytes.startsWith(groupId)) {
 						references.add(bytes);
+//						System.out.println("CLASSNAME: " + className);
+//						System.out.println("BYTES: " + bytes);
 					}
 				}
 			}
