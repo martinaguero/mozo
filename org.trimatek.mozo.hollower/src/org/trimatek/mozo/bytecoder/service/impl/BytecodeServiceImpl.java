@@ -11,13 +11,13 @@ import java.util.jar.JarInputStream;
 
 import org.apache.bcel.classfile.ClassFormatException;
 import org.apache.bcel.classfile.ClassParser;
-import org.apache.bcel.classfile.Constant;
-import org.apache.bcel.classfile.ConstantUtf8;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.commons.io.IOUtils;
 import org.trimatek.mozo.bytecoder.Context;
 import org.trimatek.mozo.bytecoder.service.BytecodeService;
+import org.trimatek.mozo.bytecoder.tools.ClassVisitor;
 import org.trimatek.mozo.bytecoder.tools.Litter;
+import org.trimatek.mozo.bytecoder.utils.BytecodeUtils;
 import org.trimatek.mozo.bytecoder.utils.JarUtils;
 import org.trimatek.mozo.catalog.model.Class;
 import org.trimatek.mozo.catalog.model.Version;
@@ -99,20 +99,12 @@ public class BytecodeServiceImpl implements BytecodeService {
 		List<String> references = new ArrayList<String>();
 		ClassParser cp = new ClassParser(new ByteArrayInputStream(bytecode),
 				className);
-		Constant[] constants = cp.parse().getConstantPool().getConstantPool();
-		for (Constant constant : constants) {
-			if (ConstantUtf8.class.isInstance(constant)) {
-				String bytes = ((ConstantUtf8) constant).getBytes();
-				// TODO mejorar el pattern matcher
-				if (bytes.startsWith("L") && bytes.endsWith(";")) {
-					bytes = bytes.substring(1, bytes.length() - 1);
-					bytes = bytes.replace("/", ".");
-					if (bytes.startsWith(groupId)) {
-						references.add(bytes);
-//						System.out.println("CLASSNAME: " + className);
-//						System.out.println("BYTES: " + bytes);
-					}
-				}
+		List<String> constants = ClassVisitor.visit(cp.parse());
+		for (String string : constants) {
+			string = BytecodeUtils.checkClassRef(string);
+			if (string != null && BytecodeUtils.isClassName(string)
+					&& string.startsWith(groupId)) {
+				references.add(string);
 			}
 		}
 		return references;
