@@ -71,9 +71,9 @@ public class Activator implements BundleActivator {
 //		references.add("org.apache.bcel.generic.DRETURN");
 //		references.add("org.apache.bcel.util.ClassPath");
 //		references.add("org.apache.bcel.generic.Type");
-		references.add("org.apache.bcel.classfile.Visitor");
+//		references.add("org.apache.bcel.classfile.Visitor");
 //		references.add("org.apache.bcel.verifier.Verifier");
-//		references.add("org.apache.bcel.classfile.Signature");
+		references.add("org.apache.bcel.classfile.Signature");
 
 		target = mozoService.fetchDependencies(references, target);
 
