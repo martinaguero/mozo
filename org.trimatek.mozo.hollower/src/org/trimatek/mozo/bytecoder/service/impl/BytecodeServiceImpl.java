@@ -51,6 +51,8 @@ public class BytecodeServiceImpl implements BytecodeService {
 	@Override
 	public Version buildJarProxy(Version version) throws IOException,
 			ClassNotFoundException {
+		// TODO verificar qué pasa con el caso donde las clases están en el primer directorio
+		// por ejemplo>  /antlr/Tool.class que no las persiste
 		Context ctx = new Context(version.getArtifactId() + "-"
 				+ version.getVersion() + ".jar");
 		JarInputStream jarFile = new JarInputStream(new ByteArrayInputStream(
