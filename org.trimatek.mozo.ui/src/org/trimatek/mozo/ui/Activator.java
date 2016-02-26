@@ -43,8 +43,8 @@ public class Activator implements BundleActivator {
 		catalogService = (CatalogService) catalogServiceTracker.getService();
 		// hasta acá provisiorio
 
-		// testLoadJarProxy();
-		testLoadDependencies();
+		testLoadJarProxy();
+		// testLoadDependencies();
 
 	}
 
@@ -63,17 +63,22 @@ public class Activator implements BundleActivator {
 
 		Version target = new Version();
 		target.setArtifactId("bcel-5.2");
+		target.setVersion("5.2");
 		target.setGroupId("org.apache.bcel");
- 
+		// target.setArtifactId("antlr-2.7.7");
+		// target.setGroupId("antlr");
+
 		List<String> references = new ArrayList<String>();
-//		references.add("org.apache.bcel.generic.JSR");
-//		references.add("org.apache.bcel.generic.NamedAndTyped");
-//		references.add("org.apache.bcel.generic.DRETURN");
-//		references.add("org.apache.bcel.util.ClassPath");
-//		references.add("org.apache.bcel.generic.Type");
-//		references.add("org.apache.bcel.classfile.Visitor");
-//		references.add("org.apache.bcel.verifier.Verifier");
-		references.add("org.apache.bcel.classfile.Signature");
+		// references.add("org.apache.bcel.generic.JSR");
+		references.add("org.apache.bcel.generic.NamedAndTyped");
+		// references.add("org.apache.bcel.generic.DRETURN");
+		// references.add("org.apache.bcel.util.ClassPath");
+		// references.add("org.apache.bcel.generic.Type");
+		// references.add("org.apache.bcel.classfile.Visitor");
+		// references.add("org.apache.bcel.verifier.Verifier");
+		// references.add("org.apache.bcel.classfile.Signature");
+
+		// references.add("antlr.ActionTransInfo");
 
 		target = mozoService.fetchDependencies(references, target);
 
@@ -94,7 +99,7 @@ public class Activator implements BundleActivator {
 		version = mozoService.loadJarProxy(version);
 
 		FileOutputStream fos = new FileOutputStream("f:\\Temp\\"
-				+ version.getArtifactId() + ".jar");
+				+ version.getArtifactId() + "-" + version.getVersion() + ".jar");
 		fos.write(version.getJarProxy());
 		fos.close();
 
