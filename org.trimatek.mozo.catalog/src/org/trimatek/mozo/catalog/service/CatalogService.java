@@ -2,12 +2,13 @@ package org.trimatek.mozo.catalog.service;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 
+import org.trimatek.mozo.catalog.model.Class;
 import org.trimatek.mozo.catalog.model.Group;
 import org.trimatek.mozo.catalog.model.Product;
 import org.trimatek.mozo.catalog.model.Repository;
 import org.trimatek.mozo.catalog.model.Version;
-import org.trimatek.mozo.catalog.model.Class;
 
 public interface CatalogService {
 
@@ -28,6 +29,8 @@ public interface CatalogService {
 	public Version buildVersionFromPom(String path, long snapshot) throws Exception;
 	
 	public Class loadClass(String artifactId, String className);
+	
+	public List<Class> loadClasses(String artifactId, long snapshot);
 	
 	public long getCurrentSnapshot();
 	

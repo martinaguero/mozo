@@ -33,4 +33,17 @@ public class ClassRepository {
 		return clazz;
 	}
 
+	public List<Class> findClassesByArtifactId(String artifactId, Long snapshot) {
+		EntityManager entityManager = entityManagerFactory
+				.createEntityManager();
+		entityManager.getTransaction().begin();
+		List<Class> results = entityManager
+				.createNamedQuery("findClassesByArtifactId", Class.class)
+				.setParameter("caid", artifactId).setParameter("cs", snapshot)
+				.getResultList();
+		entityManager.getTransaction().commit();
+		entityManager.close();
+		return results;
+	}
+
 }

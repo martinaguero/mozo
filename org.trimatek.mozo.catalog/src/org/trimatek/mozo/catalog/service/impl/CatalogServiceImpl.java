@@ -153,4 +153,10 @@ public class CatalogServiceImpl implements CatalogService {
 				artifactId, className);
 	}
 
+	@Override
+	public List<Class> loadClasses(String artifactId, long snapshot) {
+		return getClassRepository().findClassesByArtifactId(artifactId,
+				snapshot);
+	}
+
 }
