@@ -43,8 +43,8 @@ public class Activator implements BundleActivator {
 		catalogService = (CatalogService) catalogServiceTracker.getService();
 		// hasta acá provisiorio
 
-		testLoadJarProxy();
-		// testLoadDependencies();
+//		testLoadJarProxy();
+		testLoadDependencies();
 
 	}
 
@@ -62,23 +62,26 @@ public class Activator implements BundleActivator {
 			BytecodeException {
 
 		Version target = new Version();
-		target.setArtifactId("bcel-5.2");
-		target.setVersion("5.2");
-		target.setGroupId("org.apache.bcel");
-		// target.setArtifactId("antlr-2.7.7");
-		// target.setGroupId("antlr");
+		 target.setArtifactId("bcel");
+		 target.setVersion("5.2");
+		 target.setGroupId("org.apache.bcel");
+//		target.setArtifactId("antlr");
+//		target.setGroupId("antlr");
+//		target.setVersion("2.7.7");
 
 		List<String> references = new ArrayList<String>();
-		// references.add("org.apache.bcel.generic.JSR");
-		references.add("org.apache.bcel.generic.NamedAndTyped");
-		// references.add("org.apache.bcel.generic.DRETURN");
-		// references.add("org.apache.bcel.util.ClassPath");
-		// references.add("org.apache.bcel.generic.Type");
-		// references.add("org.apache.bcel.classfile.Visitor");
-		// references.add("org.apache.bcel.verifier.Verifier");
-		// references.add("org.apache.bcel.classfile.Signature");
+//		references.add("org.apache.bcel.generic.JSR"); // 289
+		// references.add("org.apache.bcel.generic.NamedAndTyped"); //80
+		// references.add("org.apache.bcel.generic.DRETURN"); //289
+		// references.add("org.apache.bcel.util.ClassPath"); //8
+		// references.add("org.apache.bcel.generic.Type"); //79
+		// references.add("org.apache.bcel.classfile.Visitor"); //79
+		// references.add("org.apache.bcel.verifier.Verifier"); //343
+		// references.add("org.apache.bcel.classfile.Signature"); //79
 
-		// references.add("antlr.ActionTransInfo");
+//		 references.add("antlr.ActionTransInfo"); //1s
+		 references.add("antlr.actions.cpp.ActionLexer"); //falló porque no cargó
+		 // en el catálogo la clase antlr.Tool (lo que está dentro del primer directorio)
 
 		target = mozoService.fetchDependencies(references, target);
 
@@ -93,7 +96,8 @@ public class Activator implements BundleActivator {
 
 	private void testLoadJarProxy() throws Exception {
 
-		String path = "https://repo1.maven.org/maven2/org/apache/bcel/bcel/5.2/bcel-5.2.pom";
+		//String path = "https://repo1.maven.org/maven2/org/apache/bcel/bcel/5.2/bcel-5.2.pom";
+		String path = "https://repo1.maven.org/maven2/antlr/antlr/2.7.7/antlr-2.7.7.pom";
 		Version version = catalogService.buildVersionFromPom(path, 0);
 
 		version = mozoService.loadJarProxy(version);
