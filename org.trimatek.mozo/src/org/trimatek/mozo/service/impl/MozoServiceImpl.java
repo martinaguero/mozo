@@ -73,11 +73,16 @@ public class MozoServiceImpl implements MozoService {
 	public Version fetchDependencies(List<String> references, Version target)
 			throws ParityCheckException, BytecodeException {
 		try {
-			target = navigatorService.fetchDependencies(references,target);
+			if (references != null && target != null && !references.isEmpty()) {
+				target = navigatorService.fetchDependencies(references, target);
+			} else {
+				throw new NullDataException("MOZO: Required data is null.");
+			}
 		} catch (RuntimeException re) {
 			throw new ParityCheckException(re.getMessage(), re);
 		} catch (Exception e) {
-			throw new BytecodeException("MOZO: Error while analyzing class bytecode.",e);
+			throw new BytecodeException(
+					"MOZO: Error while analyzing class bytecode.", e);
 		}
 		return target;
 	}
