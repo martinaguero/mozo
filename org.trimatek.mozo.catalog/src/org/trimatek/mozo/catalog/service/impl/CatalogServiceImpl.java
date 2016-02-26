@@ -36,7 +36,7 @@ public class CatalogServiceImpl implements CatalogService {
 		this.entityManagerFactory = entityManagerFactory;
 		if (PROXY_HOST != null) {
 			System.setProperty("https.proxyHost", PROXY_HOST);
-			System.setProperty("https.proxyPort", PROXY_PORT);
+			System.setProperty("https.proxyPort", PROXY_PORT + "");
 		}
 	}
 

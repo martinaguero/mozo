@@ -37,10 +37,10 @@ public class MavenUtils {
 		try {
 			model = modelReader.read(file, params);
 			System.out.println("POM: " + model.getArtifactId());
-			version = new Version(buildId(model), model.getGroupId(), snapshot,
+			version = new Version(model.getArtifactId(), model.getGroupId(), snapshot,
 					path, model.getVersion(), file);
 			for (Dependency d : model.getDependencies()) {
-				Version dep = new Version(buildId(d), d.getGroupId(), snapshot,
+				Version dep = new Version(d.getArtifactId(), d.getGroupId(), snapshot,
 						null, d.getVersion(), null);
 				version.addDependency(dep);
 			}
