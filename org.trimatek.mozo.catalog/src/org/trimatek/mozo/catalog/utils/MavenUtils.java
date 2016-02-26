@@ -20,6 +20,7 @@ import org.apache.maven.model.io.ModelReader;
 import org.trimatek.mozo.catalog.model.Product;
 import org.trimatek.mozo.catalog.model.RepoEntity;
 import org.trimatek.mozo.catalog.model.Version;
+import static org.trimatek.mozo.catalog.Config.TCR_MAVEN2_URL;
 
 public class MavenUtils {
 
@@ -37,11 +38,11 @@ public class MavenUtils {
 		try {
 			model = modelReader.read(file, params);
 			System.out.println("POM: " + model.getArtifactId());
-			version = new Version(model.getArtifactId(), model.getGroupId(), snapshot,
-					path, model.getVersion(), file);
+			version = new Version(model.getArtifactId(), model.getGroupId(),
+					snapshot, path, model.getVersion(), file);
 			for (Dependency d : model.getDependencies()) {
-				Version dep = new Version(d.getArtifactId(), d.getGroupId(), snapshot,
-						null, d.getVersion(), null);
+				Version dep = new Version(d.getArtifactId(), d.getGroupId(),
+						snapshot, buildUrl(d), d.getVersion(), null);
 				version.addDependency(dep);
 			}
 		} catch (Exception e) {
@@ -66,16 +67,14 @@ public class MavenUtils {
 		return metaReader.read(new File(product.getUrl()), params).getGroupId();
 	}
 
-	private static String buildId(Model model) {
-		return model.getArtifactId() + "-" + model.getVersion();
-	}
-
-	private static String buildId(Dependency dependency) {
-		return dependency.getArtifactId() + "-" + dependency.getVersion();
-	}
-
 	private static String buildId(String fileName) {
 		return fileName.replace(".pom", "");
+	}
+
+	private static String buildUrl(Dependency dep) {
+		return TCR_MAVEN2_URL + dep.getGroupId().replace(".", "/")
+				+ dep.getArtifactId() + dep.getVersion() + dep.getArtifactId()
+				+ "-" + dep.getVersion() + ".pom";
 	}
 
 	private static String buildVersion(String fileName) {
