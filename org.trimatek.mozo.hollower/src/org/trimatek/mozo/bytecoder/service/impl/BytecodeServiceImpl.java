@@ -51,7 +51,8 @@ public class BytecodeServiceImpl implements BytecodeService {
 	@Override
 	public Version buildJarProxy(Version version) throws IOException,
 			ClassNotFoundException {
-		Context ctx = new Context(version.getArtifactId() + ".jar");
+		Context ctx = new Context(version.getArtifactId() + "-"
+				+ version.getVersion() + ".jar");
 		JarInputStream jarFile = new JarInputStream(new ByteArrayInputStream(
 				version.getJar()));
 		JarEntry jarEntry;
