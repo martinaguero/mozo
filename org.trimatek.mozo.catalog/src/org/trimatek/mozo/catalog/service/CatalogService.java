@@ -13,25 +13,32 @@ import org.trimatek.mozo.catalog.model.Version;
 public interface CatalogService {
 
 	public void save(Repository repository);
-	
+
 	public void saveOrUpdate(Repository repository);
-	
+
 	public Collection<Repository> listAllRepositories();
-	
+
 	public Repository loadRepository();
+
+	public Version loadVersionWithClasses(String artifactId, String version)
+			throws IOException;
 	
-	public Version loadVersion(String artifactId, String version) throws IOException;
-	
+	public Version loadVersion(String artifactId, String version)
+			throws IOException;
+
 	public Group loadGroup(String groupId);
-	
+
 	public Product loadProduct(String artifactId);
-	
-	public Version buildVersionFromPom(String path, long snapshot) throws Exception;
-	
+
+	public Version buildVersionFromPom(String path, long snapshot)
+			throws Exception;
+
 	public Class loadClass(String artifactId, String className);
-	
+
 	public List<Class> loadClasses(String artifactId, long snapshot);
-	
+
 	public long getCurrentSnapshot();
-	
+
+	public Version loadVersionWithDependencies(String artifactId, String version);
+
 }

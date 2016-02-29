@@ -120,10 +120,15 @@ public class CatalogServiceImpl implements CatalogService {
 		return classRepository;
 	}
 
+	public Version loadVersionWithClasses(String artifactId, String version)
+			throws ModelParseException, IOException {
+		return getVersionRepository().findVersionWithClasses(artifactId,
+				version);
+	}
+
 	public Version loadVersion(String artifactId, String version)
 			throws ModelParseException, IOException {
-		return getVersionRepository().findVersionByArtifactIdAndVersion(
-				artifactId, version);
+		return getVersionRepository().findVersion(artifactId, version);
 	}
 
 	@Override
@@ -159,4 +164,9 @@ public class CatalogServiceImpl implements CatalogService {
 				snapshot);
 	}
 
+	@Override
+	public Version loadVersionWithDependencies(String artifactId, String version) {
+		return getVersionRepository().findVersionWithDependencies(artifactId,
+				version);
+	}
 }
