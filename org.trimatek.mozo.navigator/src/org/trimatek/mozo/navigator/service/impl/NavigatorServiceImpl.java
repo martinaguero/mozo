@@ -35,10 +35,6 @@ public class NavigatorServiceImpl implements NavigatorService {
 			version = bytecodeService.buildJarProxy(version);
 			// TODO estudiar si se puede dejar un thread persistiendo
 			version = CatalogTools.save(version, catalogService);
-		} else if (catalogVersion.getJarProxy() == null) {
-			version = bytecodeService.buildJarProxy(catalogVersion);
-			// TODO estudiar si se puede dejar un thread persistiendo
-			version = CatalogTools.save(version, catalogService);
 		} else {
 			version = catalogVersion;
 		}
@@ -50,14 +46,15 @@ public class NavigatorServiceImpl implements NavigatorService {
 			throws Exception {
 		Set<Version> deps = new HashSet<Version>();
 		List<String> refs;
-//		version = catalogService.loadVersion(version.getArtifactId(),
-//				version.getVersion());
 		version = doConjunction(references, version);
-	/*
+//		version.setDependencies(catalogService.loadDependencies(
+//				version.getArtifactId(), version.getVersion()));
+		
 		if (version.getDependencies() != null) {
 			for (Version dep : version.getDependencies()) {
-				dep = catalogService.loadVersion(dep.getArtifactId(),
-						dep.getVersion());
+				if (dep.getJar() == null) {
+					//agregar carga de jar
+				}
 				refs = BytecodeTools.findReferences(dep.getClasses(),
 						dep.getGroupId(), bytecodeService);
 				if (!refs.isEmpty()) {
@@ -66,7 +63,7 @@ public class NavigatorServiceImpl implements NavigatorService {
 			}
 			version.setDependencies(deps);
 		}
-		*/
+		
 		return version;
 	}
 
