@@ -35,6 +35,8 @@ public class NavigatorServiceImpl implements NavigatorService {
 			version = bytecodeService.buildJarProxy(version);
 			// TODO estudiar si se puede dejar un thread persistiendo
 			version = CatalogTools.save(version, catalogService);
+			version = catalogService.loadVersion(version.getArtifactId(),
+					version.getVersion());
 		} else {
 			version = catalogVersion;
 		}
@@ -46,24 +48,31 @@ public class NavigatorServiceImpl implements NavigatorService {
 			throws Exception {
 		Set<Version> deps = new HashSet<Version>();
 		List<String> refs;
+		Version catalogDep;
 		version = doConjunction(references, version);
-//		version.setDependencies(catalogService.loadDependencies(
-//				version.getArtifactId(), version.getVersion()));
-		
-		if (version.getDependencies() != null) {
-			for (Version dep : version.getDependencies()) {
-				if (dep.getJar() == null) {
-					//agregar carga de jar
-				}
-				refs = BytecodeTools.findReferences(dep.getClasses(),
-						dep.getGroupId(), bytecodeService);
-				if (!refs.isEmpty()) {
-					deps.add(fetchDependencies(refs, dep));
-				}
+		Version catalogVersion = catalogService.loadVersionWithDependencies(
+				version.getArtifactId(), version.getVersion());
+		/*
+		for (Version dep : catalogVersion.getDependencies()) {
+			catalogDep = catalogService.loadVersionWithClasses(
+					dep.getArtifactId(), dep.getVersion());
+			if (catalogDep.getJar() == null) {
+				catalogDep = bytecodeService.loadJar(catalogDep);
+				catalogDep = bytecodeService.buildJarProxy(catalogDep);
+				catalogDep = CatalogTools.save(catalogDep, catalogService);
+				catalogDep = catalogService.loadVersionWithClasses(
+						catalogDep.getArtifactId(), catalogDep.getVersion());
+			} else {
+				catalogDep = dep;
 			}
-			version.setDependencies(deps);
+			refs = BytecodeTools.findReferences(catalogDep.getClasses(),
+					catalogDep.getGroupId(), bytecodeService);
+			if (!refs.isEmpty()) {
+				deps.add(fetchDependencies(refs, catalogDep));
+			}
 		}
-		
+		*/
+		version.setDependencies(deps);
 		return version;
 	}
 

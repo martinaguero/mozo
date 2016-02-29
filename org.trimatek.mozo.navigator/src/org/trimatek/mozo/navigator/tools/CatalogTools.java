@@ -1,10 +1,7 @@
 package org.trimatek.mozo.navigator.tools;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
-import org.trimatek.mozo.catalog.model.Class;
 import org.trimatek.mozo.catalog.model.Group;
 import org.trimatek.mozo.catalog.model.Product;
 import org.trimatek.mozo.catalog.model.Repository;
@@ -36,8 +33,7 @@ public class CatalogTools {
 		product.addVersion(version);
 		version.setProduct(product);
 		catalogService.saveOrUpdate(repo);
-		return catalogService.loadVersion(version.getArtifactId(),
-				version.getVersion());
+		return version;
 	}
 
 	public static Version loadClasses(Version version,
