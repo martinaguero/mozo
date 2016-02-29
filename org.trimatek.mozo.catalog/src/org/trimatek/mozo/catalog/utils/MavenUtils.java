@@ -73,8 +73,8 @@ public class MavenUtils {
 
 	private static String buildUrl(Dependency dep) {
 		return TCR_MAVEN2_URL + dep.getGroupId().replace(".", "/")
-				+ dep.getArtifactId() + dep.getVersion() + dep.getArtifactId()
-				+ "-" + dep.getVersion() + ".pom";
+				+ "/" + dep.getArtifactId() + "/" + dep.getVersion() + "/"
+				+ dep.getArtifactId() + "-" + dep.getVersion() + ".pom";
 	}
 
 	private static String buildVersion(String fileName) {
