@@ -46,27 +46,22 @@ public class NavigatorServiceImpl implements NavigatorService {
 	@Override
 	public Version fetchDependencies(List<String> references, Version version)
 			throws Exception {
-		
 		Version catalogDep;
 		version = doConjunction(references, version);
 		Version catalogVersion = catalogService.loadVersionWithDependencies(
 				version.getArtifactId(), version.getVersion());
 		
-		for (Version dep : catalogVersion.getDependencies()) {
-			
-			catalogDep = catalogService.loadVersionWithClasses(
-					dep.getArtifactId(), dep.getVersion());
-			
-			if (catalogDep.getJar() == null) {
-				
-				catalogDep.setJar(new byte[55]);
-//				catalogDep = bytecodeService.loadJar(catalogDep);
-//				catalogDep = bytecodeService.buildJarProxy(catalogDep);
-				//catalogVersion.updateDependecy(dep, catalogDep);
+		for (Version dependency : catalogVersion.getDependencies()) {
+			if (dependency.getJar() == null) {
+				catalogDep = catalogService.loadVersionWithClasses(
+						dependency.getArtifactId(), dependency.getVersion());
+				catalogDep = bytecodeService.loadJar(catalogDep);
+				catalogDep = bytecodeService.buildJarProxy(catalogDep);
 				catalogDep = CatalogTools.saveDependency(catalogDep, catalogService);
-//				catalogDep = catalogService.loadVersionWithClasses(
-//						catalogDep.getArtifactId(), catalogDep.getVersion());
-					
+				catalogDep = catalogService.loadVersionWithClasses(
+						dependency.getArtifactId(), dependency.getVersion());
+			
+			System.out.println(catalogDep.getArtifactId());
 			}	
 //			} else {
 //				catalogDep = dep;
