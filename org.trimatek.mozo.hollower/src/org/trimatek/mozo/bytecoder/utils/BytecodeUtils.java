@@ -4,6 +4,9 @@ import java.util.regex.Pattern;
 
 import javax.lang.model.SourceVersion;
 
+import org.trimatek.mozo.catalog.model.Version;
+import org.trimatek.mozo.catalog.model.Class;
+
 public class BytecodeUtils {
 
 	private static Pattern p = Pattern
@@ -25,5 +28,34 @@ public class BytecodeUtils {
 			string = string.substring(2, string.length() - 3);
 		}
 		return string.replace("/", ".");
+	}
+
+	public static int[] split(String className, int[] namespace) {
+		String[] splitted = className.split("\\.");
+		for (int i = 0; i < splitted.length; i++) {
+			namespace[i] = namespace[i] + 1;
+		}
+		return namespace;
+	}
+
+	public static Version detachNamespace(int[] footprint, Version version) {
+		int cut = 0;
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < footprint.length; i++) {
+			if (i > 1 && footprint[i] > 0 && footprint[i - 1] == footprint[i]
+					&& footprint[i] > footprint[i + 1]) {
+				cut = i;
+			}
+		}
+		for (Class clazz : version.getClasses()) {
+			String[] splitted = clazz.getClassName().split("\\.");
+			for (int i = 0; i < cut; i++) {
+				sb.append(splitted[i] + ".");
+			}
+			break;
+		}
+		version.setNamespace(sb.toString().substring(0,
+				sb.toString().length() - 1));
+		return version;
 	}
 }

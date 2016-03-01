@@ -51,13 +51,15 @@ public class BytecodeServiceImpl implements BytecodeService {
 	@Override
 	public Version buildJarProxy(Version version) throws IOException,
 			ClassNotFoundException {
-		// TODO verificar qué pasa con el caso donde las clases están en el primer directorio
-		// por ejemplo>  /antlr/Tool.class que no las persiste
+		// TODO verificar qué pasa con el caso donde las clases están en el
+		// primer directorio
+		// por ejemplo> /antlr/Tool.class que no las persiste
 		Context ctx = new Context(version.getArtifactId() + "-"
 				+ version.getVersion() + ".jar");
 		JarInputStream jarFile = new JarInputStream(new ByteArrayInputStream(
 				version.getJar()));
 		JarEntry jarEntry;
+		int[] footprint = new int[20];
 		while (true) {
 			jarEntry = jarFile.getNextJarEntry();
 			if (jarEntry == null) {
@@ -83,6 +85,8 @@ public class BytecodeServiceImpl implements BytecodeService {
 					is.close();
 					clazz.setArtifactId(version.getArtifactId());
 					clazz.setVersion(version);
+					footprint = BytecodeUtils.split(javaClass.getClassName(),
+							footprint);
 					version.addClass(clazz);
 				}
 			}
@@ -93,6 +97,7 @@ public class BytecodeServiceImpl implements BytecodeService {
 		version.setJarProxy(IOUtils.toByteArray(fis));
 		fis.close();
 		lite.delete();
+		version = BytecodeUtils.detachNamespace(footprint,version);
 		return version;
 	}
 
@@ -105,6 +110,7 @@ public class BytecodeServiceImpl implements BytecodeService {
 		List<String> constants = ClassVisitor.visit(cp.parse());
 		for (String string : constants) {
 			string = BytecodeUtils.checkClassRef(string);
+			System.out.println("LIST REF: " + string + " groupID: " + groupId);
 			if (string != null && BytecodeUtils.isClassName(string)
 					&& string.startsWith(groupId)) {
 				references.add(string);
