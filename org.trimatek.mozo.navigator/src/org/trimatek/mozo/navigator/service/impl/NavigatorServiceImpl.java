@@ -46,33 +46,40 @@ public class NavigatorServiceImpl implements NavigatorService {
 	@Override
 	public Version fetchDependencies(List<String> references, Version version)
 			throws Exception {
-		Set<Version> deps = new HashSet<Version>();
-		List<String> refs;
+		
 		Version catalogDep;
 		version = doConjunction(references, version);
 		Version catalogVersion = catalogService.loadVersionWithDependencies(
 				version.getArtifactId(), version.getVersion());
-		/*
+		
 		for (Version dep : catalogVersion.getDependencies()) {
+			
 			catalogDep = catalogService.loadVersionWithClasses(
 					dep.getArtifactId(), dep.getVersion());
+			
 			if (catalogDep.getJar() == null) {
-				catalogDep = bytecodeService.loadJar(catalogDep);
-				catalogDep = bytecodeService.buildJarProxy(catalogDep);
-				catalogDep = CatalogTools.save(catalogDep, catalogService);
-				catalogDep = catalogService.loadVersionWithClasses(
-						catalogDep.getArtifactId(), catalogDep.getVersion());
-			} else {
-				catalogDep = dep;
-			}
-			refs = BytecodeTools.findReferences(catalogDep.getClasses(),
-					catalogDep.getGroupId(), bytecodeService);
-			if (!refs.isEmpty()) {
-				deps.add(fetchDependencies(refs, catalogDep));
-			}
+				
+				catalogDep.setJar(new byte[55]);
+//				catalogDep = bytecodeService.loadJar(catalogDep);
+//				catalogDep = bytecodeService.buildJarProxy(catalogDep);
+				//catalogVersion.updateDependecy(dep, catalogDep);
+				catalogDep = CatalogTools.saveDependency(catalogDep, catalogService);
+//				catalogDep = catalogService.loadVersionWithClasses(
+//						catalogDep.getArtifactId(), catalogDep.getVersion());
+					
+			}	
+//			} else {
+//				catalogDep = dep;
+//			}
+//			refs = BytecodeTools.findReferences(catalogDep.getClasses(),
+//					catalogDep.getGroupId(), bytecodeService);
+//			if (!refs.isEmpty()) {
+//				deps.add(fetchDependencies(refs, catalogDep));
+//			}
 		}
-		*/
-		version.setDependencies(deps);
+		
+//		catalogVersion = catalogService.loadVersion(version.getArtifactId(),
+//				version.getVersion());
 		return version;
 	}
 
