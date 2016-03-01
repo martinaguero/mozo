@@ -62,7 +62,7 @@ public class NavigatorServiceImpl implements NavigatorService {
 							catalogService);
 				}
 				List<String> refs = BytecodeTools.findReferences(
-						version.getClasses(), catalogDep.getGroupId(),
+						version.getClasses(), catalogDep.getNamespace(),
 						bytecodeService);
 				if (!refs.isEmpty()) {
 					dependency.setClasses(new HashSet<Class>());
@@ -96,7 +96,7 @@ public class NavigatorServiceImpl implements NavigatorService {
 					"MOZO: Required and fetched number of classes are not equal.");
 		}
 		List<String> selfReferences = BytecodeTools.findReferences(
-				version.getClasses(), version.getGroupId(), bytecodeService);
+				version.getClasses(), version.getNamespace(), bytecodeService);
 		selfReferences = NavigatorUtils.removeRepeated(selfReferences,
 				version.getClasses());
 		if (!selfReferences.isEmpty()) {
