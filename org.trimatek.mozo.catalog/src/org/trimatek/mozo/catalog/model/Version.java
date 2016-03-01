@@ -50,6 +50,7 @@ public class Version extends RepoEntity {
 	@Lob
 	@Column(name = "jarProxy")
 	private byte[] jarProxy;
+	private String namespace;
 
 	public Version() {
 	}
@@ -114,8 +115,8 @@ public class Version extends RepoEntity {
 		}
 		dependencies.add(dependency);
 	}
-	
-	public boolean updateDependecy(Version currentDep, Version newDep){
+
+	public boolean updateDependecy(Version currentDep, Version newDep) {
 		boolean result = dependencies.remove(currentDep);
 		return dependencies.add(newDep);
 	}
@@ -144,6 +145,14 @@ public class Version extends RepoEntity {
 			}
 		}
 		return false;
+	}
+
+	public String getNamespace() {
+		return namespace;
+	}
+
+	public void setNamespace(String namespace) {
+		this.namespace = namespace;
 	}
 
 }
