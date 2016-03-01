@@ -44,7 +44,8 @@ public class Activator implements BundleActivator {
 		// hasta acá provisiorio
 
 //		testLoadJarProxy();
-		testLoadDependencies();
+//		testLoadBcelDeps();
+		testLoadZkclientDeps();
 
 	}
 
@@ -58,46 +59,71 @@ public class Activator implements BundleActivator {
 		System.out.println("Goodbye World!!");
 	}
 
-	private void testLoadDependencies() throws ParityCheckException,
+	private void testLoadBcelDeps() throws ParityCheckException,
 			BytecodeException {
 
 		Version target = new Version();
-		 target.setArtifactId("bcel");
-		 target.setVersion("5.2");
-		 target.setGroupId("org.apache.bcel");
-//		target.setArtifactId("antlr");
-//		target.setGroupId("antlr");
-//		target.setVersion("2.7.7");
+		target.setArtifactId("bcel");
+		target.setVersion("5.2");
+		target.setGroupId("org.apache.bcel");
 
 		List<String> references = new ArrayList<String>();
-//		references.add("org.apache.bcel.generic.JSR"); // 289
-		// references.add("org.apache.bcel.generic.NamedAndTyped"); //80
-		// references.add("org.apache.bcel.generic.DRETURN"); //289
-		// references.add("org.apache.bcel.util.ClassPath"); //8
+		// references.add("org.apache.bcel.generic.JSR"); // 289
+//		 references.add("org.apache.bcel.generic.NamedAndTyped"); //80
+//		 references.add("org.apache.bcel.generic.DRETURN"); //289
+//		 references.add("org.apache.bcel.util.ClassPath"); //8
 		// references.add("org.apache.bcel.generic.Type"); //79
 		// references.add("org.apache.bcel.classfile.Visitor"); //79
-		// references.add("org.apache.bcel.verifier.Verifier"); //343
+//		references.add("org.apache.bcel.verifier.Verifier"); // 343
 		// references.add("org.apache.bcel.classfile.Signature"); //79
-
-//		 references.add("antlr.ActionTransInfo"); //1s
-		 references.add("antlr.actions.cpp.ActionLexer"); //falló porque no cargó
-		 // en el catálogo la clase antlr.Tool (lo que está dentro del primer directorio)
 
 		target = mozoService.fetchDependencies(references, target);
 
-		for (Class clazz : target.getClasses()) {
-			System.out.println(clazz.getClassName());
-		}
+		printResult(target);
 
+	}
+
+	private void printResult(Version version){
+		int count = 0;
+
+		for (Class clazz : version.getClasses()) {
+			System.out.println(clazz.getClassName());
+			count++;
+			for (Version dep : version.getDependencies()) {
+				for (Class dc : dep.getClasses()) {
+					System.out.println(dc.getClassName());
+					count++;
+				}
+			}
+		}
 		System.out.println("TOTAL DE CLASES RECUPERADAS: "
-				+ target.getClasses().size());
+				+ count);
+	}
+
+	private void testLoadZkclientDeps() throws ParityCheckException,
+			BytecodeException {
+
+		Version target = new Version();
+		target.setArtifactId("zkclient");
+		target.setVersion("0.7");
+		target.setGroupId("com.101tec");
+
+		List<String> references = new ArrayList<String>();
+		references.add("org.I0Itec.zkclient.ZkClient"); //40
+//		references.add("org.I0Itec.zkclient.Gateway"); //1
+
+		target = mozoService.fetchDependencies(references, target);
+		
+		printResult(target);
 
 	}
 
 	private void testLoadJarProxy() throws Exception {
 
-		//String path = "https://repo1.maven.org/maven2/org/apache/bcel/bcel/5.2/bcel-5.2.pom";
-		String path = "https://repo1.maven.org/maven2/antlr/antlr/2.7.7/antlr-2.7.7.pom";
+//		String path = "https://repo1.maven.org/maven2/org/apache/bcel/bcel/5.2/bcel-5.2.pom";
+		String path = "https://repo1.maven.org/maven2/com/101tec/zkclient/0.7/zkclient-0.7.pom";
+		// String path =
+		// "https://repo1.maven.org/maven2/antlr/antlr/2.7.7/antlr-2.7.7.pom";
 		Version version = catalogService.buildVersionFromPom(path, 0);
 
 		version = mozoService.loadJarProxy(version);
