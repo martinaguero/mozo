@@ -60,9 +60,6 @@ public class NavigatorServiceImpl implements NavigatorService {
 					catalogDep = bytecodeService.buildJarProxy(catalogDep);
 					catalogDep = CatalogTools.saveDependency(catalogDep,
 							catalogService);
-					catalogDep = catalogService
-							.loadVersion(dependency.getArtifactId(),
-									dependency.getVersion());
 				}
 				List<String> refs = BytecodeTools.findReferences(
 						version.getClasses(), catalogDep.getGroupId(),
