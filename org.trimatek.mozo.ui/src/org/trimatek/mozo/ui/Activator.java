@@ -43,9 +43,10 @@ public class Activator implements BundleActivator {
 		catalogService = (CatalogService) catalogServiceTracker.getService();
 		// hasta acá provisiorio
 
-//		testLoadJarProxy();
-//		testLoadBcelDeps();
+//		 testLoadJarProxy();
+//		 testLoadBcelDeps();
 		testLoadZkclientDeps();
+//		testLoadLog4JDeps();
 
 	}
 
@@ -66,15 +67,16 @@ public class Activator implements BundleActivator {
 		target.setArtifactId("bcel");
 		target.setVersion("5.2");
 		target.setGroupId("org.apache.bcel");
+		target.setNamespace("org.apache.bcel");
 
 		List<String> references = new ArrayList<String>();
 		// references.add("org.apache.bcel.generic.JSR"); // 289
-//		 references.add("org.apache.bcel.generic.NamedAndTyped"); //80
-//		 references.add("org.apache.bcel.generic.DRETURN"); //289
-//		 references.add("org.apache.bcel.util.ClassPath"); //8
-		// references.add("org.apache.bcel.generic.Type"); //79
+		// references.add("org.apache.bcel.generic.NamedAndTyped"); //80
+		// references.add("org.apache.bcel.generic.DRETURN"); //289
+		// references.add("org.apache.bcel.util.ClassPath"); //8
+		 references.add("org.apache.bcel.generic.Type"); //79
 		// references.add("org.apache.bcel.classfile.Visitor"); //79
-//		references.add("org.apache.bcel.verifier.Verifier"); // 343
+		// references.add("org.apache.bcel.verifier.Verifier"); // 343
 		// references.add("org.apache.bcel.classfile.Signature"); //79
 
 		target = mozoService.fetchDependencies(references, target);
@@ -83,7 +85,7 @@ public class Activator implements BundleActivator {
 
 	}
 
-	private void printResult(Version version){
+	private void printResult(Version version) {
 		int count = 0;
 
 		for (Class clazz : version.getClasses()) {
@@ -91,13 +93,12 @@ public class Activator implements BundleActivator {
 			count++;
 			for (Version dep : version.getDependencies()) {
 				for (Class dc : dep.getClasses()) {
-					System.out.println(dc.getClassName());
+					System.out.println("\t" + dc.getClassName());
 					count++;
 				}
 			}
 		}
-		System.out.println("TOTAL DE CLASES RECUPERADAS: "
-				+ count);
+		System.out.println("TOTAL DE CLASES RECUPERADAS: " + count);
 	}
 
 	private void testLoadZkclientDeps() throws ParityCheckException,
@@ -107,21 +108,41 @@ public class Activator implements BundleActivator {
 		target.setArtifactId("zkclient");
 		target.setVersion("0.7");
 		target.setGroupId("com.101tec");
+		target.setNamespace("org.I0Itec.zkclient");
 
 		List<String> references = new ArrayList<String>();
-		references.add("org.I0Itec.zkclient.ZkClient"); //40
-//		references.add("org.I0Itec.zkclient.Gateway"); //1
+		references.add("org.I0Itec.zkclient.ZkClient"); // 96
+		// references.add("org.I0Itec.zkclient.Gateway"); //1
 
 		target = mozoService.fetchDependencies(references, target);
-		
+
+		printResult(target);
+
+	}
+
+	private void testLoadLog4JDeps() throws ParityCheckException,
+			BytecodeException {
+
+		Version target = new Version();
+		target.setArtifactId("log4j");
+		target.setVersion("1.2.15");
+		target.setGroupId("org.apache.log4j");
+		target.setNamespace("org.apache.log4j");
+
+		List<String> references = new ArrayList<String>();
+		references.add("org.apache.log4j.Logger"); //56
+
+		target = mozoService.fetchDependencies(references, target);
+
 		printResult(target);
 
 	}
 
 	private void testLoadJarProxy() throws Exception {
 
-//		String path = "https://repo1.maven.org/maven2/org/apache/bcel/bcel/5.2/bcel-5.2.pom";
-		String path = "https://repo1.maven.org/maven2/com/101tec/zkclient/0.7/zkclient-0.7.pom";
+		 String path =
+//		 "https://repo1.maven.org/maven2/org/apache/bcel/bcel/5.2/bcel-5.2.pom";
+		path = "https://repo1.maven.org/maven2/com/101tec/zkclient/0.7/zkclient-0.7.pom";
 		// String path =
 		// "https://repo1.maven.org/maven2/antlr/antlr/2.7.7/antlr-2.7.7.pom";
 		Version version = catalogService.buildVersionFromPom(path, 0);
