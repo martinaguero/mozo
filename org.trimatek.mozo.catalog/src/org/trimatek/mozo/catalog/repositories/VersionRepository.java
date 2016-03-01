@@ -61,5 +61,16 @@ public class VersionRepository {
 		return findVersion(artifactId, version,
 				"findVersionByArtifactIdAndVersion");
 	}
+	
+	public void saveOrUpdate(Version version) {
+		EntityManager entityManager = entityManagerFactory
+				.createEntityManager();
+		entityManager.getTransaction().begin();
+
+		entityManager.merge(version);
+
+		entityManager.getTransaction().commit();
+		entityManager.close();
+	}
 
 }

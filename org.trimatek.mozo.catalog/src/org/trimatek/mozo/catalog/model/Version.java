@@ -114,6 +114,11 @@ public class Version extends RepoEntity {
 		}
 		dependencies.add(dependency);
 	}
+	
+	public boolean updateDependecy(Version currentDep, Version newDep){
+		boolean result = dependencies.remove(currentDep);
+		return dependencies.add(newDep);
+	}
 
 	public Set<Class> getClasses() {
 		return classes;
