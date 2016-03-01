@@ -51,21 +51,26 @@ public class NavigatorServiceImpl implements NavigatorService {
 		version = doConjunction(references, version);
 		Version catalogVersion = catalogService.loadVersionWithDependencies(
 				version.getArtifactId(), version.getVersion());
-		for (Version dependency : catalogVersion.getDependencies()) {
-			catalogDep = catalogService.loadVersionWithClasses(
-					dependency.getArtifactId(), dependency.getVersion());
-			if (dependency.getJar() == null) {			
-				catalogDep = bytecodeService.loadJar(catalogDep);
-				catalogDep = bytecodeService.buildJarProxy(catalogDep);
-				catalogDep = CatalogTools.saveDependency(catalogDep, catalogService);
+		if (catalogVersion != null) {
+			for (Version dependency : catalogVersion.getDependencies()) {
 				catalogDep = catalogService.loadVersionWithClasses(
-						dependency.getArtifactId(), dependency.getVersion());		
-			}
-			List<String> refs = BytecodeTools.findReferences(version.getClasses(),
-					catalogDep.getGroupId(), bytecodeService);
-			if (!refs.isEmpty()) {
-				dependency.setClasses(new HashSet<Class>());
-				deps.add(fetchDependencies(refs, dependency));
+						dependency.getArtifactId(), dependency.getVersion());
+				if (dependency.getJar() == null) {
+					catalogDep = bytecodeService.loadJar(catalogDep);
+					catalogDep = bytecodeService.buildJarProxy(catalogDep);
+					catalogDep = CatalogTools.saveDependency(catalogDep,
+							catalogService);
+					catalogDep = catalogService
+							.loadVersion(dependency.getArtifactId(),
+									dependency.getVersion());
+				}
+				List<String> refs = BytecodeTools.findReferences(
+						version.getClasses(), catalogDep.getGroupId(),
+						bytecodeService);
+				if (!refs.isEmpty()) {
+					dependency.setClasses(new HashSet<Class>());
+					deps.add(fetchDependencies(refs, dependency));
+				}
 			}
 		}
 		version.setDependencies(deps);
