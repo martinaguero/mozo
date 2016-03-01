@@ -169,4 +169,9 @@ public class CatalogServiceImpl implements CatalogService {
 		return getVersionRepository().findVersionWithDependencies(artifactId,
 				version);
 	}
+
+	@Override
+	public void saveOrUpdate(Version version) {
+		getVersionRepository().saveOrUpdate(version);
+	}
 }

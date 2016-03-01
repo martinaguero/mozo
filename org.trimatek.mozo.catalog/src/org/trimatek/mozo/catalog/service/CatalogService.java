@@ -15,6 +15,8 @@ public interface CatalogService {
 	public void save(Repository repository);
 
 	public void saveOrUpdate(Repository repository);
+	
+	public void saveOrUpdate(Version version);
 
 	public Collection<Repository> listAllRepositories();
 
