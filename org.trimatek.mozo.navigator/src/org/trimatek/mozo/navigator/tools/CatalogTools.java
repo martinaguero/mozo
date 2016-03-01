@@ -35,6 +35,12 @@ public class CatalogTools {
 		catalogService.saveOrUpdate(repo);
 		return version;
 	}
+	
+	public static Version saveDependency(Version dependency, CatalogService catalogService)
+			throws IOException {
+		catalogService.saveOrUpdate(dependency);
+		return dependency;
+	}
 
 	public static Version loadClasses(Version version,
 			CatalogService catalogService) {
