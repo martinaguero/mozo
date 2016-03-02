@@ -103,16 +103,15 @@ public class BytecodeServiceImpl implements BytecodeService {
 
 	@Override
 	public List<String> listReferences(String className, byte[] bytecode,
-			String groupId) throws ClassFormatException, IOException {
+			String namespace) throws ClassFormatException, IOException {
 		List<String> references = new ArrayList<String>();
 		ClassParser cp = new ClassParser(new ByteArrayInputStream(bytecode),
 				className);
 		List<String> constants = ClassVisitor.visit(cp.parse());
 		for (String string : constants) {
-			string = BytecodeUtils.checkClassRef(string);
-			System.out.println("LIST REF: " + string + " groupID: " + groupId);
+			string = BytecodeUtils.checkClassRef(string);		
 			if (string != null && BytecodeUtils.isClassName(string)
-					&& string.startsWith(groupId)) {
+					&& string.startsWith(namespace)) {
 				references.add(string);
 			}
 		}
