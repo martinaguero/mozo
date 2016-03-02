@@ -10,11 +10,11 @@ import org.trimatek.mozo.catalog.model.Class;
 public class BytecodeTools {
 
 	public static List<String> findReferences(Set<Class> classes,
-			String groupId, BytecodeService bytecodeService) throws Exception {
+			String namespace, BytecodeService bytecodeService) throws Exception {
 		List<String> references = new ArrayList<String>();
 		for (Class clazz : classes) {
 			references.addAll(bytecodeService.listReferences(clazz.getClassName(),
-					clazz.getBytecode(), groupId));
+					clazz.getBytecode(), namespace));
 		}
 		return references;
 	}
