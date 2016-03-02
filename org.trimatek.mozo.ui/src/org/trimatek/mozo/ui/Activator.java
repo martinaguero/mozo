@@ -44,8 +44,8 @@ public class Activator implements BundleActivator {
 		// hasta acá provisiorio
 
 //		 testLoadJarProxy();
-//		 testLoadBcelDeps();
-		testLoadZkclientDeps();
+		 testLoadBcelDeps();
+//		testLoadZkclientDeps();
 //		testLoadLog4JDeps();
 
 	}
@@ -74,10 +74,11 @@ public class Activator implements BundleActivator {
 		// references.add("org.apache.bcel.generic.NamedAndTyped"); //80
 		// references.add("org.apache.bcel.generic.DRETURN"); //289
 		// references.add("org.apache.bcel.util.ClassPath"); //8
-		 references.add("org.apache.bcel.generic.Type"); //79
+//		 references.add("org.apache.bcel.generic.Type"); //79
 		// references.add("org.apache.bcel.classfile.Visitor"); //79
-		// references.add("org.apache.bcel.verifier.Verifier"); // 343
+//		 references.add("org.apache.bcel.verifier.Verifier"); // 343
 		// references.add("org.apache.bcel.classfile.Signature"); //79
+		 references.add("org.apache.bcel.util.ClassStack"); //80
 
 		target = mozoService.fetchDependencies(references, target);
 
@@ -141,15 +142,15 @@ public class Activator implements BundleActivator {
 	private void testLoadJarProxy() throws Exception {
 
 		 String path =
-//		 "https://repo1.maven.org/maven2/org/apache/bcel/bcel/5.2/bcel-5.2.pom";
-		path = "https://repo1.maven.org/maven2/com/101tec/zkclient/0.7/zkclient-0.7.pom";
+		 "https://repo1.maven.org/maven2/org/apache/bcel/bcel/5.2/bcel-5.2.pom";
+//		path = "https://repo1.maven.org/maven2/com/101tec/zkclient/0.7/zkclient-0.7.pom";
 		// String path =
 		// "https://repo1.maven.org/maven2/antlr/antlr/2.7.7/antlr-2.7.7.pom";
 		Version version = catalogService.buildVersionFromPom(path, 0);
 
 		version = mozoService.loadJarProxy(version);
 
-		FileOutputStream fos = new FileOutputStream("f:\\Temp\\"
+		FileOutputStream fos = new FileOutputStream("d:\\Temp\\"
 				+ version.getArtifactId() + "-" + version.getVersion() + ".jar");
 		fos.write(version.getJarProxy());
 		fos.close();
