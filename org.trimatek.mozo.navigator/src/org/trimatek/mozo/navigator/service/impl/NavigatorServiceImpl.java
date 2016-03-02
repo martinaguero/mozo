@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.trimatek.mozo.bytecoder.service.BytecodeService;
 import org.trimatek.mozo.catalog.model.Class;
@@ -18,6 +20,7 @@ public class NavigatorServiceImpl implements NavigatorService {
 
 	CatalogService catalogService;
 	BytecodeService bytecodeService;
+	private static Logger logger = Logger.getLogger(NavigatorServiceImpl.class.getName());
 
 	public NavigatorServiceImpl(CatalogService catalogService, BytecodeService bytecodeService) {
 		this.catalogService = catalogService;
@@ -44,23 +47,28 @@ public class NavigatorServiceImpl implements NavigatorService {
 		Version catalogDep;
 		Set<Version> deps = new HashSet<Version>();
 		version = doConjunction(references, version);
-		Version catalogVersion = catalogService.loadVersionWithDependencies(version.getArtifactId(),
-				version.getVersion());
+		Version catalogVersion = catalogService.loadVersionWithDependencies(version.getArtifactId(), version.getVersion());
 		if (catalogVersion != null) {
 			for (Version dependency : catalogVersion.getDependencies()) {
-				catalogDep = catalogService.loadVersionWithClasses(dependency.getArtifactId(), dependency.getVersion());
-				if (dependency.getJar() == null) {
-					catalogDep = bytecodeService.loadJar(catalogDep);
-					catalogDep = bytecodeService.buildJarProxy(catalogDep);
-					catalogDep = CatalogTools.saveDependency(catalogDep, catalogService);
-				}
-				catalogDep.setJar(null);
-				catalogDep.setJarProxy(null);
-				List<String> refs = BytecodeTools.findReferences(version.getClasses(), catalogDep.getNamespace(),
-						bytecodeService);
-				if (!refs.isEmpty()) {
-					catalogDep.setClasses(new HashSet<Class>());
-					deps.add(fetchDependencies(refs, catalogDep));
+				try {
+					catalogDep = catalogService.loadVersionWithClasses(dependency.getArtifactId(), dependency.getVersion());
+					if (dependency.getJar() == null) {
+						catalogDep = bytecodeService.loadJar(catalogDep);
+						catalogDep = bytecodeService.buildJarProxy(catalogDep);
+						catalogDep = CatalogTools.saveDependency(catalogDep, catalogService);
+					}
+					catalogDep.setJar(null);
+					catalogDep.setJarProxy(null);
+					List<String> refs = BytecodeTools.findReferences(version.getClasses(), catalogDep.getNamespace(),
+							bytecodeService);
+					if (!refs.isEmpty()) {
+						catalogDep.setClasses(new HashSet<Class>());
+						deps.add(fetchDependencies(refs, catalogDep));
+					}
+				} catch (IOException ioe) {
+					logger.log(Level.SEVERE, "Error while downloading Jar: " + ioe.getMessage(), ioe);
+				} catch (ClassNotFoundException ce){
+					logger.log(Level.SEVERE, "Error while processing Jar: " + ce.getMessage(), ce);
 				}
 			}
 		}
@@ -85,8 +93,7 @@ public class NavigatorServiceImpl implements NavigatorService {
 		if (references.size() != count) {
 			throw new RuntimeException("MOZO: Required and fetched number of classes are not equal.");
 		}
-		List<String> selfReferences = BytecodeTools.findReferences(version.getClasses(), version.getNamespace(),
-				bytecodeService);
+		List<String> selfReferences = BytecodeTools.findReferences(version.getClasses(), version.getNamespace(), bytecodeService);
 		selfReferences = NavigatorUtils.removeRepeated(selfReferences, version.getClasses());
 		if (!selfReferences.isEmpty()) {
 			version = doConjunction(selfReferences, version);
