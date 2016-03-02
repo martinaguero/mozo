@@ -40,7 +40,6 @@ public class MavenUtils {
 		FileUtils.copyURLToFile(url, file);
 		try {
 			model = modelReader.read(file, params);
-			System.out.println("POM: " + model.getArtifactId());
 			version = new Version(model.getArtifactId(), model.getGroupId(),
 					snapshot, path, model.getVersion(), file);
 			for (Dependency d : model.getDependencies()) {
