@@ -44,9 +44,9 @@ public class Activator implements BundleActivator {
 		// hasta acá provisiorio
 
 //		 testLoadJarProxy();
-		 testLoadBcelDeps();
+//		 testLoadBcelDeps();
 //		testLoadZkclientDeps();
-//		testLoadLog4JDeps();
+		testLoadLog4JDeps();
 
 	}
 
@@ -91,12 +91,12 @@ public class Activator implements BundleActivator {
 
 		for (Class clazz : version.getClasses()) {
 			System.out.println(clazz.getClassName());
-			count++;
-			for (Version dep : version.getDependencies()) {
-				for (Class dc : dep.getClasses()) {
-					System.out.println("\t" + dc.getClassName());
-					count++;
-				}
+			count++;	
+		}
+		for (Version dep : version.getDependencies()) {
+			for (Class dc : dep.getClasses()) {
+				System.out.println("\t" + dc.getClassName());
+				count++;
 			}
 		}
 		System.out.println("TOTAL DE CLASES RECUPERADAS: " + count);
@@ -112,8 +112,8 @@ public class Activator implements BundleActivator {
 		target.setNamespace("org.I0Itec.zkclient");
 
 		List<String> references = new ArrayList<String>();
-		references.add("org.I0Itec.zkclient.ZkClient"); // 96
-		// references.add("org.I0Itec.zkclient.Gateway"); //1
+//		references.add("org.I0Itec.zkclient.ZkClient"); // 273
+		 references.add("org.I0Itec.zkclient.Gateway"); // 92
 
 		target = mozoService.fetchDependencies(references, target);
 
@@ -142,15 +142,15 @@ public class Activator implements BundleActivator {
 	private void testLoadJarProxy() throws Exception {
 
 		 String path =
-		 "https://repo1.maven.org/maven2/org/apache/bcel/bcel/5.2/bcel-5.2.pom";
-//		path = "https://repo1.maven.org/maven2/com/101tec/zkclient/0.7/zkclient-0.7.pom";
+//		 "https://repo1.maven.org/maven2/org/apache/bcel/bcel/5.2/bcel-5.2.pom";
+		 "https://repo1.maven.org/maven2/com/101tec/zkclient/0.7/zkclient-0.7.pom";
 		// String path =
 		// "https://repo1.maven.org/maven2/antlr/antlr/2.7.7/antlr-2.7.7.pom";
 		Version version = catalogService.buildVersionFromPom(path, 0);
 
 		version = mozoService.loadJarProxy(version);
 
-		FileOutputStream fos = new FileOutputStream("d:\\Temp\\"
+		FileOutputStream fos = new FileOutputStream("F:\\Temp\\"
 				+ version.getArtifactId() + "-" + version.getVersion() + ".jar");
 		fos.write(version.getJarProxy());
 		fos.close();
