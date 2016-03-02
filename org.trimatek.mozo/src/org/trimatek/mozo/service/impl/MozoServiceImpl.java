@@ -11,7 +11,6 @@ import org.trimatek.mozo.exception.BytecodeException;
 import org.trimatek.mozo.exception.ExternalResourceException;
 import org.trimatek.mozo.exception.MozoException;
 import org.trimatek.mozo.exception.NullDataException;
-import org.trimatek.mozo.exception.ParityCheckException;
 import org.trimatek.mozo.navigator.service.NavigatorService;
 import org.trimatek.mozo.service.MozoService;
 
@@ -55,7 +54,7 @@ public class MozoServiceImpl implements MozoService {
 
 	@Override
 	public Version fetchDependencies(List<String> references, Version target)
-			throws ParityCheckException, BytecodeException {
+			throws MozoException {
 		try {
 			if (references != null && target != null && !references.isEmpty()) {
 				target = navigatorService.fetchDependencies(references, target);
@@ -63,7 +62,7 @@ public class MozoServiceImpl implements MozoService {
 				throw new NullDataException("MOZO: Required data is null.");
 			}
 		} catch (RuntimeException re) {
-			throw new ParityCheckException(re.getMessage(), re);
+			throw new MozoException(re.getMessage(), re);
 		} catch (Exception e) {
 			throw new BytecodeException(
 					"MOZO: Error while analyzing class bytecode.", e);
