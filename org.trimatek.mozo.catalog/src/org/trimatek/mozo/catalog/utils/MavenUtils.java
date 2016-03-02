@@ -38,7 +38,7 @@ public class MavenUtils {
 		Version version = null;
 		File file = new File(path.substring(path.lastIndexOf("/") + 1));
 		FileUtils.copyURLToFile(url, file);
-		try {
+//		try {
 			model = modelReader.read(file, params);
 			version = new Version(model.getArtifactId(), model.getGroupId(),
 					snapshot, path, model.getVersion(), file);
@@ -51,10 +51,10 @@ public class MavenUtils {
 				}
 				version.addDependency(dep);
 			}
-		} catch (Exception e) {
-			return new Version(buildId(file.getName()), null, snapshot, path,
-					buildVersion(file.getName()), null);
-		}
+//		} catch (Exception e) {
+//			return new Version(buildId(file.getName()), null, snapshot, path,
+//					buildVersion(file.getName()), null);
+//		}
 		return version;
 	}
 
