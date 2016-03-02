@@ -134,7 +134,7 @@ public class CatalogServiceImpl implements CatalogService {
 	@Override
 	public Version buildVersionFromPom(String path, long snapshot)
 			throws Exception {
-		return (Version) MavenUtils.processPom(path, snapshot);
+		return (Version) MavenUtils.processPom(path, snapshot, this);
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package org.trimatek.mozo.catalog.utils;
 
+import static org.trimatek.mozo.catalog.Config.TCR_MAVEN2_URL;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -20,7 +22,7 @@ import org.apache.maven.model.io.ModelReader;
 import org.trimatek.mozo.catalog.model.Product;
 import org.trimatek.mozo.catalog.model.RepoEntity;
 import org.trimatek.mozo.catalog.model.Version;
-import static org.trimatek.mozo.catalog.Config.TCR_MAVEN2_URL;
+import org.trimatek.mozo.catalog.service.CatalogService;
 
 public class MavenUtils {
 
@@ -28,8 +30,9 @@ public class MavenUtils {
 	private static MetadataReader metaReader = new DefaultMetadataReader();
 	private static Map<String, ?> params = null;
 
-	public static RepoEntity processPom(String path, long snapshot)
-			throws ModelParseException, IOException {
+	public static RepoEntity processPom(String path, long snapshot,
+			CatalogService catalogService) throws ModelParseException,
+			IOException {
 		URL url = new URL(path);
 		Model model = null;
 		Version version = null;
@@ -41,8 +44,12 @@ public class MavenUtils {
 			version = new Version(model.getArtifactId(), model.getGroupId(),
 					snapshot, path, model.getVersion(), file);
 			for (Dependency d : model.getDependencies()) {
-				Version dep = new Version(d.getArtifactId(), d.getGroupId(),
-						snapshot, buildUrl(d), d.getVersion(), null);
+				Version dep = catalogService.loadVersion(d.getArtifactId(),
+						d.getVersion());
+				if (dep == null) {
+					dep = new Version(d.getArtifactId(), d.getGroupId(),
+							snapshot, buildUrl(d), d.getVersion(), null);
+				}
 				version.addDependency(dep);
 			}
 		} catch (Exception e) {
@@ -72,8 +79,8 @@ public class MavenUtils {
 	}
 
 	private static String buildUrl(Dependency dep) {
-		return TCR_MAVEN2_URL + dep.getGroupId().replace(".", "/")
-				+ "/" + dep.getArtifactId() + "/" + dep.getVersion() + "/"
+		return TCR_MAVEN2_URL + dep.getGroupId().replace(".", "/") + "/"
+				+ dep.getArtifactId() + "/" + dep.getVersion() + "/"
 				+ dep.getArtifactId() + "-" + dep.getVersion() + ".pom";
 	}
 
