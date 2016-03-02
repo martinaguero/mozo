@@ -11,6 +11,7 @@ import org.trimatek.mozo.catalog.model.Class;
 import org.trimatek.mozo.catalog.model.Version;
 import org.trimatek.mozo.catalog.service.CatalogService;
 import org.trimatek.mozo.exception.BytecodeException;
+import org.trimatek.mozo.exception.MozoException;
 import org.trimatek.mozo.exception.ParityCheckException;
 import org.trimatek.mozo.service.MozoService;
 
@@ -43,10 +44,10 @@ public class Activator implements BundleActivator {
 		catalogService = (CatalogService) catalogServiceTracker.getService();
 		// hasta acá provisiorio
 
-//		 testLoadJarProxy();
+		 testLoadJarProxy();
 //		 testLoadBcelDeps();
 //		testLoadZkclientDeps();
-		testLoadLog4JDeps();
+//		testLoadLog4JDeps();
 
 	}
 
@@ -60,8 +61,7 @@ public class Activator implements BundleActivator {
 		System.out.println("Goodbye World!!");
 	}
 
-	private void testLoadBcelDeps() throws ParityCheckException,
-			BytecodeException {
+	private void testLoadBcelDeps() throws MozoException {
 
 		Version target = new Version();
 		target.setArtifactId("bcel");
@@ -73,12 +73,12 @@ public class Activator implements BundleActivator {
 		// references.add("org.apache.bcel.generic.JSR"); // 289
 		// references.add("org.apache.bcel.generic.NamedAndTyped"); //80
 		// references.add("org.apache.bcel.generic.DRETURN"); //289
-		// references.add("org.apache.bcel.util.ClassPath"); //8
+		 references.add("org.apache.bcel.util.ClassPath"); //8
 //		 references.add("org.apache.bcel.generic.Type"); //79
 		// references.add("org.apache.bcel.classfile.Visitor"); //79
 //		 references.add("org.apache.bcel.verifier.Verifier"); // 343
 		// references.add("org.apache.bcel.classfile.Signature"); //79
-		 references.add("org.apache.bcel.util.ClassStack"); //80
+//		 references.add("org.apache.bcel.util.ClassStack"); //80
 
 		target = mozoService.fetchDependencies(references, target);
 
@@ -102,8 +102,7 @@ public class Activator implements BundleActivator {
 		System.out.println("TOTAL DE CLASES RECUPERADAS: " + count);
 	}
 
-	private void testLoadZkclientDeps() throws ParityCheckException,
-			BytecodeException {
+	private void testLoadZkclientDeps() throws MozoException {
 
 		Version target = new Version();
 		target.setArtifactId("zkclient");
@@ -121,8 +120,7 @@ public class Activator implements BundleActivator {
 
 	}
 
-	private void testLoadLog4JDeps() throws ParityCheckException,
-			BytecodeException {
+	private void testLoadLog4JDeps() throws MozoException {
 
 		Version target = new Version();
 		target.setArtifactId("log4j");
@@ -143,9 +141,10 @@ public class Activator implements BundleActivator {
 
 		 String path =
 //		 "https://repo1.maven.org/maven2/org/apache/bcel/bcel/5.2/bcel-5.2.pom";
-		 "https://repo1.maven.org/maven2/com/101tec/zkclient/0.7/zkclient-0.7.pom";
-		// String path =
-		// "https://repo1.maven.org/maven2/antlr/antlr/2.7.7/antlr-2.7.7.pom";
+//		 "https://repo1.maven.org/maven2/com/101tec/zkclient/0.7/zkclient-0.7.pom";
+		 "https://repo1.maven.org/maven2/antlr/antlr/2.7.7/antlr-2.7.7.pom";
+//		 "https://repo1.maven.org/maven2/jakarta-regexp/jakarta-regexp/1.4/jakarta-regexp-1.4.pom";
+//		 "https://repo1.maven.org/maven2/log4j/log4j/1.2.15/log4j-1.2.15.pom";
 		Version version = catalogService.buildVersionFromPom(path, 0);
 
 		version = mozoService.loadJarProxy(version);
