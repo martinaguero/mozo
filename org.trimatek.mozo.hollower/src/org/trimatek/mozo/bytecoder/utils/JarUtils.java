@@ -26,8 +26,7 @@ import org.trimatek.mozo.catalog.model.Version;
 
 public class JarUtils {
 
-	public static List<String> listClasses(JarInputStream jarFile)
-			throws IOException {
+	public static List<String> listClasses(JarInputStream jarFile) throws IOException {
 		List<String> classes = new ArrayList<String>();
 		JarEntry jarEntry;
 		String className;
@@ -46,20 +45,17 @@ public class JarUtils {
 	}
 
 	public static String getJarName(String jarPath) {
-		return jarPath.substring(jarPath.lastIndexOf("\\") + 1,
-				jarPath.lastIndexOf("."));
+		return jarPath.substring(jarPath.lastIndexOf("\\") + 1, jarPath.lastIndexOf("."));
 	}
 
-	public static File extractFile(ZipInputStream zipIn, String filePath,
-			Context ctx) throws IOException {
+	public static File extractFile(ZipInputStream zipIn, String filePath, Context ctx) throws IOException {
 		String dirPath = "";
 		if (filePath.contains("/")) {
 			dirPath = filePath.substring(0, filePath.lastIndexOf('/'));
 		}
 		new File(ctx.TEMP_DIR + dirPath).mkdirs();
 		File file = new File(ctx.TEMP_DIR + filePath);
-		BufferedOutputStream bos = new BufferedOutputStream(
-				new FileOutputStream(file));
+		BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
 		byte[] bytesIn = new byte[Config.BUFFER_SIZE];
 		int read = 0;
 		while ((read = zipIn.read(bytesIn)) != -1) {
@@ -69,20 +65,16 @@ public class JarUtils {
 		return file;
 	}
 
-	public static File buildHollowedJar(Context ctx)
-			throws FileNotFoundException, IOException {
+	public static File buildHollowedJar(Context ctx) throws FileNotFoundException, IOException {
 		Manifest manifest = new Manifest();
-		manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION,
-				"1.0");
-		JarOutputStream target = new JarOutputStream(new FileOutputStream(
-				Config.JARS_DIR + ctx.jarName), manifest);
+		manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0");
+		JarOutputStream target = new JarOutputStream(new FileOutputStream(Config.JARS_DIR + ctx.jarName), manifest);
 		add(new File(ctx.OUTPUT_DIR), target, ctx);
 		target.close();
 		return new File(Config.JARS_DIR + ctx.jarName);
 	}
 
-	private static void add(File source, JarOutputStream target, Context ctx)
-			throws IOException {
+	private static void add(File source, JarOutputStream target, Context ctx) throws IOException {
 		BufferedInputStream in = null;
 		try {
 			if (source.isDirectory()) {
@@ -102,8 +94,7 @@ public class JarUtils {
 				return;
 			}
 
-			JarEntry entry = new JarEntry(putMask(
-					source.getPath().replace("\\", "/"), ctx.OUTPUT_DIR));
+			JarEntry entry = new JarEntry(putMask(source.getPath().replace("\\", "/"), ctx.OUTPUT_DIR));
 			entry.setTime(source.lastModified());
 			target.putNextEntry(entry);
 			in = new BufferedInputStream(new FileInputStream(source));
@@ -131,8 +122,7 @@ public class JarUtils {
 		path = path.replace(".pom", ".jar");
 		URL website = new URL(path);
 		ReadableByteChannel rbc = Channels.newChannel(website.openStream());
-		File file = new File(Config.TEMP_DIR
-				+ path.substring(path.lastIndexOf("/")));
+		File file = new File(Config.TEMP_DIR + path.substring(path.lastIndexOf("/")));
 		FileOutputStream fos = new FileOutputStream(file);
 		fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 		fos.close();
