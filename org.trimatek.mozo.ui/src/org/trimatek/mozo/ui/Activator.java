@@ -44,9 +44,9 @@ public class Activator implements BundleActivator {
 		catalogService = (CatalogService) catalogServiceTracker.getService();
 		// hasta acá provisiorio
 
-		 testLoadJarProxy();
+//		 testLoadJarProxy();
 //		 testLoadBcelDeps();
-//		testLoadZkclientDeps();
+		testLoadZkclientDeps();
 //		testLoadLog4JDeps();
 
 	}
@@ -70,12 +70,12 @@ public class Activator implements BundleActivator {
 		target.setNamespace("org.apache.bcel");
 
 		List<String> references = new ArrayList<String>();
-		// references.add("org.apache.bcel.generic.JSR"); // 289
+		 references.add("org.apache.bcel.generic.JSR"); // 289
 		// references.add("org.apache.bcel.generic.NamedAndTyped"); //80
 		// references.add("org.apache.bcel.generic.DRETURN"); //289
-		 references.add("org.apache.bcel.util.ClassPath"); //8
+//		 references.add("org.apache.bcel.util.ClassPath"); //8
 //		 references.add("org.apache.bcel.generic.Type"); //79
-		// references.add("org.apache.bcel.classfile.Visitor"); //79
+//		 references.add("org.apache.bcel.classfile.Visitor"); //79
 //		 references.add("org.apache.bcel.verifier.Verifier"); // 343
 		// references.add("org.apache.bcel.classfile.Signature"); //79
 //		 references.add("org.apache.bcel.util.ClassStack"); //80
@@ -111,8 +111,8 @@ public class Activator implements BundleActivator {
 		target.setNamespace("org.I0Itec.zkclient");
 
 		List<String> references = new ArrayList<String>();
-//		references.add("org.I0Itec.zkclient.ZkClient"); // 273
-		 references.add("org.I0Itec.zkclient.Gateway"); // 92
+		references.add("org.I0Itec.zkclient.ZkClient"); // 273
+//		 references.add("org.I0Itec.zkclient.Gateway"); // 92
 
 		target = mozoService.fetchDependencies(references, target);
 
@@ -141,8 +141,8 @@ public class Activator implements BundleActivator {
 
 		 String path =
 //		 "https://repo1.maven.org/maven2/org/apache/bcel/bcel/5.2/bcel-5.2.pom";
-//		 "https://repo1.maven.org/maven2/com/101tec/zkclient/0.7/zkclient-0.7.pom";
-		 "https://repo1.maven.org/maven2/antlr/antlr/2.7.7/antlr-2.7.7.pom";
+		 "https://repo1.maven.org/maven2/com/101tec/zkclient/0.7/zkclient-0.7.pom";
+//		 "https://repo1.maven.org/maven2/antlr/antlr/2.7.7/antlr-2.7.7.pom";
 //		 "https://repo1.maven.org/maven2/jakarta-regexp/jakarta-regexp/1.4/jakarta-regexp-1.4.pom";
 //		 "https://repo1.maven.org/maven2/log4j/log4j/1.2.15/log4j-1.2.15.pom";
 		Version version = catalogService.buildVersionFromPom(path, 0);
