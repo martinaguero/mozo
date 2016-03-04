@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +31,7 @@ public class MavenUtils {
 	private static ModelReader modelReader = new DefaultModelReader();
 	private static MetadataReader metaReader = new DefaultMetadataReader();
 	private static Map<String, ?> params = null;
+	private static Logger logger = Logger.getLogger(MavenUtils.class.getName());
 
 	public static RepoEntity processPom(String path, long snapshot, CatalogService catalogService) throws ModelParseException,
 			IOException {
@@ -36,15 +39,19 @@ public class MavenUtils {
 		Model model = null;
 		Version version = null;
 		File file = new File(path.substring(path.lastIndexOf("/") + 1));
-		FileUtils.copyURLToFile(url, file);
-		model = modelReader.read(file, params);
-		version = new Version(model.getArtifactId(), model.getGroupId(), snapshot, path, model.getVersion(), file);
-		for (Dependency d : model.getDependencies()) {
-			Version dep = catalogService.loadVersion(d.getArtifactId(), d.getVersion());
-			if (dep == null) {
-				dep = new Version(d.getArtifactId(), d.getGroupId(), snapshot, buildUrl(d), d.getVersion(), null);
+		try {
+			FileUtils.copyURLToFile(url, file);
+			model = modelReader.read(file, params);
+			version = new Version(model.getArtifactId(), model.getGroupId(), snapshot, path, model.getVersion(), file);
+			for (Dependency d : model.getDependencies()) {
+				Version dep = catalogService.loadVersion(d.getArtifactId(), d.getVersion());
+				if (dep == null) {
+					dep = new Version(d.getArtifactId(), d.getGroupId(), snapshot, buildUrl(d), d.getVersion(), null);
+				}
+				version.addDependency(dep);
 			}
-			version.addDependency(dep);
+		} catch (IOException ioe) {
+			logger.log(Level.SEVERE, "Could not load POM: " + file, ioe);
 		}
 		return version;
 	}
@@ -81,6 +88,10 @@ public class MavenUtils {
 			}
 		}
 		return "<null>";
+	}
+
+	public static boolean isValidURL(String path) {
+		return !path.contains("null");
 	}
 
 }

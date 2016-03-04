@@ -32,7 +32,7 @@ public interface CatalogService {
 
 	public Product loadProduct(String artifactId);
 
-	public Version buildVersionFromPom(String path, long snapshot)
+	public Version buildVersionFromPom(String path, long snapshot, int level)
 			throws Exception;
 
 	public Class loadClass(String artifactId, String className);

@@ -5,7 +5,9 @@ import static org.trimatek.mozo.catalog.Config.PROXY_PORT;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -42,8 +44,7 @@ public class CatalogServiceImpl implements CatalogService {
 
 	@Override
 	public void save(Repository repository) {
-		EntityManager entityManager = entityManagerFactory
-				.createEntityManager();
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		entityManager.getTransaction().begin();
 
 		entityManager.persist(repository);
@@ -54,11 +55,9 @@ public class CatalogServiceImpl implements CatalogService {
 
 	@Override
 	public Collection<Repository> listAllRepositories() {
-		EntityManager entityManager = entityManagerFactory
-				.createEntityManager();
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		entityManager.getTransaction().begin();
-		List<Repository> result = entityManager.createQuery("from Repository",
-				Repository.class).getResultList();
+		List<Repository> result = entityManager.createQuery("from Repository", Repository.class).getResultList();
 
 		entityManager.getTransaction().commit();
 		entityManager.close();
@@ -66,12 +65,10 @@ public class CatalogServiceImpl implements CatalogService {
 	}
 
 	public Repository loadRepository() {
-		EntityManager entityManager = entityManagerFactory
-				.createEntityManager();
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		Repository result = null;
 		entityManager.getTransaction().begin();
-		List<Repository> results = entityManager.createNamedQuery(
-				"loadRepository", Repository.class).getResultList();
+		List<Repository> results = entityManager.createNamedQuery("loadRepository", Repository.class).getResultList();
 		if (!results.isEmpty()) {
 			result = results.get(0);
 		}
@@ -82,8 +79,7 @@ public class CatalogServiceImpl implements CatalogService {
 
 	@Override
 	public void saveOrUpdate(Repository repository) {
-		EntityManager entityManager = entityManagerFactory
-				.createEntityManager();
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		entityManager.getTransaction().begin();
 
 		entityManager.merge(repository);
@@ -120,21 +116,38 @@ public class CatalogServiceImpl implements CatalogService {
 		return classRepository;
 	}
 
-	public Version loadVersionWithClasses(String artifactId, String version)
-			throws ModelParseException, IOException {
-		return getVersionRepository().findVersionWithClasses(artifactId,
-				version);
+	public Version loadVersionWithClasses(String artifactId, String version) throws ModelParseException, IOException {
+		return getVersionRepository().findVersionWithClasses(artifactId, version);
 	}
 
-	public Version loadVersion(String artifactId, String version)
-			throws ModelParseException, IOException {
+	public Version loadVersion(String artifactId, String version) throws ModelParseException, IOException {
 		return getVersionRepository().findVersion(artifactId, version);
 	}
 
 	@Override
-	public Version buildVersionFromPom(String path, long snapshot)
-			throws Exception {
-		return (Version) MavenUtils.processPom(path, snapshot, this);
+	public Version buildVersionFromPom(String path, long snapshot, int level) throws Exception {
+		Version version = null;
+		Set<Version> dependencies = null;
+		if (MavenUtils.isValidURL(path)) {
+			version = (Version) MavenUtils.processPom(path, snapshot, this);
+			if (level > 0) {
+				level--;
+				if (version.getDependencies() != null) {
+					dependencies = new HashSet<Version>();
+					for (Version dep : version.getDependencies()) {
+						//TODO modificar esto para que las que ya son Version (dependencias)
+						//TODO no se pisen con nuevos objetos de clase Vesion creados a partir
+						//TODO de una url
+						Version fromPom = buildVersionFromPom(dep.getUrl(), snapshot, level);
+						if (fromPom != null) {
+							dependencies.add(fromPom);
+						}
+					}
+				}
+			}
+			version.setDependencies(dependencies);
+		}
+		return version;
 	}
 
 	@Override
@@ -154,20 +167,17 @@ public class CatalogServiceImpl implements CatalogService {
 
 	@Override
 	public Class loadClass(String artifactId, String className) {
-		return getClassRepository().findClassByArtifactIdAndClassName(
-				artifactId, className);
+		return getClassRepository().findClassByArtifactIdAndClassName(artifactId, className);
 	}
 
 	@Override
 	public List<Class> loadClasses(String artifactId, long snapshot) {
-		return getClassRepository().findClassesByArtifactId(artifactId,
-				snapshot);
+		return getClassRepository().findClassesByArtifactId(artifactId, snapshot);
 	}
 
 	@Override
 	public Version loadVersionWithDependencies(String artifactId, String version) {
-		return getVersionRepository().findVersionWithDependencies(artifactId,
-				version);
+		return getVersionRepository().findVersionWithDependencies(artifactId, version);
 	}
 
 	@Override
