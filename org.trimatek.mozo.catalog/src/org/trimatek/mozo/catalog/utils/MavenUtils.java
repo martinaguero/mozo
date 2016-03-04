@@ -30,36 +30,27 @@ public class MavenUtils {
 	private static MetadataReader metaReader = new DefaultMetadataReader();
 	private static Map<String, ?> params = null;
 
-	public static RepoEntity processPom(String path, long snapshot,
-			CatalogService catalogService) throws ModelParseException,
+	public static RepoEntity processPom(String path, long snapshot, CatalogService catalogService) throws ModelParseException,
 			IOException {
 		URL url = new URL(path);
 		Model model = null;
 		Version version = null;
 		File file = new File(path.substring(path.lastIndexOf("/") + 1));
 		FileUtils.copyURLToFile(url, file);
-//		try {
-			model = modelReader.read(file, params);
-			version = new Version(model.getArtifactId(), model.getGroupId(),
-					snapshot, path, model.getVersion(), file);
-			for (Dependency d : model.getDependencies()) {
-				Version dep = catalogService.loadVersion(d.getArtifactId(),
-						d.getVersion());
-				if (dep == null) {
-					dep = new Version(d.getArtifactId(), d.getGroupId(),
-							snapshot, buildUrl(d), d.getVersion(), null);
-				}
-				version.addDependency(dep);
+		model = modelReader.read(file, params);
+		version = new Version(model.getArtifactId(), model.getGroupId(), snapshot, path, model.getVersion(), file);
+		for (Dependency d : model.getDependencies()) {
+			Version dep = catalogService.loadVersion(d.getArtifactId(), d.getVersion());
+			if (dep == null) {
+				dep = new Version(d.getArtifactId(), d.getGroupId(), snapshot, buildUrl(d), d.getVersion(), null);
 			}
-//		} catch (Exception e) {
-//			return new Version(buildId(file.getName()), null, snapshot, path,
-//					buildVersion(file.getName()), null);
-//		}
+			version.addDependency(dep);
+		}
 		return version;
 	}
 
-	public static RepoEntity processMetadata(String path, long snapshot,
-			List<Version> versions) throws MetadataParseException, IOException {
+	public static RepoEntity processMetadata(String path, long snapshot, List<Version> versions) throws MetadataParseException,
+			IOException {
 		URL url = new URL(path);
 		File file = new File(path.substring(path.lastIndexOf("/") + 1));
 		FileUtils.copyURLToFile(url, file);
@@ -68,8 +59,7 @@ public class MavenUtils {
 		return new Product(metadata.getArtifactId(), snapshot, path, versions);
 	}
 
-	public static String getGroupId(Product product)
-			throws MetadataParseException, IOException {
+	public static String getGroupId(Product product) throws MetadataParseException, IOException {
 		return metaReader.read(new File(product.getUrl()), params).getGroupId();
 	}
 
@@ -78,8 +68,7 @@ public class MavenUtils {
 	}
 
 	private static String buildUrl(Dependency dep) {
-		return TCR_MAVEN2_URL + dep.getGroupId().replace(".", "/") + "/"
-				+ dep.getArtifactId() + "/" + dep.getVersion() + "/"
+		return TCR_MAVEN2_URL + dep.getGroupId().replace(".", "/") + "/" + dep.getArtifactId() + "/" + dep.getVersion() + "/"
 				+ dep.getArtifactId() + "-" + dep.getVersion() + ".pom";
 	}
 
