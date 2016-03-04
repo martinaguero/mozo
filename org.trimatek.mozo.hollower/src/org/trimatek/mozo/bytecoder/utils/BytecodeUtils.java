@@ -9,16 +9,14 @@ import org.trimatek.mozo.catalog.model.Class;
 
 public class BytecodeUtils {
 
-	private static Pattern p = Pattern
-			.compile("([a-zA-Z_$][a-zA-Z\\d_$]*\\.)*[a-zA-Z_$][a-zA-Z\\d_$]*");
+	private static Pattern p = Pattern.compile("([a-zA-Z_$][a-zA-Z\\d_$]*\\.)*[a-zA-Z_$][a-zA-Z\\d_$]*");
 
 	public static boolean isClassName(String className) {
 		return p.matcher(className).matches();
 	}
 
 	public static boolean isValidSimpleClassName(String className) {
-		return SourceVersion.isIdentifier(className)
-				&& !SourceVersion.isKeyword(className);
+		return SourceVersion.isIdentifier(className) && !SourceVersion.isKeyword(className);
 	}
 
 	public static String checkClassRef(String string) {
@@ -42,9 +40,11 @@ public class BytecodeUtils {
 		int cut = 0;
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < footprint.length; i++) {
-			if (i > 1 && footprint[i] > 0 && footprint[i - 1] == footprint[i]
-					&& footprint[i] > footprint[i + 1]) {
-				cut = i;
+			if (footprint[i] >= cut) {
+				cut = footprint[i];
+			} else {
+				cut = i - 1;
+				break;
 			}
 		}
 		for (Class clazz : version.getClasses()) {
@@ -54,8 +54,8 @@ public class BytecodeUtils {
 			}
 			break;
 		}
-		version.setNamespace(sb.toString().substring(0,
-				sb.toString().length() - 1));
+		version.setNamespace(sb.toString().substring(0, sb.toString().length() - 1));
 		return version;
 	}
+
 }
