@@ -19,6 +19,7 @@ import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 import java.util.zip.ZipInputStream;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.trimatek.mozo.bytecoder.Config;
 import org.trimatek.mozo.bytecoder.Context;
@@ -123,6 +124,9 @@ public class JarUtils {
 		URL website = new URL(path);
 		ReadableByteChannel rbc = Channels.newChannel(website.openStream());
 		File file = new File(Config.TEMP_DIR + path.substring(path.lastIndexOf("/")));
+		if(file.exists()){
+			FileUtils.deleteDirectory(file);
+		}
 		FileOutputStream fos = new FileOutputStream(file);
 		fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 		fos.close();
