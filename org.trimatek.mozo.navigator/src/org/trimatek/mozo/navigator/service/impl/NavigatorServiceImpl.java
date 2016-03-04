@@ -29,8 +29,10 @@ public class NavigatorServiceImpl implements NavigatorService {
 
 	@Override
 	public Version loadJarProxy(Version version) throws IOException, ClassNotFoundException {
+		logger.info("Loading proxy for: " + version.getArtifactId());
 		Version catalogVersion = catalogService.loadVersion(version.getArtifactId(), version.getVersion());
 		if (catalogVersion == null || catalogVersion.getJar() == null) {
+			logger.info("Building proxy for: " + version.getArtifactId());
 			version = bytecodeService.loadJar(version);
 			version = bytecodeService.buildJarProxy(version);
 			// TODO estudiar si se puede dejar un thread persistiendo
@@ -44,12 +46,14 @@ public class NavigatorServiceImpl implements NavigatorService {
 
 	@Override
 	public Version fetchDependencies(List<String> references, Version version) throws Exception {
+		logger.info("Fetching classes for: " + version.getArtifactId());
 		Version catalogDep;
 		Set<Version> deps = new HashSet<Version>();
 		version = doConjunction(references, version);
 		Version catalogVersion = catalogService.loadVersionWithDependencies(version.getArtifactId(), version.getVersion());
 		if (catalogVersion != null) {
 			for (Version dependency : catalogVersion.getDependencies()) {
+				logger.info("Loading dependency: " + dependency.getArtifactId());
 				try {
 					catalogDep = catalogService.loadVersionWithClasses(dependency.getArtifactId(), dependency.getVersion());
 					if (dependency.getJar() == null) {
@@ -67,7 +71,7 @@ public class NavigatorServiceImpl implements NavigatorService {
 					}
 				} catch (IOException ioe) {
 					logger.log(Level.SEVERE, "Error while downloading Jar: " + ioe.getMessage(), ioe);
-				} catch (ClassNotFoundException ce){
+				} catch (ClassNotFoundException ce) {
 					logger.log(Level.SEVERE, "Error while processing Jar: " + ce.getMessage(), ce);
 				}
 			}
