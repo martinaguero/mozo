@@ -48,6 +48,7 @@ public class Activator implements BundleActivator {
 //		 testLoadBcelDeps();
 		testLoadZkclientDeps();
 //		testLoadLog4JDeps();
+//		 testLoadMirageDeps();
 
 	}
 
@@ -137,6 +138,27 @@ public class Activator implements BundleActivator {
 
 	}
 
+	private void testLoadMirageDeps() throws MozoException {
+
+		Version target = new Version();
+		target.setArtifactId("mirage");
+		target.setVersion("1.2.3");
+		target.setGroupId("jp.sf.amateras");
+		target.setNamespace("jp.sf.amateras.mirage");
+
+		List<String> references = new ArrayList<String>();
+//		references.add("jp.sf.amateras.mirage.parser.Node");
+		references.add("jp.sf.amateras.mirage.CallExecutor");
+
+		target = mozoService.fetchDependencies(references, target);
+
+		printResult(target);
+
+	}
+	
+	
+	
+
 	private void testLoadJarProxy() throws Exception {
 
 		 String path =
@@ -145,7 +167,8 @@ public class Activator implements BundleActivator {
 //		 "https://repo1.maven.org/maven2/antlr/antlr/2.7.7/antlr-2.7.7.pom";
 //		 "https://repo1.maven.org/maven2/jakarta-regexp/jakarta-regexp/1.4/jakarta-regexp-1.4.pom";
 //		 "https://repo1.maven.org/maven2/log4j/log4j/1.2.15/log4j-1.2.15.pom";
-		Version version = catalogService.buildVersionFromPom(path, 0);
+//		 "https://repo1.maven.org/maven2/jp/sf/amateras/mirage/1.2.3/mirage-1.2.3.pom";
+		Version version = catalogService.buildVersionFromPom(path, 0, 1);
 
 		version = mozoService.loadJarProxy(version);
 
