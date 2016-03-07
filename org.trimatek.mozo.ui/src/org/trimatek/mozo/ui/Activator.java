@@ -168,7 +168,8 @@ public class Activator implements BundleActivator {
 //		 "https://repo1.maven.org/maven2/jakarta-regexp/jakarta-regexp/1.4/jakarta-regexp-1.4.pom";
 //		 "https://repo1.maven.org/maven2/log4j/log4j/1.2.15/log4j-1.2.15.pom";
 //		 "https://repo1.maven.org/maven2/jp/sf/amateras/mirage/1.2.3/mirage-1.2.3.pom";
-		Version version = catalogService.buildVersionFromPom(path, 0, 1);
+		Version version = new Version(path);
+		version = catalogService.buildVersion(version, 1);
 
 		version = mozoService.loadJarProxy(version);
 
