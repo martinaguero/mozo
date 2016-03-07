@@ -125,27 +125,22 @@ public class CatalogServiceImpl implements CatalogService {
 	}
 
 	@Override
-	public Version buildVersionFromPom(String path, long snapshot, int level) throws Exception {
-		Version version = null;
-		Set<Version> dependencies = null;
-		if (MavenUtils.isValidURL(path)) {
-			version = (Version) MavenUtils.processPom(path, snapshot, this);
-			if (level > 0) {
-				level--;
-				if (version.getDependencies() != null) {
-					dependencies = new HashSet<Version>();
-					for (Version dep : version.getDependencies()) {
-						//TODO modificar esto para que las que ya son Version (dependencias)
-						//TODO no se pisen con nuevos objetos de clase Vesion creados a partir
-						//TODO de una url
-						Version fromPom = buildVersionFromPom(dep.getUrl(), snapshot, level);
-						if (fromPom != null) {
-							dependencies.add(fromPom);
-						}
+	public Version buildVersion(Version version, int level) throws Exception {
+		Set<Version> dependencies = new HashSet<Version>();
+		if (level > 0) {
+			level--;
+			if ((version.getArtifactId() == null || version.getDependencies() == null) && MavenUtils.isValidURL(version.getUrl())) {
+				version = (Version) MavenUtils.processPom(version.getUrl(), getCurrentSnapshot(), this);
+			}
+			if (version.getDependencies() != null && level > 0) {
+				for (Version dep : version.getDependencies()) {
+					Version newDep = buildVersion(dep, level);
+					if (newDep != null) {
+						dependencies.add(newDep);
 					}
 				}
+				version.setDependencies(dependencies);
 			}
-			version.setDependencies(dependencies);
 		}
 		return version;
 	}

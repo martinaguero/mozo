@@ -33,8 +33,9 @@ public class MavenUtils {
 	private static Map<String, ?> params = null;
 	private static Logger logger = Logger.getLogger(MavenUtils.class.getName());
 
-	public static RepoEntity processPom(String path, long snapshot, CatalogService catalogService) throws ModelParseException,
+	public static RepoEntity processPom(String path, Long snapshot, CatalogService catalogService) throws ModelParseException,
 			IOException {
+		// TODO ver el asunto de la ausencia de la versión
 		URL url = new URL(path);
 		Model model = null;
 		Version version = null;
@@ -42,13 +43,16 @@ public class MavenUtils {
 		try {
 			FileUtils.copyURLToFile(url, file);
 			model = modelReader.read(file, params);
-			version = new Version(model.getArtifactId(), model.getGroupId(), snapshot, path, model.getVersion(), file);
+			String v = model.getVersion() == null ? parseVersionFromPomPath(path) : model.getVersion();
+			version = new Version(model.getArtifactId(), model.getGroupId(), snapshot, path, v, file);
 			for (Dependency d : model.getDependencies()) {
 				Version dep = catalogService.loadVersion(d.getArtifactId(), d.getVersion());
 				if (dep == null) {
-					dep = new Version(d.getArtifactId(), d.getGroupId(), snapshot, buildUrl(d), d.getVersion(), null);
+					if (d.getVersion() != null) {
+						dep = new Version(d.getArtifactId(), d.getGroupId(), snapshot, buildUrl(d), d.getVersion(), null);
+						version.addDependency(dep);
+					}
 				}
-				version.addDependency(dep);
 			}
 		} catch (IOException ioe) {
 			logger.log(Level.SEVERE, "Could not load POM: " + file, ioe);
@@ -92,6 +96,12 @@ public class MavenUtils {
 
 	public static boolean isValidURL(String path) {
 		return !path.contains("null");
+	}
+
+	private static String parseVersionFromPomPath(String path) {
+		int ini = path.lastIndexOf("-");
+		int end = path.lastIndexOf(".");
+		return path.substring(ini + 1, end);
 	}
 
 }

@@ -54,13 +54,17 @@ public class Version extends RepoEntity {
 
 	public Version() {
 	}
+	
+	public Version(String path){
+		setUrl(path);
+	}
 
 	public Version(String artifactId, long snapshot) {
 		super(snapshot);
 		setArtifactId(artifactId);
 	}
 
-	public Version(String artifactId, String groupId, long snapshot,
+	public Version(String artifactId, String groupId, Long snapshot,
 			String url, String version, File dataSource) {
 		super(snapshot);
 		setArtifactId(artifactId);
@@ -153,6 +157,10 @@ public class Version extends RepoEntity {
 
 	public void setNamespace(String namespace) {
 		this.namespace = namespace;
+	}
+	
+	public String toString(){
+		return getArtifactId() + "-" + getVersion();
 	}
 
 }
