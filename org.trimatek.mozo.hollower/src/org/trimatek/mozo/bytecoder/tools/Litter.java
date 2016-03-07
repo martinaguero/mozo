@@ -62,19 +62,8 @@ public class Litter {
 	}
 
 	private FieldGen generateField(Field field, ConstantPoolGen constantPoolGen) {
-		FieldGen fg;
-		int flags = Constants.ACC_PUBLIC;
-		if (field.isStatic()) {
-			flags = flags | Constants.ACC_STATIC;
-			if (field.isFinal()) {
-				flags = flags | Constants.ACC_FINAL;
-			}
-			fg = new FieldGen(flags, field.getType(), field.getName(),
-					constantPoolGen);
-		} else {
-			fg = new FieldGen(field, constantPoolGen);
-		}
-		return fg;
+		return new FieldGen(field.getAccessFlags(), field.getType(), field.getName(),
+				constantPoolGen);
 	}
 
 	/*
