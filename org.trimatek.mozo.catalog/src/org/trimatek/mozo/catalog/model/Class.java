@@ -20,8 +20,7 @@ import javax.persistence.Table;
 public class Class extends RepoEntity {
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumns({
-			@JoinColumn(name = "version_id", referencedColumnName = "id"),
+	@JoinColumns({ @JoinColumn(name = "version_id", referencedColumnName = "id"),
 			@JoinColumn(name = "version_snapshot", referencedColumnName = "snapshot") })
 	private Version version;
 	private String className;
@@ -30,6 +29,7 @@ public class Class extends RepoEntity {
 	@Lob
 	@Column(name = "bytecode")
 	private byte[] bytecode;
+	private long jarIndex;
 
 	public Class() {
 	}
@@ -69,6 +69,14 @@ public class Class extends RepoEntity {
 
 	public void setBytecode(byte[] bytecode) {
 		this.bytecode = bytecode;
+	}
+
+	public long getJarIndex() {
+		return jarIndex;
+	}
+
+	public void setJarIndex(long jarIndex) {
+		this.jarIndex = jarIndex;
 	}
 
 	public String toString() {

@@ -15,15 +15,11 @@ public class ClassRepository {
 		this.entityManagerFactory = entityManagerFactory;
 	}
 
-	public Class findClassByArtifactIdAndClassName(String artifactId,
-			String className) {
-		EntityManager entityManager = entityManagerFactory
-				.createEntityManager();
+	public Class findClassByArtifactIdAndClassName(String artifactId, String className) {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		entityManager.getTransaction().begin();
-		List<Class> results = entityManager
-				.createNamedQuery("findClassByArtifactIdAndClassName",
-						Class.class).setParameter("caid", artifactId)
-				.setParameter("cn", className).getResultList();
+		List<Class> results = entityManager.createNamedQuery("findClassByArtifactIdAndClassName", Class.class)
+				.setParameter("caid", artifactId).setParameter("cn", className).getResultList();
 		Class clazz = null;
 		if (!results.isEmpty()) {
 			clazz = results.get(0);
@@ -34,16 +30,23 @@ public class ClassRepository {
 	}
 
 	public List<Class> findClassesByArtifactId(String artifactId, Long snapshot) {
-		EntityManager entityManager = entityManagerFactory
-				.createEntityManager();
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		entityManager.getTransaction().begin();
-		List<Class> results = entityManager
-				.createNamedQuery("findClassesByArtifactId", Class.class)
-				.setParameter("caid", artifactId).setParameter("cs", snapshot)
-				.getResultList();
+		List<Class> results = entityManager.createNamedQuery("findClassesByArtifactId", Class.class)
+				.setParameter("caid", artifactId).setParameter("cs", snapshot).getResultList();
 		entityManager.getTransaction().commit();
 		entityManager.close();
 		return results;
+	}
+
+	public void saveOrUpdate(Class clazz) {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		entityManager.getTransaction().begin();
+
+		entityManager.merge(clazz);
+
+		entityManager.getTransaction().commit();
+		entityManager.close();
 	}
 
 }

@@ -15,25 +15,22 @@ public interface CatalogService {
 	public void save(Repository repository);
 
 	public void saveOrUpdate(Repository repository);
-	
+
 	public void saveOrUpdate(Version version);
 
 	public Collection<Repository> listAllRepositories();
 
 	public Repository loadRepository();
 
-	public Version loadVersionWithClasses(String artifactId, String version)
-			throws IOException;
-	
-	public Version loadVersion(String artifactId, String version)
-			throws IOException;
+	public Version loadVersionWithClasses(String artifactId, String version) throws IOException;
+
+	public Version loadVersion(String artifactId, String version) throws IOException;
 
 	public Group loadGroup(String groupId);
 
 	public Product loadProduct(String artifactId);
 
-	public Version buildVersion(Version version, int level)
-			throws Exception;
+	public Version buildVersion(Version version, int level) throws Exception;
 
 	public Class loadClass(String artifactId, String className);
 
@@ -42,5 +39,7 @@ public interface CatalogService {
 	public long getCurrentSnapshot();
 
 	public Version loadVersionWithDependencies(String artifactId, String version);
+
+	public void saveOrUpdate(Class clazz);
 
 }

@@ -129,7 +129,8 @@ public class CatalogServiceImpl implements CatalogService {
 		Set<Version> dependencies = new HashSet<Version>();
 		if (level > 0) {
 			level--;
-			if ((version.getArtifactId() == null || version.getDependencies() == null) && MavenUtils.isValidURL(version.getUrl())) {
+			if ((version.getArtifactId() == null || version.getDependencies() == null)
+					&& MavenUtils.isValidURL(version.getUrl())) {
 				version = (Version) MavenUtils.processPom(version.getUrl(), getCurrentSnapshot(), this);
 			}
 			if (version.getDependencies() != null && level > 0) {
@@ -178,5 +179,10 @@ public class CatalogServiceImpl implements CatalogService {
 	@Override
 	public void saveOrUpdate(Version version) {
 		getVersionRepository().saveOrUpdate(version);
+	}
+
+	@Override
+	public void saveOrUpdate(Class clazz) {
+		getClassRepository().saveOrUpdate(clazz);
 	}
 }
