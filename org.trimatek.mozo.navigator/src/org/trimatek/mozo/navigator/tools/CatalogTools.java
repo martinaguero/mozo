@@ -9,6 +9,7 @@ import org.trimatek.mozo.catalog.model.Group;
 import org.trimatek.mozo.catalog.model.Product;
 import org.trimatek.mozo.catalog.model.Repository;
 import org.trimatek.mozo.catalog.model.Version;
+import org.trimatek.mozo.catalog.model.Class;
 import org.trimatek.mozo.catalog.service.CatalogService;
 
 public class CatalogTools {
@@ -102,6 +103,10 @@ public class CatalogTools {
 			version.setDependencies(dependencies);
 		}
 		return version;
+	}
+
+	public static void save(Class clazz, CatalogService catalogService) {
+		catalogService.saveOrUpdate(clazz);
 	}
 
 }

@@ -1,6 +1,7 @@
 package org.trimatek.mozo.navigator.service.impl;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -14,17 +15,23 @@ import org.trimatek.mozo.catalog.service.CatalogService;
 import org.trimatek.mozo.navigator.service.NavigatorService;
 import org.trimatek.mozo.navigator.tools.BytecodeTools;
 import org.trimatek.mozo.navigator.tools.CatalogTools;
+import org.trimatek.mozo.navigator.tools.RemoteZipTools;
 import org.trimatek.mozo.navigator.utils.NavigatorUtils;
+import org.trimatek.remotezip.service.RemoteZipService;
+import org.trimatek.remotezip.tools.RemoteZipFile;
 
 public class NavigatorServiceImpl implements NavigatorService {
 
 	CatalogService catalogService;
 	BytecodeService bytecodeService;
+	RemoteZipService remoteZipService;
 	private static Logger logger = Logger.getLogger(NavigatorServiceImpl.class.getName());
 
-	public NavigatorServiceImpl(CatalogService catalogService, BytecodeService bytecodeService) {
+	public NavigatorServiceImpl(CatalogService catalogService, BytecodeService bytecodeService,
+			RemoteZipService remoteZipService) {
 		this.catalogService = catalogService;
 		this.bytecodeService = bytecodeService;
+		this.remoteZipService = remoteZipService;
 	}
 
 	@Override
@@ -50,21 +57,23 @@ public class NavigatorServiceImpl implements NavigatorService {
 		Version catalogDep;
 		Set<Version> deps = new HashSet<Version>();
 		version = doConjunction(references, version);
-		Version catalogVersion = catalogService.loadVersionWithDependencies(version.getArtifactId(), version.getVersion());
+		Version catalogVersion = catalogService.loadVersionWithDependencies(version.getArtifactId(),
+				version.getVersion());
 		if (catalogVersion != null) {
 			for (Version dependency : catalogVersion.getDependencies()) {
 				logger.info("Loading dependency: " + dependency.getArtifactId());
 				try {
-					catalogDep = catalogService.loadVersionWithClasses(dependency.getArtifactId(), dependency.getVersion());
-					if (dependency.getJar() == null) {
-						catalogDep = bytecodeService.loadJar(catalogDep);
-						catalogDep = bytecodeService.buildJarProxy(catalogDep);
+					catalogDep = catalogService.loadVersionWithClasses(dependency.getArtifactId(),
+							dependency.getVersion());
+					if (dependency.getNamespace() == null) {
+						catalogDep = RemoteZipTools.loadRemoteJarClasses(catalogDep, remoteZipService);
 						catalogDep = CatalogTools.saveDependency(catalogDep, catalogService);
 					}
 					catalogDep.setJar(null);
 					catalogDep.setJarProxy(null);
 					List<String> refs = BytecodeTools.findReferences(version.getClasses(), catalogDep.getNamespace(),
 							bytecodeService);
+					refs = NavigatorUtils.toUniques(refs);
 					if (!refs.isEmpty()) {
 						catalogDep.setClasses(new HashSet<Class>());
 						deps.add(fetchDependencies(refs, catalogDep));
@@ -82,9 +91,18 @@ public class NavigatorServiceImpl implements NavigatorService {
 
 	private Version doConjunction(List<String> references, Version version) throws Exception {
 		Class catalogClass;
+		RemoteZipFile remoteJar = null;
 		int count = 0;
 		for (String className : references) {
 			catalogClass = catalogService.loadClass(version.getArtifactId(), className);
+			if (catalogClass.getBytecode() == null) {
+				if (remoteJar == null) {
+					remoteJar = RemoteZipTools.loadRemoteJar(version, remoteZipService);
+				}
+				InputStream is = RemoteZipTools.getInputStream(catalogClass.getJarIndex(), remoteJar, remoteZipService);
+				catalogClass.setBytecode(bytecodeService.toByteArray(is));
+				CatalogTools.save(catalogClass, catalogService);
+			}
 			if (catalogClass != null) {
 				count++;
 				if (!version.contains(catalogClass)) {
@@ -97,7 +115,8 @@ public class NavigatorServiceImpl implements NavigatorService {
 		if (references.size() != count) {
 			throw new RuntimeException("MOZO: Required and fetched number of classes are not equal.");
 		}
-		List<String> selfReferences = BytecodeTools.findReferences(version.getClasses(), version.getNamespace(), bytecodeService);
+		List<String> selfReferences = BytecodeTools.findReferences(version.getClasses(), version.getNamespace(),
+				bytecodeService);
 		selfReferences = NavigatorUtils.removeRepeated(selfReferences, version.getClasses());
 		if (!selfReferences.isEmpty()) {
 			version = doConjunction(selfReferences, version);
