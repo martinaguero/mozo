@@ -17,8 +17,8 @@ public class Activator implements BundleActivator {
 	 * )
 	 */
 	public void start(BundleContext context) throws Exception {
-		context.registerService(BytecodeService.class.getName(),
-				new BytecodeServiceImpl(), new Hashtable());
+		context.registerService(BytecodeService.class.getName(), new BytecodeServiceImpl(),
+				new Hashtable());
 	}
 
 	/*
