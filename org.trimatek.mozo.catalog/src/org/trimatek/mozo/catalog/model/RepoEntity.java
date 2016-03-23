@@ -8,13 +8,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.SequenceGenerator;
 
 @MappedSuperclass
 @IdClass(RepoEntityPK.class)
 public class RepoEntity implements Serializable {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@SequenceGenerator(name="seq_gen", initialValue=0, sequenceName="id_seq")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE ,generator="seq_gen")
 	protected Long id;
 	@Id
 	protected Long snapshot;
