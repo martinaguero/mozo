@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.bcel.classfile.ClassFormatException;
 import org.apache.bcel.classfile.ClassParser;
@@ -26,6 +28,7 @@ import org.trimatek.mozo.catalog.model.Version;
 public class BytecodeServiceImpl implements BytecodeService {
 
 	Litter litter = new Litter();
+	private static Logger logger = Logger.getLogger(BytecodeServiceImpl.class.getName());
 
 	@Override
 	public Version fillClasses(Version version) throws IOException {
@@ -95,7 +98,7 @@ public class BytecodeServiceImpl implements BytecodeService {
 	public List<String> listReferences(String className, byte[] bytecode, String namespace)
 			throws ClassFormatException, IOException {
 		List<String> references = new ArrayList<String>();
-		System.out.println("LISTANDO REFERENCIAS DE : " + className);
+		logger.log(Level.INFO, "Checking references of: " + className);
 		ClassParser cp = new ClassParser(new ByteArrayInputStream(bytecode), className);
 		List<String> constants = ClassVisitor.visit(cp.parse());
 		for (String string : constants) {
