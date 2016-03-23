@@ -3,7 +3,6 @@ package org.trimatek.mozo.navigator.service.impl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -52,7 +51,7 @@ public class NavigatorServiceImpl implements NavigatorService {
 	}
 
 	@Override
-	public Version fetchDependencies(List<String> references, Version version) throws Exception {
+	public Version fetchDependencies(Set<String> references, Version version) throws Exception {
 		logger.info("Fetching classes for: " + version.getArtifactId());
 		Version catalogDep;
 		Set<Version> deps = new HashSet<Version>();
@@ -65,15 +64,14 @@ public class NavigatorServiceImpl implements NavigatorService {
 				try {
 					catalogDep = catalogService.loadVersionWithClasses(dependency.getArtifactId(),
 							dependency.getVersion());
-					if (dependency.getNamespace() == null) {
+					if (catalogDep.getNamespace() == null) {
 						catalogDep = RemoteZipTools.loadRemoteJarClasses(catalogDep, remoteZipService);
 						catalogDep = CatalogTools.saveDependency(catalogDep, catalogService);
 					}
 					catalogDep.setJar(null);
 					catalogDep.setJarProxy(null);
-					List<String> refs = BytecodeTools.findReferences(version.getClasses(), catalogDep.getNamespace(),
+					Set<String> refs = BytecodeTools.findReferences(version.getClasses(), catalogDep.getNamespace(),
 							bytecodeService);
-					refs = NavigatorUtils.toUniques(refs);
 					if (!refs.isEmpty()) {
 						catalogDep.setClasses(new HashSet<Class>());
 						deps.add(fetchDependencies(refs, catalogDep));
@@ -89,7 +87,7 @@ public class NavigatorServiceImpl implements NavigatorService {
 		return version;
 	}
 
-	private Version doConjunction(List<String> references, Version version) throws Exception {
+	private Version doConjunction(Set<String> references, Version version) throws Exception {
 		Class catalogClass;
 		RemoteZipFile remoteJar = null;
 		int count = 0;
@@ -101,6 +99,7 @@ public class NavigatorServiceImpl implements NavigatorService {
 				}
 				InputStream is = RemoteZipTools.getInputStream(catalogClass.getJarIndex(), remoteJar, remoteZipService);
 				catalogClass.setBytecode(bytecodeService.toByteArray(is));
+				logger.log(Level.INFO, "Saving bytecode of class: " + catalogClass.getClassName());
 				CatalogTools.save(catalogClass, catalogService);
 			}
 			if (catalogClass != null) {
@@ -115,7 +114,7 @@ public class NavigatorServiceImpl implements NavigatorService {
 		if (references.size() != count) {
 			throw new RuntimeException("MOZO: Required and fetched number of classes are not equal.");
 		}
-		List<String> selfReferences = BytecodeTools.findReferences(version.getClasses(), version.getNamespace(),
+		Set<String> selfReferences = BytecodeTools.findReferences(version.getClasses(), version.getNamespace(),
 				bytecodeService);
 		selfReferences = NavigatorUtils.removeRepeated(selfReferences, version.getClasses());
 		if (!selfReferences.isEmpty()) {

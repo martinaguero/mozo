@@ -1,6 +1,5 @@
 package org.trimatek.mozo.navigator.utils;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -9,8 +8,8 @@ import org.trimatek.mozo.catalog.model.Class;
 
 public class NavigatorUtils {
 
-	public static List<String> removeRepeated(List<String> references, Set<Class> classes) {
-		List<String> repeated = new ArrayList<String>();
+	public static Set<String> removeRepeated(Set<String> references, Set<Class> classes) {
+		Set<String> repeated = new HashSet<String>();
 		for (String className : references) {
 			if (contains(classes, className)) {
 				repeated.add(className);
