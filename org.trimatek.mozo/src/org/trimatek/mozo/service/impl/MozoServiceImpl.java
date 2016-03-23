@@ -3,6 +3,7 @@ package org.trimatek.mozo.service.impl;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
@@ -53,7 +54,7 @@ public class MozoServiceImpl implements MozoService {
 	}
 
 	@Override
-	public Version fetchDependencies(List<String> references, Version target)
+	public Version fetchDependencies(Set<String> references, Version target)
 			throws MozoException {
 		try {
 			if (references != null && target != null && !references.isEmpty()) {
