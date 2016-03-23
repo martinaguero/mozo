@@ -1,8 +1,8 @@
 package org.trimatek.mozo.ui;
 
 import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -10,9 +10,7 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.trimatek.mozo.catalog.model.Class;
 import org.trimatek.mozo.catalog.model.Version;
 import org.trimatek.mozo.catalog.service.CatalogService;
-import org.trimatek.mozo.exception.BytecodeException;
 import org.trimatek.mozo.exception.MozoException;
-import org.trimatek.mozo.exception.ParityCheckException;
 import org.trimatek.mozo.service.MozoService;
 
 public class Activator implements BundleActivator {
@@ -45,8 +43,8 @@ public class Activator implements BundleActivator {
 		// hasta acá provisiorio
 
 //		 testLoadJarProxy();
-//		 testLoadBcelDeps();
-		testLoadZkclientDeps();
+		 testLoadBcelDeps();
+//		testLoadZkclientDeps();
 //		testLoadLog4JDeps();
 //		 testLoadMirageDeps();
 
@@ -70,15 +68,15 @@ public class Activator implements BundleActivator {
 		target.setGroupId("org.apache.bcel");
 		target.setNamespace("org.apache.bcel");
 
-		List<String> references = new ArrayList<String>();
-		 references.add("org.apache.bcel.generic.JSR"); // 289
-		// references.add("org.apache.bcel.generic.NamedAndTyped"); //80
-		// references.add("org.apache.bcel.generic.DRETURN"); //289
+		Set<String> references = new HashSet<String>();
+//		 references.add("org.apache.bcel.generic.JSR"); // 289
+//		 references.add("org.apache.bcel.generic.NamedAndTyped"); //80
+		 references.add("org.apache.bcel.generic.DRETURN"); //289
 //		 references.add("org.apache.bcel.util.ClassPath"); //8
 //		 references.add("org.apache.bcel.generic.Type"); //79
 //		 references.add("org.apache.bcel.classfile.Visitor"); //79
 //		 references.add("org.apache.bcel.verifier.Verifier"); // 343
-		// references.add("org.apache.bcel.classfile.Signature"); //79
+//		 references.add("org.apache.bcel.classfile.Signature"); //79
 //		 references.add("org.apache.bcel.util.ClassStack"); //80
 
 		target = mozoService.fetchDependencies(references, target);
@@ -111,9 +109,9 @@ public class Activator implements BundleActivator {
 		target.setGroupId("com.101tec");
 		target.setNamespace("org.I0Itec.zkclient");
 
-		List<String> references = new ArrayList<String>();
-		references.add("org.I0Itec.zkclient.ZkClient"); // 273
-//		 references.add("org.I0Itec.zkclient.Gateway"); // 92
+		Set<String> references = new HashSet<String>();
+//		references.add("org.I0Itec.zkclient.ZkClient"); // 273
+		 references.add("org.I0Itec.zkclient.Gateway"); // 92
 
 		target = mozoService.fetchDependencies(references, target);
 
@@ -129,7 +127,7 @@ public class Activator implements BundleActivator {
 		target.setGroupId("org.apache.log4j");
 		target.setNamespace("org.apache.log4j");
 
-		List<String> references = new ArrayList<String>();
+		Set<String> references = new HashSet<String>();
 		references.add("org.apache.log4j.Logger"); //56
 
 		target = mozoService.fetchDependencies(references, target);
@@ -146,9 +144,9 @@ public class Activator implements BundleActivator {
 		target.setGroupId("jp.sf.amateras");
 		target.setNamespace("jp.sf.amateras.mirage");
 
-		List<String> references = new ArrayList<String>();
-//		references.add("jp.sf.amateras.mirage.parser.Node");
-		references.add("jp.sf.amateras.mirage.CallExecutor");
+		Set<String> references = new HashSet<String>();
+		references.add("jp.sf.amateras.mirage.parser.Node"); //2
+//		references.add("jp.sf.amateras.mirage.CallExecutor"); //38
 
 		target = mozoService.fetchDependencies(references, target);
 
@@ -173,7 +171,7 @@ public class Activator implements BundleActivator {
 
 		version = mozoService.loadJarProxy(version);
 
-		FileOutputStream fos = new FileOutputStream("F:\\Temp\\"
+		FileOutputStream fos = new FileOutputStream("D:\\Temp\\"
 				+ version.getArtifactId() + "-" + version.getVersion() + ".jar");
 		fos.write(version.getJarProxy());
 		fos.close();
