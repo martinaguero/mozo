@@ -104,6 +104,9 @@ public class BytecodeServiceImpl implements BytecodeService {
 		for (String string : constants) {
 			string = BytecodeUtils.checkClassRef(string);
 			if (string != null && BytecodeUtils.isClassName(string) && string.startsWith(namespace)) {
+				if (string.contains(".class")) {
+					string = string.replace(".class", "");
+				}
 				references.add(string);
 			}
 		}
