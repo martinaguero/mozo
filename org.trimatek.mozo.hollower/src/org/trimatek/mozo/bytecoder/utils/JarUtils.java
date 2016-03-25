@@ -66,7 +66,7 @@ public class JarUtils {
 		return file;
 	}
 
-	public static File buildHollowedJar(Context ctx) throws FileNotFoundException, IOException {
+	public static File buildJar(Context ctx) throws FileNotFoundException, IOException {
 		Manifest manifest = new Manifest();
 		manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0");
 		JarOutputStream target = new JarOutputStream(new FileOutputStream(Config.JARS_DIR + ctx.jarName), manifest);

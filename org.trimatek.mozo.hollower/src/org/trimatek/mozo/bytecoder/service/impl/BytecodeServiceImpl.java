@@ -85,7 +85,7 @@ public class BytecodeServiceImpl implements BytecodeService {
 			}
 		}
 		jarFile.close();
-		File lite = JarUtils.buildHollowedJar(ctx);
+		File lite = JarUtils.buildJar(ctx);
 		FileInputStream fis = new FileInputStream(lite);
 		version.setJarProxy(IOUtils.toByteArray(fis));
 		fis.close();
