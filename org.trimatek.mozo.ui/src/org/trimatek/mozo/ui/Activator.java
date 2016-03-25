@@ -1,7 +1,11 @@
 package org.trimatek.mozo.ui;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.osgi.framework.BundleActivator;
@@ -12,6 +16,9 @@ import org.trimatek.mozo.catalog.model.Version;
 import org.trimatek.mozo.catalog.service.CatalogService;
 import org.trimatek.mozo.exception.MozoException;
 import org.trimatek.mozo.service.MozoService;
+import org.trimatek.mozo.ui.service.ClasspathService;
+import org.trimatek.mozo.ui.service.impl.ClasspathServiceImpl;
+import org.trimatek.mozo.ui.tools.JarUtils;
 
 public class Activator implements BundleActivator {
 
@@ -43,8 +50,8 @@ public class Activator implements BundleActivator {
 		// hasta acá provisiorio
 
 //		 testLoadJarProxy();
-		 testLoadBcelDeps();
-//		testLoadZkclientDeps();
+//		 testLoadBcelDeps();
+		testLoadZkclientDeps();
 //		testLoadLog4JDeps();
 //		 testLoadMirageDeps();
 
@@ -101,7 +108,7 @@ public class Activator implements BundleActivator {
 		System.out.println("TOTAL DE CLASES RECUPERADAS: " + count);
 	}
 
-	private void testLoadZkclientDeps() throws MozoException {
+	private void testLoadZkclientDeps() throws MozoException, FileNotFoundException, IOException {
 
 		Version target = new Version();
 		target.setArtifactId("zkclient");
@@ -116,7 +123,16 @@ public class Activator implements BundleActivator {
 		target = mozoService.fetchDependencies(references, target);
 
 		printResult(target);
-
+		
+		ClasspathService cpService = new ClasspathServiceImpl();
+		List<File> files = cpService.buildJars(target);
+		
+		for (File file : files) {
+			Context ctx = new Context(file.getName());
+			JarUtils.buildJar(ctx);
+		}
+		
+		
 	}
 
 	private void testLoadLog4JDeps() throws MozoException {
@@ -167,7 +183,7 @@ public class Activator implements BundleActivator {
 //		 "https://repo1.maven.org/maven2/log4j/log4j/1.2.15/log4j-1.2.15.pom";
 //		 "https://repo1.maven.org/maven2/jp/sf/amateras/mirage/1.2.3/mirage-1.2.3.pom";
 		Version version = new Version(path);
-		version = catalogService.buildVersion(version, 1);
+		version = catalogService.buildVersion(version, 2);
 
 		version = mozoService.loadJarProxy(version);
 
