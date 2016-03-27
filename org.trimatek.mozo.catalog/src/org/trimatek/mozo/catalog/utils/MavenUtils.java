@@ -25,6 +25,7 @@ import org.trimatek.mozo.catalog.model.Product;
 import org.trimatek.mozo.catalog.model.RepoEntity;
 import org.trimatek.mozo.catalog.model.Version;
 import org.trimatek.mozo.catalog.service.CatalogService;
+import org.trimatek.mozo.catalog.tools.CatalogTools;
 
 public class MavenUtils {
 
@@ -33,26 +34,41 @@ public class MavenUtils {
 	private static Map<String, ?> params = null;
 	private static Logger logger = Logger.getLogger(MavenUtils.class.getName());
 
-	public static RepoEntity processPom(String path, Long snapshot, CatalogService catalogService) throws ModelParseException,
-			IOException {
+	public static RepoEntity processPom(String path, Long snapshot, CatalogService catalogService)
+			throws ModelParseException, IOException {
 		// TODO ver el asunto de la ausencia de la versión
 		URL url = new URL(path);
 		Model model = null;
 		Version version = null;
 		File file = new File(path.substring(path.lastIndexOf("/") + 1));
 		try {
+			// TODO ver de cambiar este FileUtils que es lentísimo
 			FileUtils.copyURLToFile(url, file);
 			model = modelReader.read(file, params);
 			String v = model.getVersion() == null ? parseVersionFromPomPath(path) : model.getVersion();
-			version = new Version(model.getArtifactId(), model.getGroupId(), snapshot, path, v, file);
-			for (Dependency d : model.getDependencies()) {
-				Version dep = catalogService.loadVersion(d.getArtifactId(), d.getVersion());
-				if (dep == null) {
-					if (d.getVersion() != null) {
-						dep = new Version(d.getArtifactId(), d.getGroupId(), snapshot, buildUrl(d), d.getVersion(), null);
+			version = catalogService.loadVersion(model.getArtifactId(), v);
+			if (version == null) {
+				version = new Version(model.getArtifactId(), model.getGroupId(), snapshot, path, v, file);
+			}
+			if (version.getDependencies() == null || version.getDependencies().size() == 0) {
+				for (Dependency d : model.getDependencies()) {
+					Version dep = catalogService.loadVersion(d.getArtifactId(), d.getVersion());
+					if (dep == null) {
+						if (d.getVersion() != null) {
+							dep = new Version(d.getArtifactId(), d.getGroupId(), snapshot, buildUrl(d), d.getVersion(),
+									null);
+							version.addDependency(dep);
+						}
+					} else {
 						version.addDependency(dep);
 					}
 				}
+				if (version.getId() != null) {
+					catalogService.saveOrUpdate(version);
+				} else {
+					CatalogTools.save(version, catalogService);
+				}
+				version = catalogService.loadVersion(version.getArtifactId(), version.getVersion());
 			}
 		} catch (IOException ioe) {
 			logger.log(Level.SEVERE, "Could not load POM: " + file, ioe);
@@ -60,8 +76,8 @@ public class MavenUtils {
 		return version;
 	}
 
-	public static RepoEntity processMetadata(String path, long snapshot, List<Version> versions) throws MetadataParseException,
-			IOException {
+	public static RepoEntity processMetadata(String path, long snapshot, List<Version> versions)
+			throws MetadataParseException, IOException {
 		URL url = new URL(path);
 		File file = new File(path.substring(path.lastIndexOf("/") + 1));
 		FileUtils.copyURLToFile(url, file);
@@ -79,8 +95,8 @@ public class MavenUtils {
 	}
 
 	private static String buildUrl(Dependency dep) {
-		return TCR_MAVEN2_URL + dep.getGroupId().replace(".", "/") + "/" + dep.getArtifactId() + "/" + dep.getVersion() + "/"
-				+ dep.getArtifactId() + "-" + dep.getVersion() + ".pom";
+		return TCR_MAVEN2_URL + dep.getGroupId().replace(".", "/") + "/" + dep.getArtifactId() + "/" + dep.getVersion()
+				+ "/" + dep.getArtifactId() + "-" + dep.getVersion() + ".pom";
 	}
 
 	private static String buildVersion(String fileName) {
