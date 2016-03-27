@@ -103,7 +103,7 @@ public class BytecodeServiceImpl implements BytecodeService {
 		List<String> constants = ClassVisitor.visit(cp.parse());
 		for (String string : constants) {
 			string = BytecodeUtils.checkClassRef(string);
-			if (string != null && BytecodeUtils.isClassName(string) && string.startsWith(namespace)) {
+			if (string != null && BytecodeUtils.isClassName(string) && string.contains(namespace)) {
 				if (string.contains(".class")) {
 					string = string.replace(".class", "");
 				}
