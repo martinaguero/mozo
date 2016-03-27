@@ -36,13 +36,14 @@ public class NavigatorServiceImpl implements NavigatorService {
 	@Override
 	public Version loadJarProxy(Version version) throws IOException, ClassNotFoundException {
 		logger.info("Loading proxy for: " + version.getArtifactId());
-		Version catalogVersion = catalogService.loadVersion(version.getArtifactId(), version.getVersion());
+		//TODO se pude evitar esta carga del catálogo
+		Version catalogVersion = catalogService.loadVersionWithClasses(version.getArtifactId(), version.getVersion());
 		if (catalogVersion == null || catalogVersion.getJar() == null) {
 			logger.info("Building proxy for: " + version.getArtifactId());
-			version = bytecodeService.loadJar(version);
-			version = bytecodeService.buildJarProxy(version);
+			version = bytecodeService.loadJar(catalogVersion);
+			version = bytecodeService.buildJarProxy(catalogVersion);
 			// TODO estudiar si se puede dejar un thread persistiendo
-			version = CatalogTools.save(version, catalogService);
+			CatalogTools.save(version, catalogService);
 			version = catalogService.loadVersion(version.getArtifactId(), version.getVersion());
 		} else {
 			version = catalogVersion;
@@ -92,6 +93,8 @@ public class NavigatorServiceImpl implements NavigatorService {
 		RemoteZipFile remoteJar = null;
 		int count = 0;
 		for (String className : references) {
+			// TODO antes de cargar del catalogo, verificar si no es parte del
+			// listado de clases de version
 			catalogClass = catalogService.loadClass(version.getArtifactId(), className);
 			if (catalogClass.getBytecode() == null) {
 				if (remoteJar == null) {
