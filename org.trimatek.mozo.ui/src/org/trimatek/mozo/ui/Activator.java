@@ -51,9 +51,11 @@ public class Activator implements BundleActivator {
 
 //		 testLoadJarProxy();
 //		 testLoadBcelDeps();
-		testLoadZkclientDeps();
+//		testLoadZkclientDeps();
 //		testLoadLog4JDeps();
 //		 testLoadMirageDeps();
+		 testLoadCommonsDBCP();
+//		testLoadCommonsPool();
 
 	}
 
@@ -117,8 +119,8 @@ public class Activator implements BundleActivator {
 		target.setNamespace("org.I0Itec.zkclient");
 
 		Set<String> references = new HashSet<String>();
-//		references.add("org.I0Itec.zkclient.ZkClient"); // 273
-		 references.add("org.I0Itec.zkclient.Gateway"); // 92
+		references.add("org.I0Itec.zkclient.ZkClient"); // 273
+//		 references.add("org.I0Itec.zkclient.Gateway"); // 92
 
 		target = mozoService.fetchDependencies(references, target);
 
@@ -170,18 +172,71 @@ public class Activator implements BundleActivator {
 
 	}
 	
+	private void testLoadCommonsDBCP() throws MozoException, FileNotFoundException, IOException {
+
+		Version target = new Version();
+		target.setArtifactId("commons-dbcp");
+		target.setVersion("1.4");
+		target.setGroupId("commons-dbcp");
+		target.setNamespace("org.apache.commons.dbcp");
+
+		Set<String> references = new HashSet<String>();
+//		references.add("org.apache.commons.dbcp.PoolingDriver"); //25
+//		references.add("org.apache.commons.dbcp.ConnectionFactory"); //25
+//		references.add("org.apache.commons.dbcp.DelegatingCallableStatement");
+		references.add("org.apache.commons.dbcp.managed.ManagedConnection"); //29 dbcp,transaction,pool
+
+		target = mozoService.fetchDependencies(references, target);
+
+		printResult(target);
+		
+		ClasspathService cpService = new ClasspathServiceImpl();
+		List<File> files = cpService.buildJars(target);
+		
+		for (File file : files) {
+			Context ctx = new Context(file.getName());
+			JarUtils.buildJar(ctx);
+		}
+
+	}
 	
+	private void testLoadCommonsPool() throws MozoException, FileNotFoundException, IOException {
+
+		Version target = new Version();
+		target.setArtifactId("commons-pool");
+		target.setVersion("1.5.4");
+		target.setGroupId("commons-pool");
+		target.setNamespace("org.apache.commons.pool");
+
+		Set<String> references = new HashSet<String>();
+		references.add("org.apache.commons.pool.ObjectPool"); //29 dbcp,transaction,pool
+
+		target = mozoService.fetchDependencies(references, target);
+
+		printResult(target);
+		
+		ClasspathService cpService = new ClasspathServiceImpl();
+		List<File> files = cpService.buildJars(target);
+		
+		for (File file : files) {
+			Context ctx = new Context(file.getName());
+			JarUtils.buildJar(ctx);
+		}
+
+	}
 	
 
 	private void testLoadJarProxy() throws Exception {
 
 		 String path =
 //		 "https://repo1.maven.org/maven2/org/apache/bcel/bcel/5.2/bcel-5.2.pom";
-		 "https://repo1.maven.org/maven2/com/101tec/zkclient/0.7/zkclient-0.7.pom";
+//		 "https://repo1.maven.org/maven2/com/101tec/zkclient/0.7/zkclient-0.7.pom";
 //		 "https://repo1.maven.org/maven2/antlr/antlr/2.7.7/antlr-2.7.7.pom";
 //		 "https://repo1.maven.org/maven2/jakarta-regexp/jakarta-regexp/1.4/jakarta-regexp-1.4.pom";
 //		 "https://repo1.maven.org/maven2/log4j/log4j/1.2.15/log4j-1.2.15.pom";
 //		 "https://repo1.maven.org/maven2/jp/sf/amateras/mirage/1.2.3/mirage-1.2.3.pom";
+//				 "https://repo1.maven.org/maven2/commons-dbcp/commons-dbcp/1.4/commons-dbcp-1.4.pom";
+		 "https://repo1.maven.org/maven2/commons-pool/commons-pool/1.5.4/commons-pool-1.5.4.pom";
 		Version version = new Version(path);
 		version = catalogService.buildVersion(version, 2);
 
