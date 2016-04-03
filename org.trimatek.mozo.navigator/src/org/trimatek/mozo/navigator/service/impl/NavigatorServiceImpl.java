@@ -35,11 +35,10 @@ public class NavigatorServiceImpl implements NavigatorService {
 
 	@Override
 	public Version loadJarProxy(Version version) throws IOException, ClassNotFoundException {
-		logger.info("Loading proxy for: " + version.getArtifactId());
 		//TODO se pude evitar esta carga del catálogo
 		Version catalogVersion = catalogService.loadVersionWithClasses(version.getArtifactId(), version.getVersion());
 		if (catalogVersion == null || catalogVersion.getJar() == null) {
-			logger.info("Building proxy for: " + version.getArtifactId());
+			logger.info("MOZO: Building proxy for: " + version.getArtifactId());
 			version = bytecodeService.loadJar(catalogVersion);
 			version = bytecodeService.buildJarProxy(catalogVersion);
 			// TODO estudiar si se puede dejar un thread persistiendo
@@ -53,7 +52,7 @@ public class NavigatorServiceImpl implements NavigatorService {
 
 	@Override
 	public Version fetchDependencies(Set<String> references, Version version) throws Exception {
-		logger.info("Fetching classes for: " + version.getArtifactId());
+		logger.info("MOZO: Fetching classes for: " + version.getArtifactId());
 		Version catalogDep;
 		Set<Version> deps = new HashSet<Version>();
 		version = doConjunction(references, version);
@@ -61,7 +60,7 @@ public class NavigatorServiceImpl implements NavigatorService {
 				version.getVersion());
 		if (catalogVersion != null) {
 			for (Version dependency : catalogVersion.getDependencies()) {
-				logger.info("Loading dependency: " + dependency.getArtifactId());
+				logger.info("MOZO: Loading dependency: " + dependency.getArtifactId());
 				try {
 					catalogDep = catalogService.loadVersionWithClasses(dependency.getArtifactId(),
 							dependency.getVersion());
@@ -78,9 +77,9 @@ public class NavigatorServiceImpl implements NavigatorService {
 						deps.add(fetchDependencies(refs, catalogDep));
 					}
 				} catch (IOException ioe) {
-					logger.log(Level.SEVERE, "Error while downloading Jar: " + ioe.getMessage(), ioe);
+					logger.log(Level.SEVERE, "MOZO: Error while downloading Jar: " + ioe.getMessage(), ioe);
 				} catch (ClassNotFoundException ce) {
-					logger.log(Level.SEVERE, "Error while processing Jar: " + ce.getMessage(), ce);
+					logger.log(Level.SEVERE, "MOZO: Error while processing Jar: " + ce.getMessage(), ce);
 				}
 			}
 		}
@@ -102,7 +101,7 @@ public class NavigatorServiceImpl implements NavigatorService {
 				}
 				InputStream is = RemoteZipTools.getInputStream(catalogClass.getJarIndex(), remoteJar, remoteZipService);
 				catalogClass.setBytecode(bytecodeService.toByteArray(is));
-				logger.log(Level.INFO, "Saving bytecode of class: " + catalogClass.getClassName());
+				logger.log(Level.INFO, "MOZO: Saving bytecode of class: " + catalogClass.getClassName());
 				CatalogTools.save(catalogClass, catalogService);
 			}
 			if (catalogClass != null) {
