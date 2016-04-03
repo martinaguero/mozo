@@ -1,8 +1,6 @@
 package org.trimatek.mozo.service.impl;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.osgi.framework.BundleContext;
@@ -26,12 +24,6 @@ public class MozoServiceImpl implements MozoService {
 		navigatorServiceTracker.open();
 		navigatorService = (NavigatorService) navigatorServiceTracker
 				.getService();
-	}
-
-	@Override
-	public List<Version> fill(Map<Version, List<String>> target) {
-		System.out.println("FILL");
-		return null;
 	}
 
 	@Override
