@@ -37,6 +37,8 @@ public interface CatalogService {
 	public List<Class> loadClasses(String artifactId, long snapshot);
 
 	public long getCurrentSnapshot();
+	
+	public int getDefaultLevel();
 
 	public Version loadVersionWithDependencies(String artifactId, String version);
 

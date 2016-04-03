@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -33,6 +34,7 @@ public class CatalogServiceImpl implements CatalogService {
 	private GroupRepository groupRepository;
 	private ProductRepository productRepository;
 	private ClassRepository classRepository;
+	private static Logger logger = Logger.getLogger(CatalogServiceImpl.class.getName());
 
 	public CatalogServiceImpl(EntityManagerFactory entityManagerFactory) {
 		this.entityManagerFactory = entityManagerFactory;
@@ -183,5 +185,10 @@ public class CatalogServiceImpl implements CatalogService {
 	@Override
 	public void saveOrUpdate(Class clazz) {
 		getClassRepository().saveOrUpdate(clazz);
+	}
+
+	@Override
+	public int getDefaultLevel() {
+		return Config.DEFAULT_LEVEL;
 	}
 }
