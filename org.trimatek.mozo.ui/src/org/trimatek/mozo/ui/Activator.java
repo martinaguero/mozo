@@ -54,8 +54,9 @@ public class Activator implements BundleActivator {
 //		testLoadZkclientDeps();
 //		testLoadLog4JDeps();
 //		 testLoadMirageDeps();
-		 testLoadCommonsDBCP();
+		 testLoadCommonsDBCP(); 
 //		testLoadCommonsPool();
+//		testLoadLog4j();
 
 	}
 
@@ -164,7 +165,7 @@ public class Activator implements BundleActivator {
 
 		Set<String> references = new HashSet<String>();
 		references.add("jp.sf.amateras.mirage.parser.Node"); //2
-//		references.add("jp.sf.amateras.mirage.CallExecutor"); //38
+		references.add("jp.sf.amateras.mirage.CallExecutor"); //38
 
 		target = mozoService.fetchDependencies(references, target);
 
@@ -225,6 +226,35 @@ public class Activator implements BundleActivator {
 
 	}
 	
+	
+	
+	private void testLoadLog4j() throws MozoException, FileNotFoundException, IOException {
+
+		Version target = new Version();
+		target.setArtifactId("log4j");
+		target.setVersion("1.2.14");
+		target.setGroupId("log4j");
+		target.setNamespace("org.apache.log4j");
+
+		Set<String> references = new HashSet<String>();
+		references.add("org.apache.log4j.Logger"); //
+		references.add("org.apache.log4j.RollingFileAppender");
+		references.add("org.apache.log4j.PatternLayout");
+
+		target = mozoService.fetchDependencies(references, target);
+
+		printResult(target);
+		
+		ClasspathService cpService = new ClasspathServiceImpl();
+		List<File> files = cpService.buildJars(target);
+		
+		for (File file : files) {
+			Context ctx = new Context(file.getName());
+			JarUtils.buildJar(ctx);
+		}
+
+	}
+	
 
 	private void testLoadJarProxy() throws Exception {
 
@@ -235,8 +265,9 @@ public class Activator implements BundleActivator {
 //		 "https://repo1.maven.org/maven2/jakarta-regexp/jakarta-regexp/1.4/jakarta-regexp-1.4.pom";
 //		 "https://repo1.maven.org/maven2/log4j/log4j/1.2.15/log4j-1.2.15.pom";
 //		 "https://repo1.maven.org/maven2/jp/sf/amateras/mirage/1.2.3/mirage-1.2.3.pom";
-//				 "https://repo1.maven.org/maven2/commons-dbcp/commons-dbcp/1.4/commons-dbcp-1.4.pom";
-		 "https://repo1.maven.org/maven2/commons-pool/commons-pool/1.5.4/commons-pool-1.5.4.pom";
+				 "https://repo1.maven.org/maven2/commons-dbcp/commons-dbcp/1.4/commons-dbcp-1.4.pom";
+//		 "https://repo1.maven.org/maven2/commons-pool/commons-pool/1.5.4/commons-pool-1.5.4.pom";
+//		 "https://repo1.maven.org/maven2/log4j/log4j/1.2.14/log4j-1.2.14.pom";
 		Version version = new Version(path);
 		version = catalogService.buildVersion(version, 2);
 

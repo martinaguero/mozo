@@ -3,11 +3,12 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Ui
 Bundle-SymbolicName: org.trimatek.mozo.ui
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: org.trimatek.mozo.ui.Activator
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Service-Component: OSGI-INF/timeservicecomponent.xml
 Import-Package: org.osgi.framework;version="1.3.0",
  org.osgi.util.tracker;version="1.5.1",
  org.trimatek.mozo.catalog.model,
  org.trimatek.mozo.catalog.service,
  org.trimatek.mozo.exception,
  org.trimatek.mozo.service
+Bundle-Activator: org.trimatek.mozo.ui.Activator
