@@ -24,11 +24,7 @@ public class Activator implements BundleActivator {
 
 	private MozoService mozoService;
 	private ServiceTracker mozoServiceTracker;
-	// provisorio
-	private CatalogService catalogService;
-	private ServiceTracker catalogServiceTracker;
 
-	// hasta acá provisiorio
 
 	/*
 	 * (non-Javadoc)
@@ -42,12 +38,6 @@ public class Activator implements BundleActivator {
 				MozoService.class.getName(), null);
 		mozoServiceTracker.open();
 		mozoService = (MozoService) mozoServiceTracker.getService();
-		// provisorio
-		catalogServiceTracker = new ServiceTracker(context,
-				CatalogService.class.getName(), null);
-		catalogServiceTracker.open();
-		catalogService = (CatalogService) catalogServiceTracker.getService();
-		// hasta acá provisiorio
 
 //		 testLoadJarProxy();
 //		 testLoadBcelDeps();
@@ -269,8 +259,7 @@ public class Activator implements BundleActivator {
 //		 "https://repo1.maven.org/maven2/commons-pool/commons-pool/1.5.4/commons-pool-1.5.4.pom";
 //		 "https://repo1.maven.org/maven2/log4j/log4j/1.2.14/log4j-1.2.14.pom";
 		Version version = new Version(path);
-		version = catalogService.buildVersion(version, 2);
-
+		
 		version = mozoService.loadJarProxy(version);
 
 		FileOutputStream fos = new FileOutputStream("D:\\Temp\\"
