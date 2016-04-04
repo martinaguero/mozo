@@ -14,7 +14,7 @@
 -DverboseRemoteServiceAdmin=true
 -Dservice.exported.configs=ecf.generic.server
 -Decf.generic.server.port=3288
--Decf.generic.server.hostname=localhost
+-Decf.generic.server.hostname=93.188.166.20
       </vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>

@@ -64,7 +64,7 @@ public class Activator implements BundleActivator, ServiceListener {
 		if (config == null) {
 			config = DEFAULT_CONFIG;
 			result.put(DEFAULT_CONFIG + ".port", "3288");
-			result.put(DEFAULT_CONFIG + ".hostname", "localhost");
+			result.put(DEFAULT_CONFIG + ".hostname", "93.188.166.20");
 		}
 
 		result.put(SERVICE_EXPORTED_CONFIGS, config);

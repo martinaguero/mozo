@@ -46,6 +46,9 @@ public class MozoServiceImpl implements MozoService {
 			logger.log(Level.INFO, "MOZO: Loading Jar proxy for : " + version.toString());
 			version = navigatorService.loadJarProxy(version);
 			version.setJar(null);
+			version.setClasses(null);
+			version.setDependencies(null);
+			version.setProduct(null);
 			logger.log(Level.INFO, "MOZO: Jar proxy " + version.toString() + " ready and prepared to be sent");
 			return version;
 		} catch (IOException ioe) {
