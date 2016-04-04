@@ -7,8 +7,10 @@ public class Context {
 	public String jarName;
 
 	public Context(String jarName) {
-		OUTPUT_DIR = Config.OUTPUT_DIR + jarName + "\\";
-		TEMP_DIR = Config.TEMP_DIR + jarName + "\\";
+		OUTPUT_DIR = Config.OUTPUT_DIR + jarName + "/";
+		TEMP_DIR = Config.TEMP_DIR + jarName + "/";
+//		OUTPUT_DIR = Config.OUTPUT_DIR + jarName + "\\";
+//		TEMP_DIR = Config.TEMP_DIR + jarName + "\\";
 		this.jarName = jarName;
 	}
 
