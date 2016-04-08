@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Model
+Bundle-SymbolicName: org.trimatek.mozo.model
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.trimatek.mozo.catalog
+Export-Package: org.trimatek.mozo.model.exception,
+ org.trimatek.mozo.model.service
