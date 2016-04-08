@@ -70,6 +70,7 @@ public class NavigatorServiceImpl implements NavigatorService {
 					}
 					catalogDep.setJar(null);
 					catalogDep.setJarProxy(null);
+					catalogDep.setProduct(null);
 					Set<String> refs = BytecodeTools.findReferences(version.getClasses(), catalogDep.getNamespace(),
 							bytecodeService);
 					if (!refs.isEmpty()) {
@@ -107,6 +108,7 @@ public class NavigatorServiceImpl implements NavigatorService {
 			if (catalogClass != null) {
 				count++;
 				if (!version.contains(catalogClass)) {
+					catalogClass.setVersion(null);
 					version.addClass(catalogClass);
 				}
 			} else {
