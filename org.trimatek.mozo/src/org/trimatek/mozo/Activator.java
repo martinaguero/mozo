@@ -9,7 +9,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceRegistration;
-import org.trimatek.mozo.service.MozoService;
+import org.trimatek.mozo.model.service.MozoService;
 import org.trimatek.mozo.service.impl.MozoServiceImpl;
 
 public class Activator implements BundleActivator, ServiceListener {

@@ -6,7 +6,7 @@
    <configIni use="default">
    </configIni>
 
- <launcherArgs>
+   <launcherArgs>
       <programArgs>-consoleLog -console
       </programArgs>
       <vmArgs>-Declipse.ignoreApp=true 
@@ -63,6 +63,7 @@
       <plugin id="org.trimatek.mozo"/>
       <plugin id="org.trimatek.mozo.bytecoder"/>
       <plugin id="org.trimatek.mozo.catalog"/>
+      <plugin id="org.trimatek.mozo.model"/>
       <plugin id="org.trimatek.mozo.navigator"/>
       <plugin id="org.trimatek.remotezip"/>
    </plugins>
@@ -94,12 +95,13 @@
       <plugin id="org.eclipse.equinox.preferences" autoStart="true" startLevel="0" />
       <plugin id="org.eclipse.equinox.registry" autoStart="true" startLevel="0" />
       <plugin id="org.eclipse.osgi" autoStart="true" startLevel="0" />
+      <plugin id="org.eclipse.osgi.compatibility.state" autoStart="false" startLevel="0" />
       <plugin id="org.eclipse.osgi.services" autoStart="true" startLevel="0" />
       <plugin id="org.eclipse.osgi.services.remoteserviceadmin" autoStart="true" startLevel="0" />
-      <plugin id="org.eclipse.osgi.compatibility.state" autoStart="false" startLevel="0" />
       <plugin id="org.trimatek.mozo" autoStart="true" startLevel="6" />
       <plugin id="org.trimatek.mozo.bytecoder" autoStart="true" startLevel="1" />
       <plugin id="org.trimatek.mozo.catalog" autoStart="true" startLevel="1" />
+      <plugin id="org.trimatek.mozo.model" autoStart="false" startLevel="0" />
       <plugin id="org.trimatek.mozo.navigator" autoStart="true" startLevel="2" />
       <plugin id="org.trimatek.remotezip" autoStart="true" startLevel="1" />
    </configurations>

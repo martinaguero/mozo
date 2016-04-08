@@ -9,12 +9,12 @@ import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 import org.trimatek.mozo.catalog.model.Version;
 import org.trimatek.mozo.catalog.service.CatalogService;
-import org.trimatek.mozo.exception.BytecodeException;
-import org.trimatek.mozo.exception.ExternalResourceException;
-import org.trimatek.mozo.exception.MozoException;
-import org.trimatek.mozo.exception.NullDataException;
+import org.trimatek.mozo.model.exception.BytecodeException;
+import org.trimatek.mozo.model.exception.ExternalResourceException;
+import org.trimatek.mozo.model.exception.MozoException;
+import org.trimatek.mozo.model.exception.NullDataException;
+import org.trimatek.mozo.model.service.MozoService;
 import org.trimatek.mozo.navigator.service.NavigatorService;
-import org.trimatek.mozo.service.MozoService;
 
 public class MozoServiceImpl implements MozoService {
 
@@ -85,6 +85,7 @@ public class MozoServiceImpl implements MozoService {
 			logger.log(Level.SEVERE, e.getMessage());
 			throw new BytecodeException("MOZO: Error while analyzing class bytecode.", e);
 		}
+		logger.log(Level.INFO, "MOZO: Bytecode is ready to be sent");
 		return target;
 	}
 

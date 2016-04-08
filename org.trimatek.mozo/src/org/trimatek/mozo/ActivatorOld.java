@@ -18,7 +18,7 @@ import org.trimatek.mozo.catalog.model.Product;
 import org.trimatek.mozo.catalog.model.Repository;
 import org.trimatek.mozo.catalog.model.Version;
 import org.trimatek.mozo.catalog.service.CatalogService;
-import org.trimatek.mozo.service.MozoService;
+import org.trimatek.mozo.model.service.MozoService;
 import org.trimatek.mozo.service.impl.MozoServiceImpl;
 
 public class ActivatorOld implements BundleActivator, ServiceListener {
