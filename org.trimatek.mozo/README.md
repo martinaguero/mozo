@@ -1,2 +1,3 @@
 # mozo
-Dependencies management
+Dependencies management 
+Remote Services client
