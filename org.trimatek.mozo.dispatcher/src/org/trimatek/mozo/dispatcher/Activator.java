@@ -1,4 +1,4 @@
-package org.trimatek.mozo;
+package org.trimatek.mozo.dispatcher;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -9,8 +9,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceRegistration;
+import org.trimatek.mozo.dispatcher.service.impl.MozoServiceImpl;
 import org.trimatek.mozo.model.service.MozoService;
-import org.trimatek.mozo.service.impl.MozoServiceImpl;
 
 public class Activator implements BundleActivator, ServiceListener {
 
