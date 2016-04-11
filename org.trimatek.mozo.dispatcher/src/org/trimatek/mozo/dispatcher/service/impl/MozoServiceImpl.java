@@ -1,4 +1,4 @@
-package org.trimatek.mozo.service.impl;
+package org.trimatek.mozo.dispatcher.service.impl;
 
 import java.io.IOException;
 import java.util.Set;
