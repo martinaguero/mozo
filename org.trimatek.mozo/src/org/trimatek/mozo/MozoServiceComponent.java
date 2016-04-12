@@ -33,7 +33,8 @@ public class MozoServiceComponent {
 		// Call the service and print out result!
 		try {
 			Version version = new Version(
-					"https://repo1.maven.org/maven2/org/apache/bcel/bcel/5.2/bcel-5.2.pom");
+//					"https://repo1.maven.org/maven2/org/apache/bcel/bcel/5.2/bcel-5.2.pom");
+					"https://repo1.maven.org/maven2/commons-dbcp/commons-dbcp/1.4/commons-dbcp-1.4.pom");
 			version = mozoService.loadJarProxy(version);
 			FileOutputStream fos = new FileOutputStream(
 					"D:\\Temp\\" + version.getArtifactId() + "-" + version.getVersion() + ".jar");

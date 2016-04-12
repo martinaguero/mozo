@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" enabled="true" name="org.trimatek.mozo">
    <implementation class="org.trimatek.mozo.MozoServiceComponent"/>
-   <reference bind="loadJarProxy" cardinality="1..1" interface="org.trimatek.mozo.model.service.MozoService" name="MozoService" policy="dynamic" unbind="unbindTimeService"/>
+   <reference bind="fetchDependencies" cardinality="1..1" interface="org.trimatek.mozo.model.service.MozoService" name="MozoService" policy="dynamic" unbind="unbindTimeService"/>
 </scr:component>

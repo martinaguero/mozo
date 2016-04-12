@@ -62,8 +62,8 @@
       <plugin id="org.eclipse.osgi.services.remoteserviceadmin"/>
       <plugin id="org.trimatek.mozo.catalog"/>
       <plugin id="org.trimatek.mozo.model"/>
-      <plugin id="org.trimatek.mozo.ui"/>
-      <plugin id="org.trimatek.mozo.ui.discovery"/>
+      <plugin id="org.trimatek.mozo"/>
+      <plugin id="org.trimatek.mozo.discovery"/>
    </plugins>
 
    <configurations>
@@ -98,8 +98,8 @@
       <plugin id="org.eclipse.osgi.services.remoteserviceadmin" autoStart="true" startLevel="0" />
       <plugin id="org.trimatek.mozo.catalog" autoStart="false" startLevel="0" />
       <plugin id="org.trimatek.mozo.model" autoStart="false" startLevel="0" />
-      <plugin id="org.trimatek.mozo.ui" autoStart="true" startLevel="0" />
-      <plugin id="org.trimatek.mozo.ui.discovery" autoStart="true" startLevel="0" />
+      <plugin id="org.trimatek.mozo" autoStart="true" startLevel="0" />
+      <plugin id="org.trimatek.mozo.discovery" autoStart="true" startLevel="0" />
    </configurations>
 
 </product>
