@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: Discovery
-Bundle-SymbolicName: org.trimatek.mozo.ui.discovery
-Bundle-Version: 1.0.0.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Remote-Service: timeserviceendpointdescription.xml
-Require-Capability: osgi.extender; filter:=(&(osgi.extender=osgi.remoteserviceadmin) (version>=1.1) (!(version>=2.0)))
