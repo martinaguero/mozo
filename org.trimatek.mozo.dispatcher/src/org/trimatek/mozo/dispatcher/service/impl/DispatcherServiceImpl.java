@@ -13,18 +13,18 @@ import org.trimatek.mozo.model.exception.BytecodeException;
 import org.trimatek.mozo.model.exception.ExternalResourceException;
 import org.trimatek.mozo.model.exception.MozoException;
 import org.trimatek.mozo.model.exception.NullDataException;
-import org.trimatek.mozo.model.service.MozoService;
+import org.trimatek.mozo.model.service.DispatcherService;
 import org.trimatek.mozo.navigator.service.NavigatorService;
 
-public class MozoServiceImpl implements MozoService {
+public class DispatcherServiceImpl implements DispatcherService {
 
 	private NavigatorService navigatorService;
 	private ServiceTracker navigatorServiceTracker;
 	private CatalogService catalogService;
 	private ServiceTracker catalogServiceTracker;
-	private static Logger logger = Logger.getLogger(MozoServiceImpl.class.getName());
+	private static Logger logger = Logger.getLogger(DispatcherServiceImpl.class.getName());
 
-	public MozoServiceImpl(BundleContext context) {
+	public DispatcherServiceImpl(BundleContext context) {
 		navigatorServiceTracker = new ServiceTracker(context, NavigatorService.class.getName(), null);
 		navigatorServiceTracker.open();
 		navigatorService = (NavigatorService) navigatorServiceTracker.getService();

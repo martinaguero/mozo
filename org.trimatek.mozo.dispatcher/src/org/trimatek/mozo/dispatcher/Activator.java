@@ -9,24 +9,24 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceRegistration;
-import org.trimatek.mozo.dispatcher.service.impl.MozoServiceImpl;
-import org.trimatek.mozo.model.service.MozoService;
+import org.trimatek.mozo.dispatcher.service.impl.DispatcherServiceImpl;
+import org.trimatek.mozo.model.service.DispatcherService;
 
 public class Activator implements BundleActivator, ServiceListener {
 
 	private static final String SERVICE_EXPORTED_CONFIGS = "service.exported.configs";
 	private static final String DEFAULT_CONFIG = "ecf.generic.server";
-	private ServiceRegistration<MozoService> mozoServiceRegistration;
+	private ServiceRegistration<DispatcherService> dispatcherServiceRegistration;
 
 	public void start(BundleContext context) throws Exception {
 		Dictionary<String, Object> props = createRemoteServiceProperties();
-		context.registerService(MozoService.class.getName(), new MozoServiceImpl(context), props);
+		context.registerService(DispatcherService.class.getName(), new DispatcherServiceImpl(context), props);
 	}
 
 	public void stop(BundleContext context) throws Exception {
-		if (mozoServiceRegistration != null) {
-			mozoServiceRegistration.unregister();
-			mozoServiceRegistration = null;
+		if (dispatcherServiceRegistration != null) {
+			dispatcherServiceRegistration.unregister();
+			dispatcherServiceRegistration = null;
 		}
 	}
 

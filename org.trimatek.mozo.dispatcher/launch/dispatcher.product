@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Mozo Service" uid="org.trimatek.mozo.mozoservice.product" version="1.0.0.qualifier" useFeatures="false" includeLaunchers="false">
+<product name="Dispatcher Service" uid="org.trimatek.mozo.dispatcherservice.product" version="1.0.0.qualifier" useFeatures="false" includeLaunchers="false">
 
    <configIni use="default">
    </configIni>
@@ -60,9 +60,9 @@
       <plugin id="org.eclipse.osgi.compatibility.state" fragment="true"/>
       <plugin id="org.eclipse.osgi.services"/>
       <plugin id="org.eclipse.osgi.services.remoteserviceadmin"/>
-      <plugin id="org.trimatek.mozo.dispatcher"/>
       <plugin id="org.trimatek.mozo.bytecoder"/>
       <plugin id="org.trimatek.mozo.catalog"/>
+      <plugin id="org.trimatek.mozo.dispatcher"/>
       <plugin id="org.trimatek.mozo.model"/>
       <plugin id="org.trimatek.mozo.navigator"/>
       <plugin id="org.trimatek.remotezip"/>
@@ -98,9 +98,9 @@
       <plugin id="org.eclipse.osgi.compatibility.state" autoStart="false" startLevel="0" />
       <plugin id="org.eclipse.osgi.services" autoStart="true" startLevel="0" />
       <plugin id="org.eclipse.osgi.services.remoteserviceadmin" autoStart="true" startLevel="0" />
-      <plugin id="org.trimatek.mozo.dispatcher" autoStart="true" startLevel="6" />
       <plugin id="org.trimatek.mozo.bytecoder" autoStart="true" startLevel="1" />
       <plugin id="org.trimatek.mozo.catalog" autoStart="true" startLevel="1" />
+      <plugin id="org.trimatek.mozo.dispatcher" autoStart="true" startLevel="6" />
       <plugin id="org.trimatek.mozo.model" autoStart="false" startLevel="0" />
       <plugin id="org.trimatek.mozo.navigator" autoStart="true" startLevel="2" />
       <plugin id="org.trimatek.remotezip" autoStart="true" startLevel="1" />
