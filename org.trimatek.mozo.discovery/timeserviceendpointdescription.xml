@@ -10,7 +10,7 @@
     <property name="endpoint.service.id" value-type="Long" value="0"/>
     <property name="objectClass" value-type="String">
       <array>
-        <value>org.trimatek.mozo.model.service.MozoService</value>
+        <value>org.trimatek.mozo.model.service.DispatcherService</value>
       </array>
     </property>
     <property name="remote.configs.supported" value-type="String">
