@@ -1,16 +1,9 @@
 package org.trimatek.mozo.model.service;
 
-import java.util.Set;
-
-import org.trimatek.mozo.catalog.model.Version;
-import org.trimatek.mozo.model.exception.BytecodeException;
-import org.trimatek.mozo.model.exception.MozoException;
+import java.io.File;
 
 public interface MozoService {
 
-	public Version loadJarProxy(Version target) throws MozoException;
-
-	public Version fetchDependencies(Set<String> references, Version target)
-			throws BytecodeException, MozoException;
-
+	public void loadDependencies(File file);
+	
 }
