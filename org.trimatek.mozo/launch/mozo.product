@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Mozo Remote MozoService Consumer DS EDEF" uid="org.trimatek.mozo.ui.product" version="1.0.0.qualifier" useFeatures="false" includeLaunchers="false">
+<product name="Mozo Remote DispatcherService Consumer DS EDEF" uid="org.trimatek.mozo.product" version="1.0.0.qualifier" useFeatures="false" includeLaunchers="false">
 
    <configIni use="default">
    </configIni>
@@ -14,7 +14,7 @@
 -DverboseRemoteServiceAdmin=true
 -Dservice.exported.configs=ecf.generic.server
 -Decf.generic.server.port=3288
--Decf.generic.server.hostname=localhost
+-Decf.generic.server.hostname=93.188.166.20
       </vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>
@@ -60,10 +60,10 @@
       <plugin id="org.eclipse.osgi"/>
       <plugin id="org.eclipse.osgi.services"/>
       <plugin id="org.eclipse.osgi.services.remoteserviceadmin"/>
-      <plugin id="org.trimatek.mozo.catalog"/>
-      <plugin id="org.trimatek.mozo.model"/>
       <plugin id="org.trimatek.mozo"/>
+      <plugin id="org.trimatek.mozo.catalog"/>
       <plugin id="org.trimatek.mozo.discovery"/>
+      <plugin id="org.trimatek.mozo.model"/>
    </plugins>
 
    <configurations>
@@ -96,10 +96,10 @@
       <plugin id="org.eclipse.osgi" autoStart="true" startLevel="0" />
       <plugin id="org.eclipse.osgi.services" autoStart="true" startLevel="0" />
       <plugin id="org.eclipse.osgi.services.remoteserviceadmin" autoStart="true" startLevel="0" />
-      <plugin id="org.trimatek.mozo.catalog" autoStart="false" startLevel="0" />
-      <plugin id="org.trimatek.mozo.model" autoStart="false" startLevel="0" />
       <plugin id="org.trimatek.mozo" autoStart="true" startLevel="0" />
+      <plugin id="org.trimatek.mozo.catalog" autoStart="false" startLevel="0" />
       <plugin id="org.trimatek.mozo.discovery" autoStart="true" startLevel="0" />
+      <plugin id="org.trimatek.mozo.model" autoStart="false" startLevel="0" />
    </configurations>
 
 </product>

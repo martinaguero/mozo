@@ -20,7 +20,7 @@ import org.trimatek.mozo.catalog.model.Class;
 import org.trimatek.mozo.catalog.model.Version;
 import org.trimatek.mozo.model.exception.BytecodeException;
 import org.trimatek.mozo.model.exception.MozoException;
-import org.trimatek.mozo.model.service.MozoService;
+import org.trimatek.mozo.model.service.DispatcherService;
 import org.trimatek.mozo.service.ClasspathService;
 import org.trimatek.mozo.service.impl.ClasspathServiceImpl;
 import org.trimatek.mozo.tools.JarUtils;
@@ -28,14 +28,14 @@ import org.trimatek.mozo.tools.JarUtils;
 public class MozoServiceComponent {
 
 	// Called by DS upon ITimeService discovery
-	void loadJarProxy(MozoService mozoService) {
-		System.out.println("Discovered ITimeService via DS.  Instance=" + mozoService);
+	void loadJarProxy(DispatcherService dispatcherService) {
+		System.out.println("Discovered ITimeService via DS.  Instance=" + dispatcherService);
 		// Call the service and print out result!
 		try {
 			Version version = new Version(
 //					"https://repo1.maven.org/maven2/org/apache/bcel/bcel/5.2/bcel-5.2.pom");
 					"https://repo1.maven.org/maven2/commons-dbcp/commons-dbcp/1.4/commons-dbcp-1.4.pom");
-			version = mozoService.loadJarProxy(version);
+			version = dispatcherService.loadJarProxy(version);
 			FileOutputStream fos = new FileOutputStream(
 					"D:\\Temp\\" + version.getArtifactId() + "-" + version.getVersion() + ".jar");
 			fos.write(version.getJarProxy());
@@ -54,7 +54,7 @@ public class MozoServiceComponent {
 
 	}
 	
-	void fetchDependencies(MozoService mozoService) throws FileNotFoundException, IOException, BytecodeException, MozoException{
+	void fetchDependencies(DispatcherService dispatcherService) throws FileNotFoundException, IOException, BytecodeException, MozoException{
 		Version target = new Version();
 		target.setArtifactId("commons-dbcp");
 		target.setVersion("1.4");
@@ -67,7 +67,7 @@ public class MozoServiceComponent {
 //		references.add("org.apache.commons.dbcp.DelegatingCallableStatement");
 		references.add("org.apache.commons.dbcp.managed.ManagedConnection"); //29 dbcp,transaction,pool
 
-		target = mozoService.fetchDependencies(references, target);
+		target = dispatcherService.fetchDependencies(references, target);
 
 		printResult(target);
 		
@@ -82,8 +82,8 @@ public class MozoServiceComponent {
 	
 
 	// Called by DS upon ITimeService undiscovery
-	void unbindTimeService(MozoService mozoService) {
-		System.out.println("Undiscovered ITimeService via DS.  Instance=" + mozoService);
+	void unbindTimeService(DispatcherService dispatcherService) {
+		System.out.println("Undiscovered ITimeService via DS.  Instance=" + dispatcherService);
 	}
 	
 	private void printResult(Version version) {

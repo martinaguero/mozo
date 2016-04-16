@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
 
@@ -14,15 +15,17 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.trimatek.mozo.catalog.model.Class;
 import org.trimatek.mozo.catalog.model.Version;
 import org.trimatek.mozo.model.exception.MozoException;
+import org.trimatek.mozo.model.service.DispatcherService;
 import org.trimatek.mozo.model.service.MozoService;
 import org.trimatek.mozo.service.ClasspathService;
 import org.trimatek.mozo.service.impl.ClasspathServiceImpl;
+import org.trimatek.mozo.service.impl.MozoServiceImpl;
 import org.trimatek.mozo.tools.JarUtils;
 
 public class Activator implements BundleActivator {
 
-	private MozoService mozoService;
-	private ServiceTracker mozoServiceTracker;
+	private DispatcherService dispatcherService;
+	private ServiceTracker dispatcherServiceTracker;
 
 
 	/*
@@ -33,10 +36,12 @@ public class Activator implements BundleActivator {
 	 * )
 	 */
 	public void start(BundleContext context) throws Exception {
-		mozoServiceTracker = new ServiceTracker(context,
-				MozoService.class.getName(), null);
-		mozoServiceTracker.open();
-		mozoService = (MozoService) mozoServiceTracker.getService();
+		context.registerService(MozoService.class.getName(), new MozoServiceImpl(), new Hashtable());
+				
+		dispatcherServiceTracker = new ServiceTracker(context,
+				DispatcherService.class.getName(), null);
+		dispatcherServiceTracker.open();
+		dispatcherService = (DispatcherService) dispatcherServiceTracker.getService();
 
 //		 testLoadJarProxy();
 //		 testLoadBcelDeps();
@@ -78,7 +83,7 @@ public class Activator implements BundleActivator {
 //		 references.add("org.apache.bcel.classfile.Signature"); //79
 //		 references.add("org.apache.bcel.util.ClassStack"); //80
 
-		target = mozoService.fetchDependencies(references, target);
+		target = dispatcherService.fetchDependencies(references, target);
 
 		printResult(target);
 
@@ -112,7 +117,7 @@ public class Activator implements BundleActivator {
 		references.add("org.I0Itec.zkclient.ZkClient"); // 273
 //		 references.add("org.I0Itec.zkclient.Gateway"); // 92
 
-		target = mozoService.fetchDependencies(references, target);
+		target = dispatcherService.fetchDependencies(references, target);
 
 		printResult(target);
 		
@@ -138,7 +143,7 @@ public class Activator implements BundleActivator {
 		Set<String> references = new HashSet<String>();
 		references.add("org.apache.log4j.Logger"); //56
 
-		target = mozoService.fetchDependencies(references, target);
+		target = dispatcherService.fetchDependencies(references, target);
 
 		printResult(target);
 
@@ -156,7 +161,7 @@ public class Activator implements BundleActivator {
 		references.add("jp.sf.amateras.mirage.parser.Node"); //2
 		references.add("jp.sf.amateras.mirage.CallExecutor"); //38
 
-		target = mozoService.fetchDependencies(references, target);
+		target = dispatcherService.fetchDependencies(references, target);
 
 		printResult(target);
 
@@ -176,7 +181,7 @@ public class Activator implements BundleActivator {
 //		references.add("org.apache.commons.dbcp.DelegatingCallableStatement");
 		references.add("org.apache.commons.dbcp.managed.ManagedConnection"); //29 dbcp,transaction,pool
 
-		target = mozoService.fetchDependencies(references, target);
+		target = dispatcherService.fetchDependencies(references, target);
 
 		printResult(target);
 		
@@ -201,7 +206,7 @@ public class Activator implements BundleActivator {
 		Set<String> references = new HashSet<String>();
 		references.add("org.apache.commons.pool.ObjectPool"); //29 dbcp,transaction,pool
 
-		target = mozoService.fetchDependencies(references, target);
+		target = dispatcherService.fetchDependencies(references, target);
 
 		printResult(target);
 		
@@ -230,7 +235,7 @@ public class Activator implements BundleActivator {
 		references.add("org.apache.log4j.RollingFileAppender");
 		references.add("org.apache.log4j.PatternLayout");
 
-		target = mozoService.fetchDependencies(references, target);
+		target = dispatcherService.fetchDependencies(references, target);
 
 		printResult(target);
 		
@@ -259,7 +264,7 @@ public class Activator implements BundleActivator {
 //		 "https://repo1.maven.org/maven2/log4j/log4j/1.2.14/log4j-1.2.14.pom";
 		Version version = new Version(path);
 		
-		version = mozoService.loadJarProxy(version);
+		version = dispatcherService.loadJarProxy(version);
 
 		FileOutputStream fos = new FileOutputStream("D:\\Temp\\"
 				+ version.getArtifactId() + "-" + version.getVersion() + ".jar");
