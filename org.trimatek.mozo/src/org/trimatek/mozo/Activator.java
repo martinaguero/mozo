@@ -36,6 +36,8 @@ public class Activator implements BundleActivator {
 	 * )
 	 */
 	public void start(BundleContext context) throws Exception {
+		System.out.println("ARRACÓ EL ACTIVADOR DE MOZO");
+		
 		context.registerService(MozoService.class.getName(), new MozoServiceImpl(), new Hashtable());
 				
 		dispatcherServiceTracker = new ServiceTracker(context,
@@ -48,7 +50,7 @@ public class Activator implements BundleActivator {
 //		testLoadZkclientDeps();
 //		testLoadLog4JDeps();
 //		 testLoadMirageDeps();
-		 testLoadCommonsDBCP(); 
+//		 testLoadCommonsDBCP(); 
 //		testLoadCommonsPool();
 //		testLoadLog4j();
 

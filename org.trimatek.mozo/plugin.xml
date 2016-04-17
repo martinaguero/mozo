@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+  <extension point="org.eclipse.ui.menus">
+    <menuContribution locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
+      <menu
+            icon="icons/mozo.gif"
+            label="Mozo">
+         <command
+               commandId="org.trimatek.mozo.ui.convert"
+               label="Create HTML"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeMenuSelection">
+                  <iterate
+                        ifEmpty="false"
+                        operator="or">
+                     <adapt
+                           type="org.eclipse.jdt.core.ICompilationUnit">
+                     </adapt>
+                  </iterate>
+               </with>
+               <with
+                     variable="activeMenuSelection">
+                  <iterate
+                        ifEmpty="false"
+                        operator="or">
+                  </iterate>
+               </with>
+               <with
+                     variable="activeMenuSelection">
+               </with>
+            </visibleWhen>
+         </command>
+      </menu>
+    </menuContribution>
+  </extension>
+  <extension point="org.eclipse.ui.commands">
+    <command defaultHandler="org.trimatek.mozo.ui.handler.ConvertHandler"
+      id="org.trimatek.mozo.ui.convert" name="Convert">
+    </command>
+  </extension>
+ 
+</plugin> 
