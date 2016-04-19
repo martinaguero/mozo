@@ -9,6 +9,7 @@ import java.io.IOException;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.internal.runtime.InternalPlatform;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
@@ -20,12 +21,30 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.util.tracker.ServiceTracker;
+import org.trimatek.mozo.catalog.model.Version;
+import org.trimatek.mozo.model.service.MozoService;
 
 public class ConvertHandler extends AbstractHandler {
 	private QualifiedName path = new QualifiedName("html", "path");
-
+	private ServiceTracker mozoServiceTracker;
+	private MozoService mozoService;
+ 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
+		
+		BundleContext context = InternalPlatform.getDefault().getBundleContext();
+//		BundleContext context = FrameworkUtil.getBundle(ConvertHandler.class).getBundleContext();
+		
+		mozoServiceTracker = new ServiceTracker(context, MozoService.class.getName(), null);
+		mozoServiceTracker.open();
+		mozoService = (MozoService) mozoServiceTracker.getService();
+		Version version = new Version("https://repo1.maven.org/maven2/commons-dbcp/commons-dbcp/1.4/commons-dbcp-1.4.pom");
+		mozoService.loadJarProxy(version);
+		
+		
 		Shell shell = HandlerUtil.getActiveShell(event);
 		ISelection sel = HandlerUtil.getActiveMenuSelection(event);
 		IStructuredSelection selection = (IStructuredSelection) sel;
