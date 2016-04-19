@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" enabled="true" name="org.trimatek.mozo">
-   <implementation class="org.trimatek.mozo.MozoServiceComponent"/>
-   <reference bind="fetchDependencies" cardinality="1..1" interface="org.trimatek.mozo.model.service.DispatcherService" name="DispatcherService" policy="dynamic" unbind="unbindTimeService"/>
+   <implementation class="org.trimatek.mozo.service.impl.MozoServiceImpl"/>
+   <reference bind="setDispatcherService" cardinality="1..1" interface="org.trimatek.mozo.model.service.DispatcherService" name="DispatcherService" policy="dynamic" unbind="unsetDispatcherService"/>
+   <service servicefactory="false" >
+   	<provide interface="org.trimatek.mozo.model.service.MozoService" />
+	</service>
 </scr:component>

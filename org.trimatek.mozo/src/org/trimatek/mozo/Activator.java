@@ -38,12 +38,12 @@ public class Activator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
 		System.out.println("ARRACÓ EL ACTIVADOR DE MOZO");
 		
-		context.registerService(MozoService.class.getName(), new MozoServiceImpl(), new Hashtable());
+//		context.registerService(MozoService.class.getName(), new MozoServiceImpl(), new Hashtable());
 				
-		dispatcherServiceTracker = new ServiceTracker(context,
-				DispatcherService.class.getName(), null);
-		dispatcherServiceTracker.open();
-		dispatcherService = (DispatcherService) dispatcherServiceTracker.getService();
+//		dispatcherServiceTracker = new ServiceTracker(context,
+//				DispatcherService.class.getName(), null);
+//		dispatcherServiceTracker.open();
+//		dispatcherService = (DispatcherService) dispatcherServiceTracker.getService();
 
 //		 testLoadJarProxy();
 //		 testLoadBcelDeps();
