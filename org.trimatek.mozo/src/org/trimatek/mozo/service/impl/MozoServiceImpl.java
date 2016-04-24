@@ -17,15 +17,15 @@ public class MozoServiceImpl implements MozoService {
 	}
 
 	@Override
-	public void loadJarProxy(Version version) {
+	public Version loadJarProxy(Version version) {
 		System.out.println("pide proxy");
-
 		try {
-			dispatcherService.loadJarProxy(version);
+			return dispatcherService.loadJarProxy(version);
 		} catch (MozoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return null;
 	}
 
 	@Override
