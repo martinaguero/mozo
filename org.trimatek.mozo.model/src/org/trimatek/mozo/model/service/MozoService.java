@@ -1,9 +1,13 @@
 package org.trimatek.mozo.model.service;
 
-import java.io.File;
+import org.trimatek.mozo.catalog.model.Version;
 
 public interface MozoService {
 
-	public void loadDependencies(File file);
+	public Version loadJarProxy(Version version);
+	
+	public void setDispatcherService(DispatcherService dispatcherService);
+	
+	public void unsetDispatcherService(DispatcherService dispatcherService);
 	
 }
