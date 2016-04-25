@@ -1,9 +1,12 @@
 package org.trimatek.mozo.service.impl;
 
+import java.io.IOException;
+
 import org.trimatek.mozo.catalog.model.Version;
 import org.trimatek.mozo.model.exception.MozoException;
 import org.trimatek.mozo.model.service.DispatcherService;
 import org.trimatek.mozo.model.service.MozoService;
+import org.trimatek.mozo.tools.SocketServer;
 
 public class MozoServiceImpl implements MozoService {
 
@@ -14,6 +17,20 @@ public class MozoServiceImpl implements MozoService {
 
 	public void setDispatcherService(DispatcherService dispatcherService) {
 		this.dispatcherService = dispatcherService;
+		
+		Runnable server = new Runnable() {
+			@Override
+			public void run() {
+				 try {
+					new SocketServer("localhost", 8090, dispatcherService).startServer();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+			}
+		};
+	
+		new Thread(server).start();
 	}
 
 	@Override
