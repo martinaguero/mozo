@@ -6,6 +6,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
 import org.trimatek.mozo.catalog.model.Version;
+import org.trimatek.mozo.model.command.UserCommand;
 import org.trimatek.mozo.ui.tools.Serializer;
 
 public class SocketClient {
@@ -19,16 +20,16 @@ public class SocketClient {
 
 		String threadName = Thread.currentThread().getName();
 
-		// Send messages to server
-		String[] messages = new String[] { threadName + ": test1", threadName + ": test2", threadName + ": test3" };
-
-		// for (int i = 0; i < messages.length; i++) {
-		// byte [] message = new String(messages [i]).getBytes();
 		byte[] message = null;
+
+		UserCommand command = new UserCommand();
 		Version version = new Version(
 				"https://repo1.maven.org/maven2/commons-dbcp/commons-dbcp/1.4/commons-dbcp-1.4.pom");
+		command.setId("LoadProxy");
+		command.setVersion(version);
+
 		try {
-			message = Serializer.serialize(version);
+			message = Serializer.serialize(command);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
