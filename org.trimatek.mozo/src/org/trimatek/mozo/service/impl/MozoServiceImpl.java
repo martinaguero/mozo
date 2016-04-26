@@ -1,9 +1,10 @@
 package org.trimatek.mozo.service.impl;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import org.trimatek.mozo.catalog.model.Version;
-import org.trimatek.mozo.model.exception.MozoException;
+import org.trimatek.mozo.Config;
 import org.trimatek.mozo.model.service.DispatcherService;
 import org.trimatek.mozo.model.service.MozoService;
 import org.trimatek.mozo.tools.SocketServer;
@@ -11,38 +12,29 @@ import org.trimatek.mozo.tools.SocketServer;
 public class MozoServiceImpl implements MozoService {
 
 	private DispatcherService dispatcherService;
+	private static Logger logger = Logger.getLogger(MozoServiceImpl.class.getName());
 
 	public MozoServiceImpl() {
 	}
 
 	public void setDispatcherService(DispatcherService dispatcherService) {
 		this.dispatcherService = dispatcherService;
-		
+		initServerSocket();
+	}
+
+	private void initServerSocket() {
 		Runnable server = new Runnable() {
 			@Override
 			public void run() {
-				 try {
-					new SocketServer("localhost", 8090, dispatcherService).startServer();
-				} catch (IOException e) {
-					e.printStackTrace();
+				try {
+					new SocketServer("localhost", Config.SOCKET_PORT, dispatcherService).startServer();
+				} catch (IOException ioe) {
+					String msg = "MOZO: Error in Server Socket";
+					logger.log(Level.SEVERE, msg + ioe.getMessage(), ioe);
 				}
-				
 			}
 		};
-	
 		new Thread(server).start();
-	}
-
-	@Override
-	public Version loadJarProxy(Version version) {
-		System.out.println("pide proxy");
-		try {
-			return dispatcherService.loadJarProxy(version);
-		} catch (MozoException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
 	}
 
 	@Override

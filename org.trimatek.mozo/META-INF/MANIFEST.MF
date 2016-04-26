@@ -9,6 +9,8 @@ Import-Package: org.osgi.framework;version="1.3.0",
  org.osgi.util.tracker;version="1.5.1",
  org.trimatek.mozo.catalog.model,
  org.trimatek.mozo.catalog.service,
+ org.trimatek.mozo.model.command,
  org.trimatek.mozo.model.exception,
  org.trimatek.mozo.model.service
+Export-Package: org.trimatek.mozo.commands
 
