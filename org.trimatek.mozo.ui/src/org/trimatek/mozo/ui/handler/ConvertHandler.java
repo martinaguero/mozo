@@ -40,6 +40,7 @@ public class ConvertHandler extends AbstractHandler {
 			targets = readTargets(file, event);
 		} catch (CoreException ce) {
 			logger.log(Level.SEVERE, "MOZO: Error while reading dependencies file content: " + file.getName(), ce);
+			return null;
 		}
 		
 		for (String t : targets) {
@@ -47,6 +48,7 @@ public class ConvertHandler extends AbstractHandler {
 			Version version = new Version(t);
 			command.setId("LoadProxy");
 			command.setVersion(version);
+			command.setTargetDir(file.getProject().getLocation().toString());
 		
 		
 			Runnable client = new Runnable() {
