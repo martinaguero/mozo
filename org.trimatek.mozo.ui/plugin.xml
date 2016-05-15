@@ -18,19 +18,9 @@
                         ifEmpty="false"
                         operator="or">
                      <adapt
-                           type="org.eclipse.jdt.core.ICompilationUnit">
+                           type="org.eclipse.core.resources.IFile">
                      </adapt>
                   </iterate>
-               </with>
-               <with
-                     variable="activeMenuSelection">
-                  <iterate
-                        ifEmpty="false"
-                        operator="or">
-                  </iterate>
-               </with>
-               <with
-                     variable="activeMenuSelection">
                </with>
             </visibleWhen>
          </command>
