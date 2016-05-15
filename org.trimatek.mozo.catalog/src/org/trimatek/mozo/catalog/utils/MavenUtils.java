@@ -4,7 +4,9 @@ import static org.trimatek.mozo.catalog.Config.TCR_MAVEN2_URL;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -118,6 +120,21 @@ public class MavenUtils {
 		int ini = path.lastIndexOf("-");
 		int end = path.lastIndexOf(".");
 		return path.substring(ini + 1, end);
+	}
+
+	public static List<String> readPomDependencies(InputStream inputStream) {
+		List<String> dependencies = new ArrayList<String>();
+		try {
+			Model model = modelReader.read(inputStream, params);
+			for (Dependency d : model.getDependencies()) {
+				dependencies.add(buildUrl(d));
+			}
+		} catch (ModelParseException e) {
+			logger.log(Level.SEVERE, "MOZO: Error while reading POM file", e);
+		} catch (IOException e) {
+			logger.log(Level.SEVERE, "MOZO: IO Exception while reading POM file", e);
+		}
+		return dependencies;
 	}
 
 }
