@@ -23,7 +23,7 @@ public class SocketClient {
 
 		System.out.println("Client... started");
 
-		String threadName = Thread.currentThread().getName();
+//		String threadName = Thread.currentThread().getName();
 
 		byte[] message = null;
 
@@ -38,7 +38,7 @@ public class SocketClient {
 		client.write(buffer);
 		// System.out.println(messages [i]);
 		buffer.clear();
-		Thread.sleep(5000);
+//		Thread.sleep(5000);
 		// }
 		client.close();
 	}

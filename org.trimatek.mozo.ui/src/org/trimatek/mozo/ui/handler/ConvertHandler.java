@@ -10,11 +10,18 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.QualifiedName;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.internal.core.PackageFragmentRoot;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -30,6 +37,7 @@ public class ConvertHandler extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 
 		IFile file = getSelectedFile();
+		getCurrentSelectedProject();
 		List<String> targets = null;
 
 		if (file == null) {
@@ -42,15 +50,14 @@ public class ConvertHandler extends AbstractHandler {
 			logger.log(Level.SEVERE, "MOZO: Error while reading dependencies file content: " + file.getName(), ce);
 			return null;
 		}
-		
+
 		for (String t : targets) {
 			UserCommand command = new UserCommand();
 			Version version = new Version(t);
 			command.setId("LoadProxy");
 			command.setVersion(version);
-			command.setTargetDir(file.getProject().getLocation().toString());
-		
-		
+			command.setTargetDir(file.getProject().getLocation().toString() + Config.LIB_DIR);
+
 			Runnable client = new Runnable() {
 				@Override
 				public void run() {
@@ -66,88 +73,90 @@ public class ConvertHandler extends AbstractHandler {
 			};
 
 			new Thread(client, "client-A").start();
-		
-		
-		
-		}
-		
 
-//		Shell shell = HandlerUtil.getActiveShell(event);
-//		ISelection sel = HandlerUtil.getActiveMenuSelection(event);
-//		IStructuredSelection selection = (IStructuredSelection) sel;
-//
-//		Object firstElement = selection.getFirstElement();
-//		if (firstElement instanceof ICompilationUnit) {
-//			createOutput(shell, firstElement);
-//
-//		} else {
-//			MessageDialog.openInformation(shell, "Info", "Please select a Java source file");
-//		}
+		}
+
+		// IWorkspaceRoot root = ResourcesPlugin.getWorkspace();
+
+		// Shell shell = HandlerUtil.getActiveShell(event);
+		// ISelection sel = HandlerUtil.getActiveMenuSelection(event);
+		// IStructuredSelection selection = (IStructuredSelection) sel;
+		//
+		// Object firstElement = selection.getFirstElement();
+		// if (firstElement instanceof ICompilationUnit) {
+		// createOutput(shell, firstElement);
+		//
+		// } else {
+		// MessageDialog.openInformation(shell, "Info", "Please select a Java
+		// source file");
+		// }
 		return null;
 	}
 
-//	private void createOutput(Shell shell, Object firstElement) {
-//		String directory;
-//		ICompilationUnit cu = (ICompilationUnit) firstElement;
-//		IResource res = cu.getResource();
-//		boolean newDirectory = true;
-//		directory = getPersistentProperty(res, path);
-//
-//		if (directory != null && directory.length() > 0) {
-//			newDirectory = !(MessageDialog.openQuestion(shell, "Question", "Use the previous output directory?"));
-//		}
-//		if (newDirectory) {
-//			DirectoryDialog fileDialog = new DirectoryDialog(shell);
-//			directory = fileDialog.open();
-//
-//		}
-//		if (directory != null && directory.length() > 0) {
-//			setPersistentProperty(res, path, directory);
-//			write(directory, cu);
-//		}
-//	}
-//
-//	protected String getPersistentProperty(IResource res, QualifiedName qn) {
-//		try {
-//			return res.getPersistentProperty(qn);
-//		} catch (CoreException e) {
-//			return "";
-//		}
-//	}
-//
-//	protected void setPersistentProperty(IResource res, QualifiedName qn, String value) {
-//		try {
-//			res.setPersistentProperty(qn, value);
-//		} catch (CoreException e) {
-//			e.printStackTrace();
-//		}
-//	}
-//
-//	private void write(String dir, ICompilationUnit cu) {
-//		try {
-//			cu.getCorrespondingResource().getName();
-//			String test = cu.getCorrespondingResource().getName();
-//			// Need
-//			String[] name = test.split("\\.");
-//			String htmlFile = dir + "\\" + name[0] + ".html";
-//			FileWriter output = new FileWriter(htmlFile);
-//			BufferedWriter writer = new BufferedWriter(output);
-//			writer.write("<html>");
-//			writer.write("<head>");
-//			writer.write("</head>");
-//			writer.write("<body>");
-//			writer.write("<pre>");
-//			writer.write(cu.getSource());
-//			writer.write("</pre>");
-//			writer.write("</body>");
-//			writer.write("</html>");
-//			writer.flush();
-//		} catch (JavaModelException e) {
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//
-//	}
+	// private void createOutput(Shell shell, Object firstElement) {
+	// String directory;
+	// ICompilationUnit cu = (ICompilationUnit) firstElement;
+	// IResource res = cu.getResource();
+	// boolean newDirectory = true;
+	// directory = getPersistentProperty(res, path);
+	//
+	// if (directory != null && directory.length() > 0) {
+	// newDirectory = !(MessageDialog.openQuestion(shell, "Question", "Use the
+	// previous output directory?"));
+	// }
+	// if (newDirectory) {
+	// DirectoryDialog fileDialog = new DirectoryDialog(shell);
+	// directory = fileDialog.open();
+	//
+	// }
+	// if (directory != null && directory.length() > 0) {
+	// setPersistentProperty(res, path, directory);
+	// write(directory, cu);
+	// }
+	// }
+	//
+	// protected String getPersistentProperty(IResource res, QualifiedName qn) {
+	// try {
+	// return res.getPersistentProperty(qn);
+	// } catch (CoreException e) {
+	// return "";
+	// }
+	// }
+	//
+	// protected void setPersistentProperty(IResource res, QualifiedName qn,
+	// String value) {
+	// try {
+	// res.setPersistentProperty(qn, value);
+	// } catch (CoreException e) {
+	// e.printStackTrace();
+	// }
+	// }
+	//
+	// private void write(String dir, ICompilationUnit cu) {
+	// try {
+	// cu.getCorrespondingResource().getName();
+	// String test = cu.getCorrespondingResource().getName();
+	// // Need
+	// String[] name = test.split("\\.");
+	// String htmlFile = dir + "\\" + name[0] + ".html";
+	// FileWriter output = new FileWriter(htmlFile);
+	// BufferedWriter writer = new BufferedWriter(output);
+	// writer.write("<html>");
+	// writer.write("<head>");
+	// writer.write("</head>");
+	// writer.write("<body>");
+	// writer.write("<pre>");
+	// writer.write(cu.getSource());
+	// writer.write("</pre>");
+	// writer.write("</body>");
+	// writer.write("</html>");
+	// writer.flush();
+	// } catch (JavaModelException e) {
+	// } catch (IOException e) {
+	// e.printStackTrace();
+	// }
+	//
+	// }
 
 	private List<String> readTargets(IFile file, ExecutionEvent event) throws CoreException {
 		List<String> targets = new ArrayList<String>();
@@ -171,6 +180,27 @@ public class ConvertHandler extends AbstractHandler {
 			}
 		}
 		return file;
+	}
+
+	public static IProject getCurrentSelectedProject() {
+	    IProject project = null;
+	    ISelectionService selectionService = 
+	        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService();
+	    ISelection selection = selectionService.getSelection();
+	    if(selection instanceof IStructuredSelection) {
+	        Object element = ((IStructuredSelection)selection).getFirstElement();
+	        if (element instanceof IResource) {
+	            project= ((IResource)element).getProject();
+	        } else if (element instanceof PackageFragmentRoot) {
+	            IJavaProject jProject = 
+	                ((PackageFragmentRoot)element).getJavaProject();
+	            project = jProject.getProject();
+	        } else if (element instanceof IJavaElement) {
+	            IJavaProject jProject= ((IJavaElement)element).getJavaProject();
+	            project = jProject.getProject();
+	        }
+	    }
+	    return project;
 	}
 
 }

@@ -8,7 +8,7 @@
             label="Mozo">
          <command
                commandId="org.trimatek.mozo.ui.convert"
-               label="Create HTML"
+               label="Solicitar dependencias"
                style="push">
             <visibleWhen
                   checkEnabled="false">
