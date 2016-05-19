@@ -40,28 +40,16 @@ import org.trimatek.mozo.model.FileTypeEnum;
 import org.trimatek.mozo.model.command.UserCommand;
 
 public class ConvertHandler extends AbstractHandler {
-	private QualifiedName path = new QualifiedName("html", "path");
 	private static Logger logger = Logger.getLogger(ConvertHandler.class.getName());
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 
 		IFile file = getSelectedFile();
+		String libdir = file.getProject().getLocation().toString() + Config.LIB_DIR;
 		IProject project = getCurrentSelectedProject();
-		try {
-			changeClasspath(project);
-		} catch (JavaModelException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		/*
 		List<String> targets = null;
 
-		if (file == null) {
-			MessageDialog.openError(HandlerUtil.getActiveShell(event), "Error", "Could not retrieve file information");
-			return null;
-		}
 		try {
 			targets = readTargets(file, event);
 		} catch (CoreException ce) {
@@ -69,37 +57,49 @@ public class ConvertHandler extends AbstractHandler {
 			return null;
 		}
 
-		for (String t : targets) {
-			UserCommand command = new UserCommand();
-			Version version = new Version(t);
-			command.setId("LoadProxy");
-			command.setVersion(version);
-			command.setTargetDir(file.getProject().getLocation().toString() + Config.LIB_DIR);
+		sendCommands(targets, libdir);
 
-			Runnable client = new Runnable() {
-				@Override
-				public void run() {
-					try {
-						new SocketClient(command).startClient();
-					} catch (IOException e) {
-						e.printStackTrace();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-
-				}
-			};
-
-			new Thread(client, "client-A").start();
-
+		try {
+			updateClasspath(project, targets, libdir);
+		} catch (JavaModelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		*/
+
 		return null;
 	}
 
+	private void sendCommands(List<String> targets, String dir) {
+		Job job = new Job("Sending commands to Mozo") {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				for (String t : targets) {
+					UserCommand command = new UserCommand();
+					Version version = new Version(t);
+					command.setId("LoadProxy");
+					command.setVersion(version);
+					command.setTargetDir(dir);
+					Runnable client = new Runnable() {
+						@Override
+						public void run() {
+							try {
+								new SocketClient(command).startClient();
+							} catch (IOException e) {
+								e.printStackTrace();
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+						}
+					};
+					new Thread(client, "client-A").start();
+				}
+				return Status.OK_STATUS;
+			}
+		};
+		job.schedule();
+	}
 
 	private List<String> readTargets(IFile file, ExecutionEvent event) throws CoreException {
-		List<String> targets = new ArrayList<String>();
 		if (!FileTypeEnum.contains(file.getFileExtension())) {
 			MessageDialog.openError(HandlerUtil.getActiveShell(event), "Error", "File extension is not POM or MOZO");
 			return null;
@@ -141,24 +141,25 @@ public class ConvertHandler extends AbstractHandler {
 		return project;
 	}
 
-	private void changeClasspath(IProject project) throws JavaModelException {
-		Job job = new Job("Setting the classpath") {
-
+	private void updateClasspath(IProject project, List<String> targets, String libdir) throws JavaModelException {
+		Job job = new Job("Updating the classpath") {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				IJavaProject javaProject = (IJavaProject) project;
-
-				// Test the best and get the IClasspathEntry for mockito-core
-				Path path = new Path("d:\\mockito-core-1.8.4.jar");
-				IClasspathEntry libraryEntry = JavaCore.newLibraryEntry(path, null, null);
-
+				IJavaProject javaProject = JavaCore.create(project);
+				IClasspathEntry[] entries = new IClasspathEntry[targets.size()];
+				String jarName;
+				int idx = 0;
+				for (String target : targets) {
+					jarName = target.substring(target.lastIndexOf("/") + 1, target.lastIndexOf(".")) + ".jar";
+					Path path = new Path(libdir + jarName);
+					entries[idx++] = JavaCore.newLibraryEntry(path, null, null);
+				}
 				try {
-					// add the classpath to mockito-core for the java project
-					javaProject.setRawClasspath(new IClasspathEntry[] { libraryEntry }, monitor);
+					javaProject.setRawClasspath(entries, monitor);
 				} catch (JavaModelException e) {
 					Bundle bundle = FrameworkUtil.getBundle(getClass());
 					return new Status(Status.ERROR, bundle.getSymbolicName(),
-							"Could not set classpath to Java project: " + javaProject.getElementName(), e);
+							"MOZO: Could not set classpath to Java project: " + javaProject.getElementName(), e);
 				}
 				return Status.OK_STATUS;
 			}
