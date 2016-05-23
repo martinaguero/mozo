@@ -7,7 +7,7 @@
             icon="icons/mozo.gif"
             label="Mozo">
          <command
-               commandId="org.trimatek.mozo.ui.convert"
+               commandId="org.trimatek.mozo.ui.getproxies"
                label="Solicitar dependencias"
                style="push">
             <visibleWhen
@@ -28,8 +28,8 @@
     </menuContribution>
   </extension>
   <extension point="org.eclipse.ui.commands">
-    <command defaultHandler="org.trimatek.mozo.ui.handler.ConvertHandler"
-      id="org.trimatek.mozo.ui.convert" name="Convert">
+    <command defaultHandler="org.trimatek.mozo.ui.handlers.GetProxiesHandler"
+      id="org.trimatek.mozo.ui.getproxies" name="Convert">
     </command>
   </extension>
  
