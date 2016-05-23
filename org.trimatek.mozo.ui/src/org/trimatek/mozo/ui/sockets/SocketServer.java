@@ -1,7 +1,6 @@
 package org.trimatek.mozo.ui.sockets;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -22,7 +21,6 @@ import java.util.logging.Logger;
 import org.eclipse.core.resources.IProject;
 import org.trimatek.mozo.model.command.Command;
 import org.trimatek.mozo.model.command.UserCommand;
-import org.trimatek.mozo.model.exception.MozoException;
 import org.trimatek.mozo.ui.Config;
 import org.trimatek.mozo.ui.service.UIServiceImpl;
 import org.trimatek.mozo.ui.tools.Serializer;
@@ -46,7 +44,7 @@ public class SocketServer {
 		serverChannel.configureBlocking(false);
 		serverChannel.socket().bind(listenAddress);
 		serverChannel.register(this.selector, SelectionKey.OP_ACCEPT);
-		logger.log(Level.INFO, "MOZO: UI socket server started");
+		logger.log(Level.INFO, "MOZO: UI Socket Server started");
 		while (true) {
 			this.selector.select();
 			Iterator keys = this.selector.selectedKeys().iterator();
@@ -71,7 +69,7 @@ public class SocketServer {
 		channel.configureBlocking(false);
 		Socket socket = channel.socket();
 		SocketAddress remoteAddr = socket.getRemoteSocketAddress();
-		logger.log(Level.INFO, "MOZO: UI socket server connected to: " + remoteAddr);
+		logger.log(Level.INFO, "MOZO: UI Socket Server connected to: " + remoteAddr);
 		dataMapper.put(channel, new ArrayList());
 		channel.register(this.selector, SelectionKey.OP_READ);
 	}
@@ -86,7 +84,7 @@ public class SocketServer {
 			this.dataMapper.remove(channel);
 			Socket socket = channel.socket();
 			SocketAddress remoteAddr = socket.getRemoteSocketAddress();
-			logger.log(Level.INFO, "MOZO: UI socket connection closed by client: " + remoteAddr);
+			logger.log(Level.INFO, "MOZO: UI Socket connection closed by client: " + remoteAddr);
 			channel.close();
 			key.cancel();
 			return;
@@ -97,33 +95,12 @@ public class SocketServer {
 		try {
 			UserCommand usrCommand = (UserCommand) Serializer.deserialize(data);
 			Class clazz = Class.forName("org.trimatek.mozo.ui.commands." + usrCommand.getId());
-
 			Method method = clazz.getDeclaredMethod("buildInstance", UserCommand.class);
 			Command cmd = (Command) method.invoke(null, usrCommand);
-
 			cmd.execute(new UIServiceImpl(iproject));
-
-		} catch (ClassNotFoundException ce) {
+		} catch (Exception e) {
 			msg = "MOZO: Error while deserilizing command class";
-			logger.log(Level.SEVERE, msg + ce.getMessage(), ce);
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (MozoException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.log(Level.SEVERE, msg + e.getMessage(), e);
 		}
 	}
 }
