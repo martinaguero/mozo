@@ -12,6 +12,8 @@ import org.trimatek.mozo.model.command.Command;
 import org.trimatek.mozo.model.command.UserCommand;
 import org.trimatek.mozo.model.exception.MozoException;
 import org.trimatek.mozo.model.service.DispatcherService;
+import org.trimatek.mozo.model.service.Service;
+import org.trimatek.mozo.sockets.SocketClient;
 
 public class LoadProxy extends UserCommand implements Command {
 
@@ -28,8 +30,32 @@ public class LoadProxy extends UserCommand implements Command {
 	}
 
 	@Override
-	public void execute(DispatcherService dispatcherService) throws MozoException {
-		Version proxy = dispatcherService.loadJarProxy(getVersion());
+	public void execute(Service service) throws MozoException {
+		Version proxy = ((DispatcherService)service).loadJarProxy(getVersion());
+		saveProxy(proxy);
+		proxy.setJarProxy(null);
+		
+		UserCommand command = new UserCommand();
+		command.setId("SaveProxy");
+		command.setVersion(proxy);
+		command.setTargetDir(getTargetDir());
+		
+		Runnable client = new Runnable() {
+			@Override
+			public void run() {
+				try {
+					new SocketClient(command).startClient();
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		new Thread(client, "Mozo socket client").start();
+	}
+	
+	private void saveProxy(Version proxy){
 		FileOutputStream fos = null;
 		if (!new File(getTargetDir()).exists()) {
 			new File(getTargetDir()).mkdirs();

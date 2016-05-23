@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 import org.trimatek.mozo.Config;
 import org.trimatek.mozo.model.service.DispatcherService;
 import org.trimatek.mozo.model.service.MozoService;
-import org.trimatek.mozo.tools.SocketServer;
+import org.trimatek.mozo.sockets.SocketServer;
 
 public class MozoServiceImpl implements MozoService {
 
@@ -27,7 +27,7 @@ public class MozoServiceImpl implements MozoService {
 			@Override
 			public void run() {
 				try {
-					new SocketServer("localhost", Config.SOCKET_PORT, dispatcherService).startServer();
+					new SocketServer("localhost", Config.SOCKET_MOZO_PORT, dispatcherService).startServer();
 				} catch (IOException ioe) {
 					String msg = "MOZO: Error in Server Socket";
 					logger.log(Level.SEVERE, msg + ioe.getMessage(), ioe);

@@ -1,4 +1,4 @@
-package org.trimatek.mozo.tools;
+package org.trimatek.mozo.sockets;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -23,6 +23,7 @@ import org.trimatek.mozo.model.command.Command;
 import org.trimatek.mozo.model.command.UserCommand;
 import org.trimatek.mozo.model.exception.MozoException;
 import org.trimatek.mozo.model.service.DispatcherService;
+import org.trimatek.mozo.tools.Serializer;
 
 public class SocketServer {
 	private Selector selector;
@@ -43,7 +44,7 @@ public class SocketServer {
 		serverChannel.configureBlocking(false);
 		serverChannel.socket().bind(listenAddress);
 		serverChannel.register(this.selector, SelectionKey.OP_ACCEPT);
-		logger.log(Level.INFO, "MOZO: Socket server started");
+		logger.log(Level.INFO, "MOZO: Service socket server started");
 		while (true) {
 			this.selector.select();
 			Iterator keys = this.selector.selectedKeys().iterator();
@@ -68,7 +69,7 @@ public class SocketServer {
 		channel.configureBlocking(false);
 		Socket socket = channel.socket();
 		SocketAddress remoteAddr = socket.getRemoteSocketAddress();
-		logger.log(Level.INFO, "MOZO: Socket server connected to: " + remoteAddr);
+		logger.log(Level.INFO, "MOZO: Service socket server connected to: " + remoteAddr);
 		dataMapper.put(channel, new ArrayList());
 		channel.register(this.selector, SelectionKey.OP_READ);
 	}
@@ -83,7 +84,7 @@ public class SocketServer {
 			this.dataMapper.remove(channel);
 			Socket socket = channel.socket();
 			SocketAddress remoteAddr = socket.getRemoteSocketAddress();
-			logger.log(Level.INFO, "MOZO: Socket connection closed by client: " + remoteAddr);
+			logger.log(Level.INFO, "MOZO: Service socket connection closed by UI: " + remoteAddr);
 			channel.close();
 			key.cancel();
 			return;
