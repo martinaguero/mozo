@@ -21,29 +21,18 @@ public class SocketClient {
 	}
 
 	public void startClient() throws IOException, InterruptedException {
-
 		InetSocketAddress hostAddress = new InetSocketAddress("localhost", Config.SOCKET_UI_PORT);
 		SocketChannel client = SocketChannel.open(hostAddress);
-
-		logger.log(Level.INFO, "MOZO: Service socket client started");
-
-		// String threadName = Thread.currentThread().getName();
-
+		logger.log(Level.INFO, "MOZO: Service Socket Client started");
 		byte[] message = null;
-
 		try {
 			message = Serializer.serialize(userCommand);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.log(Level.SEVERE, "MOZO: Service Socket Client error while receiving command class " + e.getMessage(), e);
 		}
-
 		ByteBuffer buffer = ByteBuffer.wrap(message);
 		client.write(buffer);
-		// System.out.println(messages [i]);
 		buffer.clear();
-		// Thread.sleep(5000);
-		// }
 		client.close();
 	}
 }
