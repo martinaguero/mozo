@@ -44,7 +44,7 @@ public class SocketServer {
 		serverChannel.configureBlocking(false);
 		serverChannel.socket().bind(listenAddress);
 		serverChannel.register(this.selector, SelectionKey.OP_ACCEPT);
-		logger.log(Level.INFO, "MOZO: UI Socket Server started");
+		logger.log(Level.INFO, "MOZO -> UI Socket Server ready and listening");
 		while (true) {
 			this.selector.select();
 			Iterator keys = this.selector.selectedKeys().iterator();
@@ -69,7 +69,7 @@ public class SocketServer {
 		channel.configureBlocking(false);
 		Socket socket = channel.socket();
 		SocketAddress remoteAddr = socket.getRemoteSocketAddress();
-		logger.log(Level.INFO, "MOZO: UI Socket Server connected to: " + remoteAddr);
+		logger.log(Level.INFO, "MOZO -> UI Socket Server connected to: " + remoteAddr);
 		dataMapper.put(channel, new ArrayList());
 		channel.register(this.selector, SelectionKey.OP_READ);
 	}
@@ -84,7 +84,7 @@ public class SocketServer {
 			this.dataMapper.remove(channel);
 			Socket socket = channel.socket();
 			SocketAddress remoteAddr = socket.getRemoteSocketAddress();
-			logger.log(Level.INFO, "MOZO: UI Socket connection closed by client: " + remoteAddr);
+			logger.log(Level.INFO, "MOZO -> UI Socket connection closed by client: " + remoteAddr);
 			channel.close();
 			key.cancel();
 			return;
@@ -99,7 +99,7 @@ public class SocketServer {
 			Command cmd = (Command) method.invoke(null, usrCommand);
 			cmd.execute(new UIServiceImpl(iproject));
 		} catch (Exception e) {
-			msg = "MOZO: Error while deserilizing command class";
+			msg = "MOZO -> Error while deserializing command class";
 			logger.log(Level.SEVERE, msg + e.getMessage(), e);
 		}
 	}
