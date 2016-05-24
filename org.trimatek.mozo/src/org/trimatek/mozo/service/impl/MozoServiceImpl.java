@@ -19,6 +19,7 @@ public class MozoServiceImpl implements MozoService {
 
 	public void setDispatcherService(DispatcherService dispatcherService) {
 		this.dispatcherService = dispatcherService;
+		logger.log(Level.INFO, "MOZO -> Dispatcher service located and ready");
 		initServerSocket();
 	}
 
@@ -29,7 +30,7 @@ public class MozoServiceImpl implements MozoService {
 				try {
 					new SocketServer("localhost", Config.SOCKET_MOZO_PORT, dispatcherService).startServer();
 				} catch (IOException ioe) {
-					String msg = "MOZO: Error in Server Socket";
+					String msg = "MOZO -> Error in Server Socket";
 					logger.log(Level.SEVERE, msg + ioe.getMessage(), ioe);
 				}
 			}

@@ -52,7 +52,7 @@ public class LoadProxy extends UserCommand implements Command {
 				}
 			}
 		};
-		new Thread(client, "Mozo socket client").start();
+		new Thread(client, "mozo-service-command").start();
 	}
 	
 	private void saveProxy(Version proxy){
@@ -66,11 +66,11 @@ public class LoadProxy extends UserCommand implements Command {
 			fos.write(proxy.getJarProxy());
 			fos.close();
 		} catch (FileNotFoundException fe) {
-			logger.log(Level.SEVERE, "MOZO: Error while copying Jar proxy to localhost", fe);
+			logger.log(Level.SEVERE, "MOZO -> Error while copying Jar proxy to localhost", fe);
 		} catch (IOException ioe) {
-			logger.log(Level.SEVERE, "MOZO: IO exception while copying Jar proxy to localhost", ioe);
+			logger.log(Level.SEVERE, "MOZO -> IO exception while copying Jar proxy to localhost", ioe);
 		}
-		logger.log(Level.INFO, "MOZO: Jar proxy " + fileName + " copied to localhost");
+		logger.log(Level.INFO, "MOZO -> Jar proxy " + fileName + " copied to localhost");
 	}
 
 }
