@@ -12,26 +12,23 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.trimatek.mozo.catalog.model.Version;
 import org.trimatek.mozo.model.FileTypeEnum;
 import org.trimatek.mozo.model.command.UserCommand;
 import org.trimatek.mozo.ui.Config;
 import org.trimatek.mozo.ui.sockets.SocketClient;
+import org.trimatek.mozo.ui.tools.EclipseTools;
 
 public class GetProxiesHandler extends AbstractHandler {
 	private static Logger logger = Logger.getLogger(GetProxiesHandler.class.getName());
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		IFile file = getSelectedFile();
+		IFile file = (IFile)EclipseTools.getSelectedResource();
 		String libdir = file.getProject().getLocation().toString() + Config.LIB_DIR;
 		List<String> targets = null;
 		try {
@@ -83,20 +80,6 @@ public class GetProxiesHandler extends AbstractHandler {
 		}
 		FileTypeEnum type = FileTypeEnum.valueOf(file.getFileExtension());
 		return type.getReader().read(file.getContents());
-	}
-
-	private IFile getSelectedFile() {
-		IFile file = null;
-		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		if (window != null) {
-			IStructuredSelection selection = (IStructuredSelection) window.getSelectionService().getSelection();
-			if (selection instanceof IStructuredSelection) {
-				IStructuredSelection ssel = (IStructuredSelection) selection;
-				Object obj = ssel.getFirstElement();
-				file = (IFile) Platform.getAdapterManager().getAdapter(obj, IFile.class);
-			}
-		}
-		return file;
 	}
 
 }

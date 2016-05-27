@@ -24,12 +24,35 @@
                </with>
             </visibleWhen>
          </command>
+         <command
+               commandId="org.trimatek.mozo.ui.sample"
+               label="Analizar"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeMenuSelection">
+                  <iterate
+                        ifEmpty="false"
+                        operator="or">
+                     <adapt
+                           type="org.eclipse.jdt.core.IJavaProject">
+                     </adapt>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
       </menu>
     </menuContribution>
   </extension>
   <extension point="org.eclipse.ui.commands">
     <command defaultHandler="org.trimatek.mozo.ui.handlers.GetProxiesHandler"
       id="org.trimatek.mozo.ui.getproxies" name="Convert">
+    </command>
+    <command
+          defaultHandler="org.trimatek.mozo.ui.handlers.SampleHandler"
+          id="org.trimatek.mozo.ui.sample"
+          name="Analyze">
     </command>
   </extension>
  
