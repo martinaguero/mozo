@@ -18,7 +18,7 @@
                         ifEmpty="false"
                         operator="or">
                      <adapt
-                           type="org.eclipse.core.resources.IFile">
+                           type="org.eclipse.jdt.core.IJavaProject">
                      </adapt>
                   </iterate>
                </with>

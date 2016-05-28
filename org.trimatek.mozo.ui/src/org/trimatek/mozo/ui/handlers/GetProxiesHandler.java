@@ -19,25 +19,30 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import org.trimatek.mozo.catalog.model.Version;
 import org.trimatek.mozo.model.FileTypeEnum;
 import org.trimatek.mozo.model.command.UserCommand;
-import org.trimatek.mozo.ui.Config;
+import org.trimatek.mozo.model.exception.NullDataException;
+import org.trimatek.mozo.ui.Context;
 import org.trimatek.mozo.ui.sockets.SocketClient;
 import org.trimatek.mozo.ui.tools.EclipseTools;
 
 public class GetProxiesHandler extends AbstractHandler {
 	private static Logger logger = Logger.getLogger(GetProxiesHandler.class.getName());
+	private Context ctx;
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		IFile file = (IFile)EclipseTools.getSelectedResource();
-		String libdir = file.getProject().getLocation().toString() + Config.LIB_DIR;
 		List<String> targets = null;
 		try {
-			targets = readTargets(file, event);
+			ctx = EclipseTools.setupContext(event);
+			targets = readTargets(ctx.getDepsFile(), event);
 			if (targets != null) {
-				sendCommands(targets, libdir);
+				sendCommands(targets, ctx.getLibPath());
 			}
 		} catch (CoreException ce) {
-			logger.log(Level.SEVERE, "MOZO -> Error while reading dependencies file content: " + file.getName(), ce);
+			logger.log(Level.SEVERE,
+					"MOZO -> Error while reading dependencies file content: " + ctx.getDepsFile().getName(), ce);
+			return null;
+		} catch (NullDataException nde) {
+			logger.log(Level.SEVERE, "MOZO -> Could not find dependencies file", nde);
 			return null;
 		}
 		return null;
@@ -75,7 +80,7 @@ public class GetProxiesHandler extends AbstractHandler {
 
 	private List<String> readTargets(IFile file, ExecutionEvent event) throws CoreException {
 		if (!FileTypeEnum.contains(file.getFileExtension())) {
-			MessageDialog.openWarning(HandlerUtil.getActiveShell(event), "MOZO", "File extension is not POM or MOZO");
+			MessageDialog.openWarning(HandlerUtil.getActiveShell(event), "MOZO", "Error: File extension is not POM or MOZO.");
 			return null;
 		}
 		FileTypeEnum type = FileTypeEnum.valueOf(file.getFileExtension());

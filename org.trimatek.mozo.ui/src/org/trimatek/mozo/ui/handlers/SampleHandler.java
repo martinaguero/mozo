@@ -9,40 +9,33 @@ import java.security.ProtectionDomain;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IImportDeclaration;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
-import org.eclipse.jdt.core.JavaCore;
-import org.trimatek.mozo.ui.Config;
+import org.trimatek.mozo.model.exception.NullDataException;
+import org.trimatek.mozo.ui.Context;
 import org.trimatek.mozo.ui.tools.EclipseTools;
 
 public class SampleHandler extends AbstractHandler {
 
-	private String libPath;
-	private IJavaProject javaProject;
+	private Context ctx;
 
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		try {
-			setupContext();
-			print(javaProject);
+			ctx = EclipseTools.setupContext(event);
+			print(ctx.getJavaProject());
 		} catch (CoreException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+		} catch (NullDataException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 		return null;
-	}
-
-	private void setupContext() throws CoreException {
-		IProject project = (IProject) EclipseTools.getSelectedResource();
-		libPath = project.getLocation() + Config.LIB_DIR;
-		if (project.hasNature(JavaCore.NATURE_ID)) {
-			javaProject = JavaCore.create(project);
-		}
 	}
 
 	private void print(IJavaProject javaProject) {
@@ -73,9 +66,10 @@ public class SampleHandler extends AbstractHandler {
 							ClassLoader cl = new URLClassLoader(urls);
 							Class cls = cl.loadClass(decla.getElementName());
 
-//							URL location = cls.getResource('/' + cls.getName().replace('.', '/') + ".class");
-//
-//							System.out.println(location);
+							// URL location = cls.getResource('/' +
+							// cls.getName().replace('.', '/') + ".class");
+							//
+							// System.out.println(location);
 
 							ProtectionDomain pd = cls.getProtectionDomain();
 
@@ -101,7 +95,6 @@ public class SampleHandler extends AbstractHandler {
 					}
 
 				}
-
 			}
 		} catch (Exception e) {
 			System.out.println(e);
