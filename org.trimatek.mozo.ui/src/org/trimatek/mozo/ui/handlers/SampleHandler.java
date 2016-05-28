@@ -74,8 +74,8 @@ public class SampleHandler extends AbstractHandler {
 							ProtectionDomain pd = cls.getProtectionDomain();
 
 							if (pd.getCodeSource() != null) {
-
-								System.out.println(pd.getCodeSource().getLocation().toURI().getPath());
+								System.out.println("Clase: " + decla.getElementName());
+								System.out.println("Origen: " + pd.getCodeSource().getLocation().toURI().getPath());
 							}
 
 							// System.out.println(new File(
