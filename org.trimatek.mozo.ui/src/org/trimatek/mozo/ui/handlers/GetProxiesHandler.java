@@ -40,10 +40,8 @@ public class GetProxiesHandler extends AbstractHandler {
 		} catch (CoreException ce) {
 			logger.log(Level.SEVERE,
 					"MOZO -> Error while reading dependencies file content: " + ctx.getDepsFile().getName(), ce);
-			return null;
 		} catch (NullDataException nde) {
 			logger.log(Level.SEVERE, "MOZO -> Could not find dependencies file", nde);
-			return null;
 		}
 		return null;
 	}
