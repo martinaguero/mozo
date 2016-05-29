@@ -137,4 +137,23 @@ public class MavenUtils {
 		return dependencies;
 	}
 
+	public static List<Version> translatePomDependencies(InputStream inputStream) {
+		List<Version> deps = new ArrayList<Version>();
+		try {
+			Model model = modelReader.read(inputStream, params);
+			for (Dependency d : model.getDependencies()) {
+				Version v = new Version();
+				v.setArtifactId(d.getArtifactId());
+				v.setGroupId(d.getGroupId());
+				v.setVersion(d.getVersion());
+				deps.add(v);
+			}
+		} catch (ModelParseException e) {
+			logger.log(Level.SEVERE, "MOZO: Error while reading POM file", e);
+		} catch (IOException e) {
+			logger.log(Level.SEVERE, "MOZO: IO Exception while reading POM file", e);
+		}
+		return deps;
+	}
+
 }
