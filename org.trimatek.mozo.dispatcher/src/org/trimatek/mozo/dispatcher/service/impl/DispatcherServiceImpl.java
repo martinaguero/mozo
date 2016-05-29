@@ -37,30 +37,30 @@ public class DispatcherServiceImpl implements DispatcherService {
 	public Version loadJarProxy(Version version) throws MozoException {
 		String msg = null;
 		if (version == null || version.getUrl() == null) {
-			throw new NullDataException("MOZO: Version or URL is missing.");
+			throw new NullDataException("MOZO -> Version or URL is missing.");
 		}
 		try {
-			logger.log(Level.INFO, "MOZO: Loading version for POM: " + version.getUrl());
+			logger.log(Level.INFO, "MOZO -> Loading version for POM: " + version.getUrl());
 			// TODO Evaluar si está en el catálogo antes de crear
 			version = catalogService.buildVersion(version, catalogService.getDefaultLevel());
-			logger.log(Level.INFO, "MOZO: Loading Jar proxy for : " + version.toString());
+			logger.log(Level.INFO, "MOZO -> Loading Jar proxy for : " + version.toString());
 			version = navigatorService.loadJarProxy(version);
 			version.setJar(null);
 			version.setClasses(null);
 			version.setDependencies(null);
 			version.setProduct(null);
-			logger.log(Level.INFO, "MOZO: Jar proxy " + version.toString() + " ready and prepared to be sent");
+			logger.log(Level.INFO, "MOZO -> Jar proxy " + version.toString() + " ready and prepared to be sent");
 			return version;
 		} catch (IOException ioe) {
-			msg = "MOZO: Error while downloading Jar ";
+			msg = "MOZO -> Error while downloading Jar ";
 			logger.log(Level.SEVERE, msg + ioe.getMessage(), ioe);
 			throw new ExternalResourceException(msg, ioe);
 		} catch (ClassNotFoundException ce) {
-			msg = "MOZO: Error while processing bytecode";
+			msg = "MOZO -> Error while processing bytecode";
 			logger.log(Level.SEVERE, msg + ce.getMessage(), ce);
 			throw new BytecodeException(msg, ce);
 		} catch (Exception e) {
-			msg = "MOZO: Undetermined error";
+			msg = "MOZO -> Undetermined error";
 			logger.log(Level.SEVERE, msg + e.getMessage(), e);
 			throw new MozoException();
 		}
@@ -71,21 +71,21 @@ public class DispatcherServiceImpl implements DispatcherService {
 		String msg = null;
 		try {
 			if (references != null && target != null && !references.isEmpty()) {
-				logger.log(Level.INFO, "MOZO: Fetching bytecode for: " + target.toString());
+				logger.log(Level.INFO, "MOZO -> Fetching bytecode for: " + target.toString());
 				target = navigatorService.fetchDependencies(references, target);
 			} else {
-				msg = "MOZO: Required data is null";
+				msg = "MOZO -> Required data is null";
 				logger.log(Level.SEVERE, msg);
-				throw new NullDataException();
+				throw new NullDataException(msg);
 			}
 		} catch (RuntimeException re) {
 			logger.log(Level.SEVERE, re.getMessage());
 			throw new MozoException(re.getMessage(), re);
 		} catch (Exception e) {
 			logger.log(Level.SEVERE, e.getMessage());
-			throw new BytecodeException("MOZO: Error while analyzing class bytecode.", e);
+			throw new BytecodeException("MOZO -> Error while analyzing class bytecode.", e);
 		}
-		logger.log(Level.INFO, "MOZO: Bytecode is ready to be sent");
+		logger.log(Level.INFO, "MOZO -> " + target + " bytecode is ready to be sent");
 		return target;
 	}
 
