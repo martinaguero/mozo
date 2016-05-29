@@ -13,6 +13,7 @@ import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.jar.Attributes;
+import java.util.jar.Attributes.Name;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 import java.util.jar.JarOutputStream;
@@ -66,9 +67,10 @@ public class JarUtils {
 		return file;
 	}
 
-	public static File buildJar(Context ctx) throws FileNotFoundException, IOException {
+	public static File buildJar(Context ctx, String namespace) throws FileNotFoundException, IOException {
 		Manifest manifest = new Manifest();
 		manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0");
+		manifest.getMainAttributes().put(new Name("Namespace"), namespace);
 		JarOutputStream target = new JarOutputStream(new FileOutputStream(Config.JARS_DIR + ctx.jarName), manifest);
 		add(new File(ctx.OUTPUT_DIR), target, ctx);
 		target.close();
@@ -124,7 +126,7 @@ public class JarUtils {
 		URL website = new URL(path);
 		ReadableByteChannel rbc = Channels.newChannel(website.openStream());
 		File file = new File(Config.TEMP_DIR + path.substring(path.lastIndexOf("/")));
-		if(file.exists()){
+		if (file.exists()) {
 			FileUtils.deleteDirectory(file);
 		}
 		FileOutputStream fos = new FileOutputStream(file);

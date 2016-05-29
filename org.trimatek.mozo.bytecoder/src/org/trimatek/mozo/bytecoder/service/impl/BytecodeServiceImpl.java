@@ -85,12 +85,12 @@ public class BytecodeServiceImpl implements BytecodeService {
 			}
 		}
 		jarFile.close();
-		File lite = JarUtils.buildJar(ctx);
+		version = BytecodeUtils.detachNamespace(footprint, version);
+		File lite = JarUtils.buildJar(ctx, version.getNamespace());
 		FileInputStream fis = new FileInputStream(lite);
 		version.setJarProxy(IOUtils.toByteArray(fis));
 		fis.close();
 		lite.delete();
-		version = BytecodeUtils.detachNamespace(footprint, version);
 		return version;
 	}
 
