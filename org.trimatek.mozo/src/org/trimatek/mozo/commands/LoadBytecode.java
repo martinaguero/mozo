@@ -4,6 +4,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -19,7 +23,6 @@ import org.trimatek.mozo.model.command.UserCommand;
 import org.trimatek.mozo.model.exception.MozoException;
 import org.trimatek.mozo.model.service.DispatcherService;
 import org.trimatek.mozo.model.service.Service;
-import org.trimatek.mozo.sockets.SocketClient;
 
 public class LoadBytecode extends UserCommand implements Command {
 
@@ -70,11 +73,15 @@ public class LoadBytecode extends UserCommand implements Command {
 	}
 
 	private void saveBytecode(Version version) throws IOException {
-		File tmp = new File(getTargetDir() + version.toString() + ".tmp");
-		JarOutputStream os = new JarOutputStream(new FileOutputStream(tmp));
-		File proxyFile = new File(getTargetDir() + version + ".jar");
-		JarFile proxy = new JarFile(proxyFile);
-
+		Path tmp  = Paths.get(getTargetDir() + version + ".tmp");
+		Path proxyFile = Paths.get(getTargetDir() + version + ".jar");
+		Files.move(proxyFile, tmp, StandardCopyOption.REPLACE_EXISTING);
+		
+		JarFile proxy = new JarFile(getTargetDir() + version + ".tmp");
+		
+		File jar = new File(getTargetDir() + version.toString() + ".jar");
+		JarOutputStream os = new JarOutputStream(new FileOutputStream(jar));
+		
 		Enumeration<JarEntry> entries = proxy.entries();
 		List<String> updated = new ArrayList<String>();
 		for (Class clazz : version.getClasses()) {
@@ -104,5 +111,7 @@ public class LoadBytecode extends UserCommand implements Command {
 		for (Version dep : version.getDependencies()) {
 			saveBytecode(dep);
 		}
+		Files.delete(tmp);
+		
 	}
 }
