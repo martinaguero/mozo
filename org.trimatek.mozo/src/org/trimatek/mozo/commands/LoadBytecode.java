@@ -78,16 +78,17 @@ public class LoadBytecode extends UserCommand implements Command {
 
 	private void saveBytecode(Version version) throws IOException {
 
-		File jar = new File(getTargetDir() + version + ".jar");
-		if (jar.exists()) {
+		Path path = Paths.get(getTargetDir() + version + ".jar");
+		if (Files.exists(path)) {
+			path = null;
 			updateJar(version);
 		} else {
-			JarOutputStream os = new JarOutputStream(new FileOutputStream(jar));
+			JarOutputStream os = new JarOutputStream(new FileOutputStream(new File(getTargetDir() + version + ".jar")));
 			for (Class clazz : version.getClasses()) {
 				String name = clazz.getClassName().replace(".", "/") + ".class";
 				JarEntry entry = new JarEntry(name);
 				os.putNextEntry(entry);
-				os.write(clazz.getBytecode());
+				os.write(clazz.getBytecode()); 
 				os.closeEntry();
 			}
 			os.close();
@@ -103,12 +104,9 @@ public class LoadBytecode extends UserCommand implements Command {
 		Path tmp = Paths.get(getTargetDir() + version + ".tmp");
 		Path proxyFile = Paths.get(getTargetDir() + version + ".jar");
 		Files.move(proxyFile, tmp, StandardCopyOption.REPLACE_EXISTING);
-
 		JarFile proxy = new JarFile(getTargetDir() + version + ".tmp");
-
 		File jar = new File(getTargetDir() + version + ".jar");
 		JarOutputStream os = new JarOutputStream(new FileOutputStream(jar));
-
 		Enumeration<JarEntry> entries = proxy.entries();
 		List<String> updated = new ArrayList<String>();
 		for (Class clazz : version.getClasses()) {
