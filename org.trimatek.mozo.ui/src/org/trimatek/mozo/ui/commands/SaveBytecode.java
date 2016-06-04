@@ -19,14 +19,15 @@ public class SaveBytecode extends UserCommand implements Command {
 		SaveBytecode instance = new SaveBytecode();
 		instance.setVersion(userCommand.getVersion());
 		instance.setTargetDir(userCommand.getTargetDir());
+		instance.setReferences(userCommand.getReferences());
 		return instance;
 	}
 
 	@Override
 	public void execute(Service service) throws MozoException {
-
-		((UIService) service).updateClasspath(getTargetDir() + "\\" + getVersion() + ".jar");
-
+		for (String ref : getReferences()) {
+			((UIService) service).updateClasspath(getTargetDir() + "\\" + ref + ".jar");
+		}
 	}
 
 }
