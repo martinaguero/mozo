@@ -10,10 +10,13 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.trimatek.mozo.catalog.model.Class;
@@ -23,10 +26,12 @@ import org.trimatek.mozo.model.command.UserCommand;
 import org.trimatek.mozo.model.exception.MozoException;
 import org.trimatek.mozo.model.service.DispatcherService;
 import org.trimatek.mozo.model.service.Service;
+import org.trimatek.mozo.sockets.SocketClient;
 
 public class LoadBytecode extends UserCommand implements Command {
 
 	private static Logger logger = Logger.getLogger(LoadBytecode.class.getName());
+	private Set<String> references = new HashSet<String>();
 
 	private LoadBytecode() {
 	}
@@ -45,14 +50,13 @@ public class LoadBytecode extends UserCommand implements Command {
 
 		try {
 			saveBytecode(version);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (IOException ioe) {
+			logger.log(Level.SEVERE, "MOZO -> Error while copying Jar proxy to localhost", ioe);
 		}
-/*
+
 		UserCommand command = new UserCommand();
 		command.setId("SaveBytecode");
-		command.setVersion(version);
+		command.setReferences(references);
 		command.setTargetDir(getTargetDir());
 
 		Runnable client = new Runnable() {
@@ -69,19 +73,42 @@ public class LoadBytecode extends UserCommand implements Command {
 			}
 		};
 		new Thread(client, "mozo-service-command").start();
-*/
+
 	}
 
 	private void saveBytecode(Version version) throws IOException {
-		Path tmp  = Paths.get(getTargetDir() + version + ".tmp");
+
+		File jar = new File(getTargetDir() + version + ".jar");
+		if (jar.exists()) {
+			updateJar(version);
+		} else {
+			JarOutputStream os = new JarOutputStream(new FileOutputStream(jar));
+			for (Class clazz : version.getClasses()) {
+				String name = clazz.getClassName().replace(".", "/") + ".class";
+				JarEntry entry = new JarEntry(name);
+				os.putNextEntry(entry);
+				os.write(clazz.getBytecode());
+				os.closeEntry();
+			}
+			os.close();
+			references.add(version.toString());
+		}
+		for (Version dep : version.getDependencies()) {
+			saveBytecode(dep);
+		}
+
+	}
+
+	private void updateJar(Version version) throws IOException {
+		Path tmp = Paths.get(getTargetDir() + version + ".tmp");
 		Path proxyFile = Paths.get(getTargetDir() + version + ".jar");
 		Files.move(proxyFile, tmp, StandardCopyOption.REPLACE_EXISTING);
-		
+
 		JarFile proxy = new JarFile(getTargetDir() + version + ".tmp");
-		
-		File jar = new File(getTargetDir() + version.toString() + ".jar");
+
+		File jar = new File(getTargetDir() + version + ".jar");
 		JarOutputStream os = new JarOutputStream(new FileOutputStream(jar));
-		
+
 		Enumeration<JarEntry> entries = proxy.entries();
 		List<String> updated = new ArrayList<String>();
 		for (Class clazz : version.getClasses()) {
@@ -108,10 +135,6 @@ public class LoadBytecode extends UserCommand implements Command {
 		}
 		os.close();
 		proxy.close();
-		for (Version dep : version.getDependencies()) {
-			saveBytecode(dep);
-		}
 		Files.delete(tmp);
-		
 	}
 }
