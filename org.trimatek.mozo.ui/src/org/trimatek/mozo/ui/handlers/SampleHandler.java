@@ -93,7 +93,7 @@ public class SampleHandler extends AbstractHandler {
 	}
 
 	private Map<String, Set<String>> loadTargets(IJavaProject javaProject)
-			throws MalformedURLException, JavaModelException, ClassNotFoundException, URISyntaxException {
+			throws JavaModelException, ClassNotFoundException, URISyntaxException, IOException {
 		Map<String, Set<String>> targets = new HashMap<String, Set<String>>();
 		ClassLoader cl = new URLClassLoader(loadAvailableJars(ctx.getLibPath()));
 		for (IPackageFragment mypackage : javaProject.getPackageFragments()) {
@@ -119,6 +119,7 @@ public class SampleHandler extends AbstractHandler {
 				}
 			}
 		}
+		((URLClassLoader)cl).close();
 		return targets;
 	}
 
