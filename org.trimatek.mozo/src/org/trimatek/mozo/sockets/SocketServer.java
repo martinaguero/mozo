@@ -74,7 +74,7 @@ public class SocketServer {
 
 	private void read(SelectionKey key) throws IOException {
 		SocketChannel channel = (SocketChannel) key.channel();
-		ByteBuffer buffer = ByteBuffer.allocate(1024);
+		ByteBuffer buffer = ByteBuffer.allocate(2048);
 		int numRead = -1;
 		numRead = channel.read(buffer);
 		String msg = null;
