@@ -12,9 +12,12 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
+import java.util.jar.Attributes;
+import java.util.jar.Attributes.Name;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
+import java.util.jar.Manifest;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -55,8 +58,8 @@ public class LoadBytecode extends UserCommand implements Command {
 
 		UserCommand command = new UserCommand();
 		command.setId("SaveBytecode");
-		command.setReferences(getReferences());
 		command.setTargetDir(getTargetDir());
+		command.setReferences(getReferences());
 
 		Runnable client = new Runnable() {
 
@@ -82,7 +85,11 @@ public class LoadBytecode extends UserCommand implements Command {
 			path = null;
 			updateJar(version);
 		} else {
-			JarOutputStream os = new JarOutputStream(new FileOutputStream(new File(getTargetDir() + version + ".jar")));
+			Manifest manifest = new Manifest();
+			manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0");
+			manifest.getMainAttributes().put(new Name("Namespace"), version.getNamespace());
+			JarOutputStream os = new JarOutputStream(new FileOutputStream(new File(getTargetDir() + version + ".jar")),
+					manifest);
 			for (Class clazz : version.getClasses()) {
 				String name = clazz.getClassName().replace(".", "/") + ".class";
 				JarEntry entry = new JarEntry(name);
@@ -91,7 +98,7 @@ public class LoadBytecode extends UserCommand implements Command {
 				os.closeEntry();
 			}
 			os.close();
-			getReferences().add(version.toString());
+			references.add(getTargetDir() + version.toString() + ".jar");
 		}
 		for (Version dep : version.getDependencies()) {
 			saveBytecode(dep);
