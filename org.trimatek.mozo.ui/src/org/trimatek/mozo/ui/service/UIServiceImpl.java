@@ -1,9 +1,8 @@
 package org.trimatek.mozo.ui.service;
 
-import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -28,13 +27,13 @@ public class UIServiceImpl implements UIService {
 	}
 
 	@Override
-	public void updateClasspath(String jarName) {
+	public void updateClasspath(String jarPath) {
 		Job job = new Job("Updating the classpath") {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				IJavaProject javaProject = JavaCore.create((IProject) iproject);
 				try {
-					IClasspathEntry newEntry = JavaCore.newLibraryEntry(new Path(jarName), null, null);
+					IClasspathEntry newEntry = JavaCore.newLibraryEntry(new Path(jarPath), null, null);
 					List<IClasspathEntry> entries = new ArrayList<IClasspathEntry>();
 					for (IClasspathEntry entry : javaProject.getRawClasspath()) {
 						if (newEntry != null && entry.equals(newEntry)) {
@@ -57,4 +56,33 @@ public class UIServiceImpl implements UIService {
 		job.schedule();
 	}
 
+	@Override
+	public void updateClasspath(Set<String> jars) {
+		Job job = new Job("Updating the classpath") {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				IJavaProject javaProject = JavaCore.create((IProject) iproject);
+				List<IClasspathEntry> entries = new ArrayList<IClasspathEntry>();
+				try {
+					for (IClasspathEntry entry : javaProject.getRawClasspath()) {
+						entries.add(entry);
+					}
+					for (String jarPath : jars) {
+						IClasspathEntry newEntry = JavaCore.newLibraryEntry(new Path(jarPath), null, null);
+						if (!entries.contains(newEntry)) {
+							entries.add(newEntry);
+						}
+					}
+					javaProject.setRawClasspath(entries.toArray(new IClasspathEntry[entries.size()]), monitor);
+				} catch (JavaModelException e) {
+					Bundle bundle = FrameworkUtil.getBundle(getClass());
+					return new Status(Status.ERROR, bundle.getSymbolicName(),
+							"MOZO: Could not set classpath to Java project: " + javaProject.getElementName(), e);
+				}
+				return Status.OK_STATUS;
+			}
+
+		};
+		job.schedule();
+	}
 }
