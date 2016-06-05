@@ -25,8 +25,8 @@
             </visibleWhen>
          </command>
          <command
-               commandId="org.trimatek.mozo.ui.sample"
-               label="Analizar"
+               commandId="org.trimatek.mozo.ui.getbytecode"
+               label="Obtener bytecode"
                style="push">
             <visibleWhen
                   checkEnabled="false">
@@ -47,12 +47,12 @@
   </extension>
   <extension point="org.eclipse.ui.commands">
     <command defaultHandler="org.trimatek.mozo.ui.handlers.GetProxiesHandler"
-      id="org.trimatek.mozo.ui.getproxies" name="Convert">
+      id="org.trimatek.mozo.ui.getproxies" name="Proxies">
     </command>
     <command
-          defaultHandler="org.trimatek.mozo.ui.handlers.SampleHandler"
-          id="org.trimatek.mozo.ui.sample"
-          name="Analyze">
+          defaultHandler="org.trimatek.mozo.ui.handlers.GetBytecodeHandler"
+          id="org.trimatek.mozo.ui.getbytecode"
+          name="Bytecode">
     </command>
   </extension>
  

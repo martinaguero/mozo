@@ -1,5 +1,10 @@
 package org.trimatek.mozo.ui.service;
 
+import java.io.File;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -28,14 +33,19 @@ public class UIServiceImpl implements UIService {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				IJavaProject javaProject = JavaCore.create((IProject) iproject);
-				int idx = 0;
 				try {
-					IClasspathEntry[] entries = new IClasspathEntry[javaProject.getRawClasspath().length + 1];
+					IClasspathEntry newEntry = JavaCore.newLibraryEntry(new Path(jarName), null, null);
+					List<IClasspathEntry> entries = new ArrayList<IClasspathEntry>();
 					for (IClasspathEntry entry : javaProject.getRawClasspath()) {
-						entries[idx++] = entry;
+						if (newEntry != null && entry.equals(newEntry)) {
+							newEntry = null;
+						}
+						entries.add(entry);
 					}
-					entries[idx] = JavaCore.newLibraryEntry(new Path(jarName), null, null);
-					javaProject.setRawClasspath(entries, monitor);
+					if (newEntry != null) {
+						entries.add(newEntry);
+					}
+					javaProject.setRawClasspath(entries.toArray(new IClasspathEntry[entries.size()]), monitor);
 				} catch (JavaModelException e) {
 					Bundle bundle = FrameworkUtil.getBundle(getClass());
 					return new Status(Status.ERROR, bundle.getSymbolicName(),
@@ -44,7 +54,6 @@ public class UIServiceImpl implements UIService {
 				return Status.OK_STATUS;
 			}
 		};
-
 		job.schedule();
 	}
 

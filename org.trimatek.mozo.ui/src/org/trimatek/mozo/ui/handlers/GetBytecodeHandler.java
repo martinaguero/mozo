@@ -40,9 +40,9 @@ import org.trimatek.mozo.ui.Context;
 import org.trimatek.mozo.ui.sockets.SocketClient;
 import org.trimatek.mozo.ui.tools.EclipseTools;
 
-public class SampleHandler extends AbstractHandler {
+public class GetBytecodeHandler extends AbstractHandler {
 
-	private static Logger logger = Logger.getLogger(SampleHandler.class.getName());
+	private static Logger logger = Logger.getLogger(GetBytecodeHandler.class.getName());
 	private Context ctx;
 
 	public Object execute(ExecutionEvent event) throws ExecutionException {
