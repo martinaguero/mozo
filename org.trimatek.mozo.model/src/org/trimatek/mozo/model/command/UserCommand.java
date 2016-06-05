@@ -10,7 +10,7 @@ public class UserCommand implements Serializable {
 
 	private String id;
 	private Version version;
-	private Set<String> references = new HashSet<String>();
+	protected Set<String> references = new HashSet<String>();
 	private String targetDir;
 
 	public String getId() {
