@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
@@ -31,7 +30,6 @@ import org.trimatek.mozo.sockets.SocketClient;
 public class LoadBytecode extends UserCommand implements Command {
 
 	private static Logger logger = Logger.getLogger(LoadBytecode.class.getName());
-	private Set<String> references = new HashSet<String>();
 
 	private LoadBytecode() {
 	}
@@ -47,6 +45,7 @@ public class LoadBytecode extends UserCommand implements Command {
 	@Override
 	public void execute(Service service) throws MozoException {
 		Version version = ((DispatcherService) service).fetchDependencies(getReferences(), getVersion());
+		setReferences(new HashSet<String>());
 
 		try {
 			saveBytecode(version);
@@ -56,7 +55,7 @@ public class LoadBytecode extends UserCommand implements Command {
 
 		UserCommand command = new UserCommand();
 		command.setId("SaveBytecode");
-		command.setReferences(references);
+		command.setReferences(getReferences());
 		command.setTargetDir(getTargetDir());
 
 		Runnable client = new Runnable() {
@@ -88,11 +87,11 @@ public class LoadBytecode extends UserCommand implements Command {
 				String name = clazz.getClassName().replace(".", "/") + ".class";
 				JarEntry entry = new JarEntry(name);
 				os.putNextEntry(entry);
-				os.write(clazz.getBytecode()); 
+				os.write(clazz.getBytecode());
 				os.closeEntry();
 			}
 			os.close();
-			references.add(version.toString());
+			getReferences().add(version.toString());
 		}
 		for (Version dep : version.getDependencies()) {
 			saveBytecode(dep);
@@ -106,20 +105,19 @@ public class LoadBytecode extends UserCommand implements Command {
 		Files.move(proxyFile, tmp, StandardCopyOption.REPLACE_EXISTING);
 		JarFile proxy = new JarFile(getTargetDir() + version + ".tmp");
 		File jar = new File(getTargetDir() + version + ".jar");
-		JarOutputStream os = new JarOutputStream(new FileOutputStream(jar));
+		JarOutputStream os = new JarOutputStream(new FileOutputStream(jar), proxy.getManifest());
 		Enumeration<JarEntry> entries = proxy.entries();
 		List<String> updated = new ArrayList<String>();
 		for (Class clazz : version.getClasses()) {
 			String name = clazz.getClassName().replace(".", "/") + ".class";
-			JarEntry entry = new JarEntry(name);
-			os.putNextEntry(entry);
+			os.putNextEntry(new JarEntry(name));
 			os.write(clazz.getBytecode());
 			os.closeEntry();
 			updated.add(name);
 		}
 		while (entries.hasMoreElements()) {
 			JarEntry entry = entries.nextElement();
-			if (!updated.contains(entry.getName())) {
+			if (!updated.contains(entry.getName()) && !entry.getName().equals("META-INF/MANIFEST.MF")) {
 				InputStream is = proxy.getInputStream(entry);
 				os.putNextEntry(entry);
 				byte[] buffer = new byte[1024];
