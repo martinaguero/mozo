@@ -102,12 +102,14 @@ public class BytecodeServiceImpl implements BytecodeService {
 		ClassParser cp = new ClassParser(new ByteArrayInputStream(bytecode), className);
 		List<String> constants = ClassVisitor.visit(cp.parse());
 		for (String string : constants) {
-			string = BytecodeUtils.checkClassRef(string);
-			if (string != null && BytecodeUtils.isClassName(string) && string.contains(namespace)) {
-				if (string.contains(".class")) {
-					string = string.replace(".class", "");
+			if (!string.contains(".")) {
+				string = BytecodeUtils.checkClassRef(string);
+				if (string != null && BytecodeUtils.isClassName(string) && string.contains(namespace)) {
+					if (string.contains(".class")) {
+						string = string.replace(".class", "");
+					}
+					references.add(string);
 				}
-				references.add(string);
 			}
 		}
 		return references;
