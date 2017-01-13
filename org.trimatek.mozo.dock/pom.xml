@@ -3,4 +3,16 @@
   <groupId>org.trimatek</groupId>
   <artifactId>org.trimatek.mozo.dock</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  	<dependencies>
+		<dependency>
+			<groupId>com.spotify</groupId>
+			<artifactId>apollo-http-service</artifactId>
+			<version>1.0.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.7.21</version>
+		</dependency>		
+	</dependencies>
 </project>
