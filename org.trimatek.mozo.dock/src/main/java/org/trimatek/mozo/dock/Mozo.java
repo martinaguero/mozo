@@ -1,6 +1,5 @@
 package org.trimatek.mozo.dock;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -19,10 +18,12 @@ public class Mozo {
 
 	public Response resolve(Request request) {
 		try {
-			List<String> targets = split(request.parameter("modules"));			
-			List<Module> modules = findPaths(targets);
-			for (Module module : modules) {
-				System.out.println(module.toString());
+			List<String> targets = split(request.parameter("modules"));
+			List<Module> modules = Utils.findPaths(targets);
+			Module module = new Module("user-request");
+			module.setRequires(modules);
+			for (Module aModule : module.getRequires()) {
+				System.out.println(aModule.toString());
 			}
 
 			return Response.forPayload("OK");
@@ -33,14 +34,6 @@ public class Mozo {
 
 	private List<String> split(Optional<String> modules) {
 		return (List<String>) Arrays.asList(modules.get().split(","));
-	}
-
-	private List<Module> findPaths(List<String> targets) throws Exception {
-		List<Module> modules = new ArrayList<Module>();
-		for (String target : targets) {
-			modules.add(Utils.toModule(target));
-		}
-		return modules;
 	}
 
 }

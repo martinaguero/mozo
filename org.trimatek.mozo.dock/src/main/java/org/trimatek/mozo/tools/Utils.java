@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.trimatek.mozo.model.Module;
 import org.trimatek.mozo.model.RepositoryEnum;
@@ -36,6 +38,14 @@ public class Utils {
 		HttpURLConnection con = (HttpURLConnection) new URL(URLName).openConnection();
 		con.setRequestMethod("HEAD");
 		return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
+	}
+	
+	public static List<Module> findPaths(List<String> targets) throws Exception {
+		List<Module> modules = new ArrayList<Module>();
+		for (String target : targets) {
+			modules.add(Utils.toModule(target));
+		}
+		return modules;
 	}
 
 }

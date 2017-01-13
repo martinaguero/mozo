@@ -1,14 +1,14 @@
 package org.trimatek.mozo.model;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Module {
 
 	private String name;
 	private String version;
 	private String path;
-	private Set<Module> requires;
+	private List<Module> requires;
 
 	public Module(String name) {
 		this.name = name;
@@ -43,17 +43,17 @@ public class Module {
 		this.path = path;
 	}
 
-	public Set<Module> getRequires() {
+	public List<Module> getRequires() {
 		return requires;
 	}
 
-	public void setRequires(Set<Module> requires) {
+	public void setRequires(List<Module> requires) {
 		this.requires = requires;
 	}
 
 	public void addModule(Module module) {
 		if (requires == null) {
-			requires = new HashSet<Module>();
+			requires = new ArrayList<Module>();
 		}
 		requires.add(module);
 	}
