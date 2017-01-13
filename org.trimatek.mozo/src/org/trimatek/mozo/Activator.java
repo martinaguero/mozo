@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
 
@@ -16,6 +17,8 @@ import org.trimatek.mozo.catalog.model.Class;
 import org.trimatek.mozo.catalog.model.Version;
 import org.trimatek.mozo.model.exception.MozoException;
 import org.trimatek.mozo.model.service.DispatcherService;
+import org.trimatek.mozo.model.service.MozoService;
+import org.trimatek.mozo.service.impl.MozoServiceImpl;
 import org.trimatek.mozo.tools.JarUtils;
 
 public class Activator implements BundleActivator {
@@ -34,20 +37,23 @@ public class Activator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
 		System.out.println("ARRACÓ EL ACTIVADOR DE MOZO");
 		
-//		context.registerService(MozoService.class.getName(), new MozoServiceImpl(), new Hashtable());
+		context.registerService(MozoService.class.getName(), new MozoServiceImpl(), new Hashtable());
 				
-//		dispatcherServiceTracker = new ServiceTracker(context,
-//				DispatcherService.class.getName(), null);
-//		dispatcherServiceTracker.open();
-//		dispatcherService = (DispatcherService) dispatcherServiceTracker.getService();
+		dispatcherServiceTracker = new ServiceTracker(context,
+				DispatcherService.class.getName(), null);
+		dispatcherServiceTracker.open();
+		dispatcherService = (DispatcherService) dispatcherServiceTracker.getService();
 
 //		 testLoadJarProxy();
+		testLoadInforma();
+//		 testLoadOpenGIS();
 //		 testLoadBcelDeps();
 //		testLoadZkclientDeps();
 //		testLoadLog4JDeps();
 //		 testLoadMirageDeps();
 //		 testLoadCommonsDBCP(); 
 //		testLoadCommonsPool();
+//		testLoadCommonsLogging();
 //		testLoadLog4j();
 
 	}
@@ -244,29 +250,137 @@ public class Activator implements BundleActivator {
 
 	}
 	
+	private void testLoadOpenGIS() throws MozoException, FileNotFoundException, IOException {
+
+		Version target = new Version();
+		target.setArtifactId("gt-main");
+		target.setVersion("14.3");
+		target.setGroupId("org.geotools");
+		target.setNamespace("org.geotools");
+
+		Set<String> references = new HashSet<String>();
+		references.add("org.geotools.styling.SLD"); 
+		references.add("org.geotools.data.FileDataStoreFinder");
+		references.add("org.geotools.data.FileDataStore");
+		references.add("org.geotools.data.simple.SimpleFeatureSource");
+		references.add("org.geotools.map.FeatureLayer");
+		references.add("org.geotools.map.Layer");
+		references.add("org.geotools.map.MapContent");
+		references.add("org.geotools.styling.SLD");
+		references.add("org.geotools.styling.Style");
+		references.add("org.geotools.swing.JMapFrame");
+		references.add("org.geotools.swing.data.JFileDataStoreChooser");
+		//TOTAL DE CLASES RECUPERADAS: 2687
+		
+		target = dispatcherService.fetchDependencies(references, target);
+
+		printResult(target);
+		
+		List<File> files = buildJars(target);
+		
+		for (File file : files) {
+			Context ctx = new Context(file.getName());
+			JarUtils.buildJar(ctx);
+		}
+
+	}
+	
+	private void testLoadInforma() throws MozoException, FileNotFoundException, IOException {
+
+		Version target = new Version();
+		target.setArtifactId("informa");
+		target.setVersion("0.6.0");
+		target.setGroupId("informa");
+		target.setNamespace("de.nava.informa");
+
+		Set<String> references = new HashSet<String>();
+		references.add("de.nava.informa.core.ChannelIF");
+		references.add("de.nava.informa.core.ParseException");
+		references.add("de.nava.informa.impl.basic.ChannelBuilder");
+		references.add("de.nava.informa.parsers.FeedParser");
+		
+		
+		target = dispatcherService.fetchDependencies(references, target);
+
+		printResult(target);
+		
+		List<File> files = buildJars(target);
+		
+		for (File file : files) {
+			Context ctx = new Context(file.getName());
+			JarUtils.buildJar(ctx);
+		}
+
+	}
+	
+	private void testLoadCommonsLogging() throws MozoException, FileNotFoundException, IOException {
+
+		Version target = new Version();
+		target.setArtifactId("commons-logging");
+		target.setVersion("1.0.3");
+		target.setGroupId("commons-logging");
+		target.setNamespace("org.apache.commons.logging");
+
+		Set<String> references = new HashSet<String>();
+		references.add("org.apache.commons.logging.LogFactory");
+//		references.add("org.apache.commons.logging.impl.LogFactoryImpl");
+//		references.add("org.apache.commons.logging.impl.SimpleLog");
+		
+		
+		target = dispatcherService.fetchDependencies(references, target);
+
+		printResult(target);
+		
+		List<File> files = buildJars(target);
+		
+		for (File file : files) {
+			Context ctx = new Context(file.getName());
+			JarUtils.buildJar(ctx);
+		}
+
+	}
+	
 
 	private void testLoadJarProxy() throws Exception {
 
-		 String path =
+		List<String> targets = new ArrayList<String>();
+		 
 //		 "https://repo1.maven.org/maven2/org/apache/bcel/bcel/5.2/bcel-5.2.pom";
 //		 "https://repo1.maven.org/maven2/com/101tec/zkclient/0.7/zkclient-0.7.pom";
 //		 "https://repo1.maven.org/maven2/antlr/antlr/2.7.7/antlr-2.7.7.pom";
 //		 "https://repo1.maven.org/maven2/jakarta-regexp/jakarta-regexp/1.4/jakarta-regexp-1.4.pom";
 //		 "https://repo1.maven.org/maven2/log4j/log4j/1.2.15/log4j-1.2.15.pom";
 //		 "https://repo1.maven.org/maven2/jp/sf/amateras/mirage/1.2.3/mirage-1.2.3.pom";
-				 "https://repo1.maven.org/maven2/commons-dbcp/commons-dbcp/1.4/commons-dbcp-1.4.pom";
+//				 "https://repo1.maven.org/maven2/commons-dbcp/commons-dbcp/1.4/commons-dbcp-1.4.pom";
 //		 "https://repo1.maven.org/maven2/commons-pool/commons-pool/1.5.4/commons-pool-1.5.4.pom";
 //		 "https://repo1.maven.org/maven2/log4j/log4j/1.2.14/log4j-1.2.14.pom";
-		Version version = new Version(path);
 		
-		version = dispatcherService.loadJarProxy(version);
-
-		FileOutputStream fos = new FileOutputStream("D:\\Temp\\"
-				+ version.getArtifactId() + "-" + version.getVersion() + ".jar");
-		fos.write(version.getJarProxy());
-		fos.close();
-
-		System.out.println("PROXY: " + version.getArtifactId());
+//		 targets.add("http://download.osgeo.org/webdav/geotools/org/geotools/gt-opengis/14.3/gt-opengis-14.3.pom");
+//		 targets.add("http://download.osgeo.org/webdav/geotools/org/geotools/gt-main/14.3/gt-main-14.3.pom");
+//		 targets.add("http://download.osgeo.org/webdav/geotools/org/geotools/gt-render/14.3/gt-render-14.3.pom");
+//		 targets.add("http://download.osgeo.org/webdav/geotools/org/geotools/gt-api/14.3/gt-api-14.3.pom");
+//		 targets.add("http://download.osgeo.org/webdav/geotools/org/geotools/gt-swing/14.3/gt-swing-14.3.pom");
+		 
+//		 targets.add("http://download.osgeo.org/webdav/geotools/org/geotools/gt-metadata/14.3/gt-metadata-14.3.pom");
+//		 targets.add("http://download.osgeo.org/webdav/geotools/org/geotools/gt-referencing/14.3/gt-referencing-14.3.pom");		 
+//		 targets.add("http://download.osgeo.org/webdav/geotools/org/geotools/gt-coverage/14.3/gt-coverage-14.3.pom");
+//		 targets.add("http://download.osgeo.org/webdav/geotools/org/geotools/gt-cql/14.3/gt-cql-14.3.pom");
+//		 targets.add("http://download.osgeo.org/webdav/geotools/org/geotools/gt-shapefile/14.3/gt-shapefile-14.3.pom");
+		targets.add("https://repo1.maven.org/maven2/informa/informa/0.6.0/informa-0.6.0.pom");
+//		targets.add("https://repo1.maven.org/maven2/hsqldb/hsqldb/1.7.1/hsqldb-1.7.1.pom");
+//		targets.add("https://repo1.maven.org/maven2/commons-logging/commons-logging/1.0.3/commons-logging-1.0.3.pom");
+		
+		
+		 for (String path : targets) {
+			 Version version = new Version(path);				
+				version = dispatcherService.loadJarProxy(version);
+				FileOutputStream fos = new FileOutputStream("D:\\Temp\\"
+						+ version.getArtifactId() + "-" + version.getVersion() + ".jar");
+				fos.write(version.getJarProxy());
+				fos.close();
+				System.out.println("PROXY: " + version.getArtifactId());			
+		}
+		 
 	}
 	
 	public List<File> buildJars(Version version) throws IOException {
