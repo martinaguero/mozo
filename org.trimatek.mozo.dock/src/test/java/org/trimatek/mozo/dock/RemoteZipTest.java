@@ -19,7 +19,7 @@ public class RemoteZipTest {
 	public static void main(String[] args) throws IOException {
 
 		RemoteZipService remoteZip = new RemoteZipServiceImpl();
-		RemoteZipFile zip = remoteZip.load(repositorypath + "/org.astro@1.0.jar", null);
+		RemoteZipFile zip = remoteZip.load(repositorypath + "/com.greetings.jar", null);
 
 		int c = 0;
 		for (RemoteZipEntry e : zip.getEntries()) {
