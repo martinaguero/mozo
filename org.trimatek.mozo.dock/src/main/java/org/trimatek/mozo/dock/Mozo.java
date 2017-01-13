@@ -11,7 +11,6 @@ import com.spotify.apollo.Status;
 public class Mozo {
 
 	public Mozo() {
-
 	}
 
 	public Response resolve(Request request) {
@@ -29,5 +28,6 @@ public class Mozo {
 	private List<String> split(Optional<String> modules) {
 		return (List<String>) Arrays.asList(modules.get().split(","));
 	}
-
+	
+	
 }
