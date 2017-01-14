@@ -12,6 +12,8 @@ import org.trimatek.mozo.tools.Utils;
 import org.trimatek.remotezip.service.RemoteZipService;
 import org.trimatek.remotezip.service.impl.RemoteZipServiceImpl;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.spotify.apollo.Request;
 import com.spotify.apollo.Response;
 import com.spotify.apollo.Status;
@@ -20,18 +22,20 @@ public class Mozo {
 
 	private static Logger logger = Logger.getLogger(Mozo.class.getName());
 	private RemoteZipService remoteZip;
+	private Gson gson;
 
 	public Mozo() {
 		remoteZip = new RemoteZipServiceImpl();
+		gson = new GsonBuilder().setPrettyPrinting().create();
 	}
 
-	public Response<String> resolve(Request request) {
+	public Response<String> findModules(Request request) {
 		try {
 			List<String> targets = split(request.parameter("modules"));
-			Module module = new Module("user-request");
+			Module module = new Module();
+			module.setFrom("user-request: " + request.uri());
 			module = addModules(module, targets);
-
-			return Response.forPayload("OK");
+			return Response.forPayload(gson.toJson(module));
 		} catch (Exception e) {
 			return Response.forStatus(Status.BAD_REQUEST);
 		}
@@ -59,7 +63,7 @@ public class Mozo {
 		if (targets != null && !targets.isEmpty()) {
 			requires = Utils.findPaths(targets);
 			for (Module aModule : requires) {
-				logger.log(Level.INFO,"\t\t >>>>> Module Added: " + aModule.toString());
+				logger.log(Level.INFO, "\t\t >>>>> Module Added: " + aModule.toString());
 				addModules(aModule, null);
 			}
 			module.setRequires(requires);

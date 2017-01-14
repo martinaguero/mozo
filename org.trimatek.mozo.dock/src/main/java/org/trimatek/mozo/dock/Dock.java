@@ -20,15 +20,15 @@ public final class Dock {
 	}
 
 	static void init(Environment environment) {
-		SyncHandler<Response<String>> addHandler = context -> resolve(context.request());
-		environment.routingEngine().registerAutoRoute(Route.with(exceptionHandler(), "GET", "/mozo/dock", addHandler));
+		SyncHandler<Response<String>> addHandler = context -> findModules(context.request());
+		environment.routingEngine().registerAutoRoute(Route.with(exceptionHandler(), "GET", "/mozo/find", addHandler));
 		if (MOZO == null) {
 			MOZO = new Mozo();
 		}
 	}
 
-	static Response<String> resolve(Request request) {
-		return MOZO.resolve(request);
+	static Response<String> findModules(Request request) {
+		return MOZO.findModules(request);
 	}
 
 	/**

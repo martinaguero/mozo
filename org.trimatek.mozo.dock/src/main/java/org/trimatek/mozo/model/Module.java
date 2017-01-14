@@ -5,26 +5,30 @@ import java.util.List;
 
 public class Module {
 
-	private String name;
+	private String module;
 	private String version;
 	private String path;
+	private String from;
 	private List<Module> requires;
 
+	public Module() {
+	}
+
 	public Module(String name) {
-		this.name = name;
+		module = name;
 	}
 
 	public Module(String name, String version) {
-		this.name = name;
+		module = name;
 		this.version = version;
 	}
 
-	public String getName() {
-		return name;
+	public String getModule() {
+		return module;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setModule(String module) {
+		this.module = module;
 	}
 
 	public String getVersion() {
@@ -43,6 +47,14 @@ public class Module {
 		this.path = path;
 	}
 
+	public String getFrom() {
+		return from;
+	}
+
+	public void setFrom(String from) {
+		this.from = from;
+	}
+
 	public List<Module> getRequires() {
 		return requires;
 	}
@@ -59,14 +71,14 @@ public class Module {
 	}
 
 	public String toString() {
-		if (name != null && version != null && path != null) {
-			return name + "@" + version + "=" + path;
-		} else if (name != null && version != null) {
-			return name + "@" + version;
-		} else if (name != null && path != null) {
-			return name + "=" + path;
-		} else if (name != null) {
-			return name;
+		if (module != null && version != null && path != null) {
+			return module + "@" + version + "=" + path;
+		} else if (module != null && version != null) {
+			return module + "@" + version;
+		} else if (module != null && path != null) {
+			return module + "=" + path;
+		} else if (module != null) {
+			return module;
 		}
 		return null;
 	}
