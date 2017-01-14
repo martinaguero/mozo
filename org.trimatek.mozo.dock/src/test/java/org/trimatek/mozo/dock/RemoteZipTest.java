@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import static org.trimatek.mozo.dock.Config.repositorypath;
-
 import org.apache.commons.io.IOUtils;
 import org.trimatek.remotezip.model.RemoteZipEntry;
 import org.trimatek.remotezip.service.RemoteZipService;
@@ -19,7 +17,7 @@ public class RemoteZipTest {
 	public static void main(String[] args) throws IOException {
 
 		RemoteZipService remoteZip = new RemoteZipServiceImpl();
-		RemoteZipFile zip = remoteZip.load(repositorypath + "/com.greetings.jar", null);
+		RemoteZipFile zip = remoteZip.load("http://www.trimatek.org/repository" + "/com.greetings.jar", null);
 
 		int c = 0;
 		for (RemoteZipEntry e : zip.getEntries()) {
