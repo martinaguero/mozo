@@ -10,8 +10,8 @@ import java.net.URL;
 public class FindModules implements Command {
 
 	@Override
-	public Object exec() throws Exception {
-		URL url = new URL(mozopath + "find?modules=com.greetings,com.socket,org.fastsocket");
+	public Object exec(String arg) throws Exception {
+		URL url = new URL(mozopath + "find?modules=" + arg);
 
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
