@@ -10,7 +10,7 @@ import java.util.Set;
  
 public class Mozo {
 
-	private final static String brand = "Mozo 0.1 alfa";
+	private final static String brand = "Mozo 0.1";
 	private final static String header = "mozo> ";
 	private final static String headererror = "Error: ";
 	private final static String helpfind = "[listado de nombres de módulos separados por coma (com.mod1,org.mod2)]";

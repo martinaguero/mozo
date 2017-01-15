@@ -26,7 +26,7 @@ public class Mozo {
 
 	public Mozo() {
 		remoteZip = new RemoteZipServiceImpl();
-		gson = new GsonBuilder().setPrettyPrinting().create();
+		gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 	}
 
 	public Response<String> findModules(Request request) {
