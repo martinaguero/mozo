@@ -50,7 +50,7 @@ public class Download implements Command {
 			int bytesRead = -1;
 			byte[] buffer = new byte[BUFFER_SIZE];
 			while ((bytesRead = inputStream.read(buffer)) != -1) {
-				System.out.println("bajando....");
+				System.out.println("descargando....");
 				outputStream.write(buffer, 0, bytesRead);
 			}
 
