@@ -16,8 +16,8 @@ public class FindModules implements Command {
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
 		int responseCode = con.getResponseCode();
-		System.out.println("Sending get request : " + url);
-		System.out.println("Response code : " + responseCode);
+		System.out.println("GET request: " + url);
+		System.out.println("Response code: " + responseCode);
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 		String output;
@@ -27,9 +27,8 @@ public class FindModules implements Command {
 			response.append(output + "\n");
 		}
 		in.close();
-		System.out.println(response.toString());
-
-		return null;
+		
+		return response.toString();
 	}
 
 }
