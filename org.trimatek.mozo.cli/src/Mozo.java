@@ -7,9 +7,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
- 
+
 public class Mozo {
 
+	private final static String jarpath = "http://www.trimatek.org/repository/mozo-cli.jar";
 	private final static String brand = "Mozo 0.1";
 	private final static String header = "mozo> ";
 	private final static String headererror = "Error: ";
@@ -50,6 +51,12 @@ public class Mozo {
 				}
 				listModules(args[1]);
 				return;
+			} else if (arg.equals("descargar-modulos") || arg.equals("dm")) {
+				if (args.length < 2) {
+					break;
+				}
+				downloadModules(args[1]);
+				return;
 			} else if (arg.equals("help") || arg.equals("ayuda") || arg.equals("man")) {
 				printHelp();
 				return;
@@ -66,7 +73,7 @@ public class Mozo {
 	private static void findModules(String target) {
 		Class c;
 		try {
-			URL[] classLoaderUrls = new URL[] { new URL("http://www.trimatek.org/repository/mozo-cli.jar") };
+			URL[] classLoaderUrls = new URL[] { new URL(jarpath) };
 			URLClassLoader loader = new URLClassLoader(classLoaderUrls);
 			c = Class.forName("org.trimatek.mozo.cli.FindModules", true, loader);
 			Method m = c.getMethod("exec", String.class);
@@ -78,7 +85,20 @@ public class Mozo {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
 
+	private static void downloadModules(String target) {
+		Class c;
+		try {
+			URL[] classLoaderUrls = new URL[] { new URL(jarpath) };
+			URLClassLoader loader = new URLClassLoader(classLoaderUrls);
+			c = Class.forName("org.trimatek.mozo.cli.Download", true, loader);
+			Method m = c.getMethod("exec", String.class);
+			System.out.println(m.invoke(c.newInstance(), target));			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private static void printResult(String key) {
@@ -86,14 +106,16 @@ public class Mozo {
 	}
 
 	private static void listModules(String key) {
-		Set<String> modules = new HashSet<String>();
-		for (String line : results.get(key).split("\n")) {
-			if (line.contains("\"module\":")) {
-				modules.add((line.replaceAll("\"", "").replaceAll("module:", "").replaceAll(",", "")).trim());
+		if (results.containsKey(key)) {
+			Set<String> modules = new HashSet<String>();
+			for (String line : results.get(key).split("\n")) {
+				if (line.contains("\"module\":")) {
+					modules.add((line.replaceAll("\"", "").replaceAll("module:", "").replaceAll(",", "")).trim());
+				}
 			}
-		}
-		for (String module : modules) {
-			System.out.println(module);
+			for (String module : modules) {
+				System.out.println(module);
+			}
 		}
 	}
 

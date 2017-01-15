@@ -27,6 +27,7 @@ public class FindModules implements Command {
 			response.append(output + "\n");
 		}
 		in.close();
+		con.disconnect();
 		
 		return response.toString();
 	}
