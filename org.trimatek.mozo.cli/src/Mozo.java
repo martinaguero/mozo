@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class Mozo {
 
-	private final static String jarpath = "http://www.trimatek.org/repository/mozo-cli.jar";
+	private final static String jarpath = "http://www.trimatek.org/repository/mozo/mozo-cli.jar";
 	private final static String brand = "Mozo 0.1";
 	private final static String header = "mozo> ";
 	private final static String headererror = "Error: ";
