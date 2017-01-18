@@ -79,7 +79,7 @@ public class Utils {
 		BufferedReader br = new BufferedReader(new InputStreamReader(pr.getInputStream()));
 		String line;
 		while ((line = br.readLine()) != null) {
-			if (line.contains("requires") && !line.contains("java.base")) {
+			if (line.contains("requires") && !line.contains("java.")) {
 				line = line.replace("requires", "");
 				line = line.replace(";", "");
 				targets.add(line.trim());
