@@ -40,7 +40,7 @@ public class Mozo {
 				}
 				findModules(args[1]);
 				return;
-			} else if (arg.equals("descargar") || arg.equals("dm")) {
+			} else if (arg.equals("descargar-modulos") || arg.equals("dm")) {
 				if (args.length < 2) {
 					break;
 				}
