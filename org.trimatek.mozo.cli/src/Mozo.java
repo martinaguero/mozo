@@ -16,7 +16,7 @@ public class Mozo {
 	private final static String header = "mozo> ";
 	private final static String headererror = "Error: ";
 	private final static String helpfind = "[List of modules names separated by commas (e.g.: com.mod1,org.mod2)]";
-	private final static String helpprint = "[Variable with result (e.g.: var1)]";
+	private final static String helpprint = "[Variable with result (e.g.: res0)]";
 	private static Map<String, String> results = new HashMap<String, String>();
 	private static int cont;
 	private static boolean online = true;

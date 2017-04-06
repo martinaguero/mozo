@@ -12,7 +12,7 @@ public class Download implements Command {
 	private static final int BUFFER_SIZE = 4096;
 
 	public Object exec(String path) throws IOException {
-		String result = "El archivo no pudo ser descargado";
+		String result = "The file could not be downloaded";
 		URL url = new URL(path);
 		HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
 		int responseCode = httpConn.getResponseCode();
@@ -50,14 +50,14 @@ public class Download implements Command {
 			int bytesRead = -1;
 			byte[] buffer = new byte[BUFFER_SIZE];
 			while ((bytesRead = inputStream.read(buffer)) != -1) {
-				System.out.println("descargando....");
+				System.out.println("downloading....");
 				outputStream.write(buffer, 0, bytesRead);
 			}
 
 			outputStream.close();
 			inputStream.close();
 
-			result = "Archivo descargado en: " + saveFilePath;
+			result = "Resource saved in: " + saveFilePath;
 		}
 		httpConn.disconnect();
 		return result;
