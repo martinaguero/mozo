@@ -15,8 +15,8 @@ public class Mozo {
 	private final static String brand = "Mozo 0.1";
 	private final static String header = "mozo> ";
 	private final static String headererror = "Error: ";
-	private final static String helpfind = "[listado de nombres de módulos separados por coma (ej: com.mod1,org.mod2)]";
-	private final static String helpprint = "[variable con resultado (ej: var1)]";
+	private final static String helpfind = "[List of modules names separated by commas (e.g.: com.mod1,org.mod2)]";
+	private final static String helpprint = "[Variable with result (e.g.: res0)]";
 	private static Map<String, String> results = new HashMap<String, String>();
 	private static int cont;
 	private static boolean online = true;
@@ -34,25 +34,25 @@ public class Mozo {
 	private static void parseInput(String input) {
 		String[] args = input.split(" ");
 		for (String arg : args) {
-			if (arg.equals("buscar-modulos") || arg.equals("bm")) {
+			if (arg.equals("find-modules") || arg.equals("fm")) {
 				if (args.length < 2) {
 					break;
 				}
 				findModules(args[1]);
 				return;
-			} else if (arg.equals("descargar-modulos") || arg.equals("dm")) {
+			} else if (arg.equals("download-modules") || arg.equals("dm")) {
 				if (args.length < 2) {
 					break;
 				}
 				downloadModules(args[1]);
 				return;
-			} else if (arg.equals("mostrar") || arg.equals("m")) {
+			} else if (arg.equals("print") || arg.equals("p")) {
 				if (args.length < 2) {
 					break;
 				}
 				printResult(args[1]);
 				return;
-			} else if (arg.equals("listar-modulos") || arg.equals("lm")) {
+			} else if (arg.equals("list-modules") || arg.equals("lm")) {
 				if (args.length < 2) {
 					break;
 				}
@@ -62,12 +62,12 @@ public class Mozo {
 				printHelp();
 				return;
 			} else if (arg.equals("quit") || arg.equals("exit") || arg.equals("salir")) {
-				System.out.println("chau");
+				System.out.println("bye");
 				online = false;
 				return;
 			}
 		}
-		System.out.println(headererror + "comando no interpretado");
+		System.out.println(headererror + "command not found");
 		printHelp();
 	}
 
@@ -78,7 +78,7 @@ public class Mozo {
 			String key = "res" + cont++;
 			results.put(key, (String) m.invoke(c.newInstance(), target));
 			printResult(key);
-			System.out.println("resultado guardado en: " + key);
+			System.out.println("result stored in: " + key);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -128,13 +128,13 @@ public class Mozo {
 
 	private static void printHelp() {
 		System.out.println("Sintaxis:");
-		System.out.println("\tbuscar-modulos " + helpfind);
-		System.out.println("\tbm " + helpfind);
-		System.out.println("\tdescargar-modulos " + helpprint);
+		System.out.println("\tfind-modules " + helpfind);
+		System.out.println("\tfm " + helpfind);
+		System.out.println("\tdownload-modules " + helpprint);
 		System.out.println("\tdm " + helpprint);
-		System.out.println("\tmostrar " + helpprint);
-		System.out.println("\tm " + helpprint);
-		System.out.println("\tlistar-modulos " + helpprint);
+		System.out.println("\tprint " + helpprint);
+		System.out.println("\tp " + helpprint);
+		System.out.println("\tlist-modules " + helpprint);
 		System.out.println("\tlm " + helpprint);
 	}
 
