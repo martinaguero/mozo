@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.trimatek.mozo.model.Module;
+import org.trimatek.mozo.model.Pool;
 import org.trimatek.mozo.model.RepositoryEnum;
 import org.trimatek.mozo.tools.Utils;
 import org.trimatek.remotezip.service.RemoteZipService;
@@ -23,10 +24,12 @@ public class Mozo {
 	private static Logger logger = Logger.getLogger(Mozo.class.getName());
 	private RemoteZipService remoteZip;
 	private Gson gson;
+	private Pool pool;
 
 	public Mozo() {
 		remoteZip = new RemoteZipServiceImpl();
 		gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+		pool = new Pool();
 	}
 
 	public Response<String> findModules(Request request) {
@@ -52,18 +55,22 @@ public class Mozo {
 			if (module.getPath() == null) {
 				for (RepositoryEnum repository : RepositoryEnum.values()) {
 					path = repository.path + module.toString() + ".jar";
-					if (Utils.exists(path)) {
+					if (Utils.exists(path, pool)) {
 						module.setPath(path);
 						break;
 					}
 				}
 			}
-			targets = Utils.inspectModuleInfo(module, remoteZip);
+			targets = Utils.inspectModuleInfo(module, remoteZip, pool);
+		}
+		if (module.getModule() != null) {
+			pool.put(module.getModule(), targets);
 		}
 		if (targets != null && !targets.isEmpty()) {
-			requires = Utils.findPaths(targets);
+			requires = Utils.findPaths(targets, pool);
 			for (Module aModule : requires) {
 				logger.log(Level.INFO, "\t\t >>>>> Module Added: " + aModule.toString());
+				pool.put(aModule.getModule(), aModule.getPath());
 				addModules(aModule, null);
 			}
 			module.setRequires(requires);
