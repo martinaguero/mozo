@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 public class Mozo {
 
@@ -32,6 +33,7 @@ public class Mozo {
 	}
 
 	private static void parseInput(String input) {
+		long startTime = System.nanoTime();
 		String[] args = input.split(" ");
 		for (String arg : args) {
 			if (arg.equals("find-modules") || arg.equals("fm")) {
@@ -39,18 +41,19 @@ public class Mozo {
 					break;
 				}
 				findModules(args[1]);
+				printTotalTime(startTime);
 				return;
 			} else if (arg.equals("download-modules") || arg.equals("dm")) {
 				if (args.length < 2) {
 					break;
 				}
 				downloadModules(args[1]);
+				printTotalTime(startTime);
 				return;
 			} else if (arg.equals("print") || arg.equals("p")) {
 				if (args.length < 2) {
 					break;
 				}
-				printResult(args[1]);
 				return;
 			} else if (arg.equals("list-modules") || arg.equals("lm")) {
 				if (args.length < 2) {
@@ -78,7 +81,7 @@ public class Mozo {
 			String key = "res" + cont++;
 			results.put(key, (String) m.invoke(c.newInstance(), target));
 			printResult(key);
-			System.out.println("result stored in: " + key);
+			System.out.println("Result stored in: " + key);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -115,7 +118,8 @@ public class Mozo {
 			}
 		}
 	}
-	//TODO Display version
+
+	// TODO Display version
 	private static Set<String> list(String key, String field) {
 		Set<String> elements = new HashSet<String>();
 		for (String line : results.get(key).split("\n")) {
@@ -136,6 +140,12 @@ public class Mozo {
 		System.out.println("\tp " + helpprint);
 		System.out.println("\tlist-modules " + helpprint);
 		System.out.println("\tlm " + helpprint);
+	}
+
+	private static void printTotalTime(long startTime) {
+		System.out.println("Elapsed time: "
+				+ TimeUnit.MILLISECONDS.convert(System.nanoTime() - startTime, TimeUnit.NANOSECONDS) / 1000.0
+				+ " seconds");
 	}
 
 }
