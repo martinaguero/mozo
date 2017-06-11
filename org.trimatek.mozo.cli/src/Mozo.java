@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 public class Mozo {
 
 	private final static String jarpath = "http://www.trimatek.org/mozo/org.trimatek.mozo.cli.jar";
-	private final static String brand = "Mozo 0.1";
+	private final static String brand = "Mozo 0.2";
 	private final static String header = "mozo> ";
 	private final static String headererror = "Error: ";
 	private final static String helpfind = "[List of modules names separated by commas (e.g.: com.mod1,org.mod2)]";
