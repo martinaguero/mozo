@@ -2,7 +2,8 @@ package org.trimatek.mozo.model;
 
 public enum RepositoryEnum {
 	Trimatek("http://www.trimatek.org/repository/"),
-	TheCentralRepository("https://repo1.maven.org/maven2/");
+	TheNewRepository("https://thenewrepository.000webhostapp.com/");
+//	TheCentralRepository("https://repo1.maven.org/maven2/");
 
 	public String path;
 
