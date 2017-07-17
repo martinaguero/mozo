@@ -1,7 +1,9 @@
 package org.trimatek.mozo.cli;
 
-public interface Command {
+import java.util.concurrent.Callable;
 
-	public Object exec(String arg) throws Exception;
+public interface Command extends Callable {
+
+	public Object setup(String arg) throws Exception;
 
 }

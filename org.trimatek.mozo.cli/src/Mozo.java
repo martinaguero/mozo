@@ -8,12 +8,15 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class Mozo {
 
 	private final static String jarpath = "http://www.trimatek.org/mozo/org.trimatek.mozo.cli.jar";
-	private final static String brand = "Mozo 0.2";
+	private final static String brand = "Mozo 0.3";
 	private final static String header = "mozo> ";
 	private final static String headererror = "Error: ";
 	private final static String helpfind = "[List of modules names separated by commas (e.g.: com.mod1,org.mod2)]";
@@ -77,7 +80,7 @@ public class Mozo {
 	private static void findModules(String target) {
 		try {
 			Class c = loadClass("org.trimatek.mozo.cli.FindModules");
-			Method m = c.getMethod("exec", String.class);
+			Method m = c.getMethod("setup", String.class);
 			String key = "res" + cont++;
 			results.put(key, (String) m.invoke(c.newInstance(), target));
 			printResult(key);
@@ -89,13 +92,20 @@ public class Mozo {
 
 	private static void downloadModules(String key) {
 		try {
+			ThreadPoolExecutor exec = (ThreadPoolExecutor) Executors.newFixedThreadPool(5);
 			Class c = loadClass("org.trimatek.mozo.cli.Download");
 			if (results.containsKey(key)) {
 				for (String path : list(key, "path")) {
-					Method m = c.getMethod("exec", String.class);
-					System.out.println(m.invoke(c.newInstance(), path));
+					Method m = c.getMethod("setup", String.class);
+					Object d = c.newInstance();
+					m.invoke(d, path);
+					exec.submit((Callable)d);
 				}
 			}
+			while (exec.getActiveCount() > 0) {
+			}
+			System.out.println("Total downloaded: " + exec.getCompletedTaskCount());
+			exec.shutdown();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -112,11 +122,14 @@ public class Mozo {
 	}
 
 	private static void printModules(String key) {
+		int c = 0;
 		if (results.containsKey(key)) {
 			for (String module : list(key, "module")) {
 				System.out.println(module);
+				c++;
 			}
 		}
+		System.out.println("Total: " + c);
 	}
 
 	// TODO Display version
