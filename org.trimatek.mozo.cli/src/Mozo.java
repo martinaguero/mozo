@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 public class Mozo {
 
 	private final static String jarpath = "http://www.trimatek.org/mozo/org.trimatek.mozo.cli.jar";
-	private final static String brand = "Mozo 0.3";
+	private final static String brand = "Mozo 0.31";
 	private final static String header = "mozo> ";
 	private final static String headererror = "Error: ";
 	private final static String helpfind = "[List of modules names separated by commas (e.g.: com.mod1,org.mod2)]";
@@ -57,6 +57,7 @@ public class Mozo {
 				if (args.length < 2) {
 					break;
 				}
+				printResult(args[1]);
 				return;
 			} else if (arg.equals("list-modules") || arg.equals("lm")) {
 				if (args.length < 2) {
@@ -144,7 +145,7 @@ public class Mozo {
 	}
 
 	private static void printHelp() {
-		System.out.println("Sintaxis:");
+		System.out.println("Syntax:");
 		System.out.println("\tfind-modules " + helpfind);
 		System.out.println("\tfm " + helpfind);
 		System.out.println("\tdownload-modules " + helpprint);
