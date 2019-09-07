@@ -102,15 +102,7 @@ Then, it will display the result: a hierarchical tree of all the required module
 
 Resulting in:
 
-mozo> dm res1|
-Downloading: com.stats.cli.jar|
-Downloading: org.apache.math.jar|
-Downloading: org.apache.rng.jar|
-Downloading: com.stats.core.jar|
-Downloading: com.google.guava.jar|
-Total downloaded: 5|
-Elapsed time: 0.429 seconds|
-mozo>|<br />
+![Fig7](https://github.com/martinaguero/mozo/blob/master/org.trimatek.mozo.ui/icons/fig7.png)<br />
 <sub>Fig. 7 – Modules download.</sub>
 
 Now, the user has the target module (*com.stats.cli*) and all its dependencies in his local environment.
