@@ -75,10 +75,10 @@ Fig. 5 – Response time (less is better).
 ### Use cases
 
 #### Example 1
-In this case, a statistics system requires the following modules to compile and execute: *com.stats.cli*, *com.stats.core*, *com.google.guava*, *org.apache.math* and *org.apache.rng* (Fig. 4).
+In this case, a statistics system requires the following modules to compile and execute: *com.stats.cli*, *com.stats.core*, *com.google.guava*, *org.apache.math* and *org.apache.rng* (Fig. 6).
 
-
-Fig. 6 – Module *com.stats.cli* and it dependencies.
+![Fig6](https://github.com/martinaguero/mozo/blob/master/org.trimatek.mozo.ui/icons/fig6.png)<br />
+<sub>Fig. 6 – Module *com.stats.cli* and it dependencies.</sub>
 
 To download this module with all the dependencies, the actions that the user must execute are:
 
