@@ -52,18 +52,24 @@ Fig. 4 - Module *com.stats.cli* and dependencies.
 
 To download this module with all it dependencies, the actions that the user must execute are:
 
-1. Download the client Mozo.class file from: 
+1. Download the client Mozo.class file from:
+
 http://trimatek.org/mozo/Mozo.class
+
 2. Run it from the command interface with:
 
 `$>java –cp . Mozo`
+
 3. Within the command console (prompt), the user enters:
 
 `mozo> find-modules com.stats.cli`
+
 Then, it will display the hierarchical tree of the complete closing of dependencies by console.
+
 4. Lastly, the user enters the command:
 
 `download-modules res0`
+
 Resulting in:
 
 
