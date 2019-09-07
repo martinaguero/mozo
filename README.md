@@ -67,10 +67,9 @@ Fig. 4 – Mozo components.
 ### Performance comparison
 The prototype was tested by comparing its performance to Maven, Gradle and Ivy. The test case consisted of solving and downloading all the dependencies of the Quickstart class for [GeoTools], for which the corresponding descriptors were added to the 60 jars that integrate the closure, in order to have comparable dataset.  The result measured in time is as follows:
 
-
-
-Fig. 5 – Response time (less is better).
-
+![Fig5](https://github.com/martinaguero/mozo/blob/master/org.trimatek.mozo.ui/icons/fig5.png)<br />
+<sub>Fig. 5 – Response time (less is better).</sub>
+<br />
 
 ### Use cases
 
@@ -80,6 +79,7 @@ In this case, a statistics system requires the following modules to compile and 
 ![Fig6](https://github.com/martinaguero/mozo/blob/master/org.trimatek.mozo.ui/icons/fig6.png)<br />
 <sub>Fig. 6 – Module *com.stats.cli* and it dependencies.</sub>
 
+<br />
 To download this module with all the dependencies, the user must:
 
 1. Download the client **Mozo.class** file from:
