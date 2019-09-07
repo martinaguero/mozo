@@ -1,6 +1,10 @@
 # Mozo
 Java modules dependencies management
-<br/>
+
+##### Table of Contents  
+[Headers](#headers)  
+[Emphasis](#emphasis)  
+
 ## Introduction
 This prototype is based on a thin client and a cloud service (middleware) for solving and locating the dependencies of Java modules. The service analyze modules descriptors and dynamically locates all the dependencies (other modules) required to compile.
 
