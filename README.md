@@ -6,10 +6,12 @@ Java modules dependencies management
 - [Technology](https://github.com/martinaguero/mozo/blob/master/README.md#technology)
 - [Summary](https://github.com/martinaguero/mozo/blob/master/README.md#summary)
   - [Conceptual advantages](https://github.com/martinaguero/mozo/blob/master/README.md#conceptual-advantages)
+  - [Architectural advantages](https://github.com/martinaguero/mozo/blob/master/README.md#architectural-advantages)
 c
 - [Appendix](https://github.com/martinaguero/mozo/blob/master/README.md#appendix)
   - [Components](https://github.com/martinaguero/mozo/blob/master/README.md#components)
   - [Performance comparison](https://github.com/martinaguero/mozo/blob/master/README.md#performance-comparison)
+  - [Use cases](https://github.com/martinaguero/mozo/blob/master/README.md#use-cases)
 
 ## Introduction
 This prototype is based on a thin client and a cloud service (middleware) for solving and locating the dependencies of Java modules. The service analyze modules descriptors and dynamically locates all the dependencies (other modules) required to compile.
@@ -45,7 +47,7 @@ Finally, with the dependencies tree and its paths, the client begins the transfe
 * The closure does not depend on the list of sources (repositories) in the descriptor file of the project/module. It is the middleware who knows these sources, the software project is decoupled from the repositories. 
 * The middleware can, transparently for the client, incorporate more sophisticated algorithms, such as cognitive computing tools.
 
-### Architecture advantages
+### Architectural advantages
 * The client always executes the latest version.
 * The paths to the modules are always verified.
 * The response time is acceptable, as only the descriptor file is transferred from the module to the intermediary.
