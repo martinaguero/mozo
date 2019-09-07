@@ -61,8 +61,8 @@ Finally, with the dependencies tree and its paths, the client begins the transfe
 ### Components
 The middleware is a cloud service with two main communication modules (Port and Apollo), another one with the entities (Model), common use utilities (Tools), the remote file extractor (RemoteZip) and the Mozo module, as a manager of resources.
 
-
-Fig. 4 – Mozo components.
+![Fig4](https://github.com/martinaguero/mozo/blob/master/org.trimatek.mozo.ui/icons/fig4.png)<br />
+<sub>Fig. 4 – Mozo components.</sub>
 
 ### Performance comparison
 The prototype was tested by comparing its performance to Maven, Gradle and Ivy. The test case consisted of solving and downloading all the dependencies of the Quickstart class for [GeoTools], for which the corresponding descriptors were added to the 60 jars that integrate the closure, in order to have comparable dataset.  The result measured in time is as follows:
