@@ -44,20 +44,20 @@ Finally, with the dependencies tree and its routes, the client requests all the 
 
 ## Appendix
 
-### Architecture of the Middleware
+### Architecture of the middleware
 The middleware is a cloud service consisting of 2 client communication modules (Port and Apollo), another one that communicates with the entities (Model), one that concentrates common use utilities (Tools), the remote file extractor (RemoteZip) and the Mozo module, serving as the coordinator.
 
 
 Fig. 6 – Mozo service components.
 
-## Performance Comparison
+### Performance comparison
 The prototype was evaluated by comparing its performance to Maven, Gradle y Ivy. The test case consisted of solving and downloading the class Quickstart dependencies of GeoTools: http://docs.geotools.org/latest/userguide/build/install/jdk.html for which the corresponding descriptors were added to the 60 jars that integrate the closure, so that this proposal can be compared with current technologies.  The result measured in time is as follows:
 
 
 
 Fig. 7 – Response time (less is better).
 
-### Use Cases
+### Use cases
 
 #### Example 1
 In this case, a statistics system requires the following modules to compile and execute: *com.stats.cli*, *com.stats.core*, *com.google.guava*, *org.apache.math* and *org.apache.rng* (Fig. 4).
