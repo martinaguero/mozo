@@ -1,7 +1,7 @@
 # Mozo
 Dependencies management
 
-## Summary
+## Introduction
 This solution is based on a thin client and a cloud service (middleware) for resolving and locating all the dependencies of a Java module. Basically, its functionality consists in analyzing the descriptors and, from that information, solving and locating all the dependencies required to compile.
 
 
@@ -25,13 +25,13 @@ Fig. 3 - Dynamic representation of the system.
 
 The JSON file has all the paths to the modules. This prototype uses a software component to extract compressed files from remote repositories. In order to optimize the response time to locate modules, the service extracts portions of bytes from servers that implements RFC 2616. This software was ported to Java from: https://www.codeproject.com/Articles/8688/Extracting-files-from-a-remote-ZIP-archive. With this feature, only the portion of bytes that represents the module descriptor is transferred from the repositories to the middleware.
 
-## Conclusions
-With this technology, the intermediary receives dependency resolution requests (modules) from a command-line client (CLI) and, after "visiting" the repositories in search for the required modules, it returns a list of paths to those dependencies in JSON format. In this version, there is no local repository of modules or classes as the intermediary only extracts the descriptors, analyzes its dependencies and recursively until the construction of the module tree is completed.
-Finally, with the dependencies tree and its routes, the client requests all the required modules to the respective repositories.
+## Summary
+With this technology, the service receives high-level dependency resolution requests (modules) from a thin client and, after "visiting" the repositories in search for all the required modules, it returns a list of paths to those dependencies. The middleware extracts the descriptors, analyzes its dependencies recursively, until the module tree is completed.
+Finally, with the dependencies tree and its paths, the client begins the transfer from the repositories.
 
 ### Conceptual advantages
 * It is not an invasive solution, that is to say, it does not require adding metadata to the modules.
-* The resolution of the closing does not depend on the list of sources (repositories) defined in the descriptor file of the project/module. It is the intermediary who knows these sources. In this way, the software project is decoupled from the repositories. 
+* The resolution of the closure does not depend on the list of sources (repositories) defined in the descriptor file of the project/module. It is the intermediary who knows these sources. In this way, the software project is decoupled from the repositories. 
 * The intermediary can, transparently for the client, incorporate more sophisticated algorithms, such as cognitive computing tools.
 
 ### Architecture advantages
