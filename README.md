@@ -11,19 +11,20 @@ Fig. 1 – Basic architecture.
 With this technology, the development environment is decoupled from the repositories, the middleware is the entity that determines the location of the modules. This solution proposes that the client only requests direct dependencies, and the cloud service resolves the transitives and their locations.
 
 ## Technology
-Since Java 9 (Java Module System), each module must have a mandatory descriptor (module-info file), so, this avoids the need of adding an external descriptor, such as Maven, Ivy y Gradle requires. Analizing the ‘requires’ attribute of the descriptor, is enough to know the dependencies of each module:
+Since Java 9 (Java Module System), each module must have a mandatory descriptor (module-info file), so, this avoids the need of adding an external descriptor, such as Maven, Ivy y Gradle requires. Analizing the "requires" attribute of the descriptor, is enough to know the dependencies of each module:
 
 
 
-Fig. 2 - Relation between modules defined in the module-info descriptor.
+Fig. 2 - Relation between modules in a module-info descriptor.
 
-The algorithm iterates the references to modules until reaching the closure or the level of depth defined in configuration. To know the dependencies of each module, first, the descriptor file is extracted and then it is decompiled with the javap program (that is part of the JDK). See in the following diagram the dynamic interaction between the client (development environment), the intermediary and the repositories, where the middleware locates the jar files of each module:
+The service algorithm iterates the references to modules until reaching the closure or the level of depth established
+in configuration. To survey the dependencies of each module, first, the descriptor file is extracted remotely, and then, it is decompiled with the javap program (that is part of the JDK). See in the following diagram the dynamic interaction between the client (development environment), the middleware and the repositories:
 
 
 
-Fig. 3 - Dynamic representation of the system.
+Fig. 3 - Dynamic representation.
 
-The JSON file has all the paths to the modules. This prototype uses a software component to extract compressed files from remote repositories. In order to optimize the response time to locate modules, the service extracts portions of bytes from servers that implements RFC 2616. This software was ported to Java from: https://www.codeproject.com/Articles/8688/Extracting-files-from-a-remote-ZIP-archive. With this feature, only the portion of bytes that represents the module descriptor is transferred from the repositories to the middleware.
+The JSON file has all the paths to the modules. This service extracts compressed files from remote repositories with the [RemoteZip] subproject. In order to optimize the response time to locate modules, the service extracts portions of bytes from servers that implements RFC 2616. With this feature, only the portion of bytes that represents the module descriptor is transferred from the repositories to the middleware.
 
 ## Summary
 With this technology, the service receives high-level dependency resolution requests (modules) from a thin client and, after "visiting" the repositories in search for all the required modules, it returns a list of paths to those dependencies. The middleware extracts the descriptors, analyzes its dependencies recursively, until the module tree is completed.
@@ -97,5 +98,7 @@ Now, the user has the target module (com.stats.cli) and all its dependencies in 
 To resolve and download the 60 modules required to compile and run Quickstart, the user must start the Mozo client (Mozo.class) and enter:
 
 `fm org.geotools.gt_shapefile,org.geotools.gt_swing` (fm is the abbreviated version of find-modules) as shown in Fig. 8:
+
+[RemoteZip]:https://github.com/martinaguero/remotezip
 
 
