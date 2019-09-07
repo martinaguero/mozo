@@ -2,28 +2,28 @@
 Dependencies management
 
 ## Summary
-This solution is based on a thin client and a cloud service for resolving and locating all the dependencies of a Java module. Basically, its functionality consists in analyzing the descriptors and, from that information, solving and locating all the dependencies required to compile.
+This solution is based on a thin client and a cloud service (middleware) for resolving and locating all the dependencies of a Java module. Basically, its functionality consists in analyzing the descriptors and, from that information, solving and locating all the dependencies required to compile.
 
 
 
 Fig. 1 – General architecture of the system.
 
-With this technology, the development environment is decoupled from the repositories, being the middleware the entity that determines the location of the modules. This solution proposes that the client only requests direct dependencies, and the cloud service resolves the transitives depedendencies and their locations.
+With this technology, the development environment is decoupled from the repositories, being the middleware the entity that determines the location of the modules. This solution proposes that the client only requests direct dependencies, and the cloud service resolves the transitives and their locations.
 
 ## Technology
-Since Java 9 version (Java Module System) each module will be embedded by a mandatory (module-info), thus avoiding the need of adding an external descriptor, such as the ones used Maven, Ivy y Gradle. To analyze the ‘requires’ attribute is enough to know the dependencies of each module:
+Since Java 9 version (Java Module System) each module is integrated by a mandatory descriptor (module-info file), thus avoiding the need of adding an external descriptor, such as the ones required by Maven, Ivy y Gradle. To analyze the ‘requires’ attribute is enough to know the dependencies of each module:
 
 
 
 Fig. 2 - Relation between modules defined in the module-info descriptor.
 
-A system is presented where an algorithm iterates the references to modules until reaching the closing or the level of depth defined in configuration. To know the dependencies of each module, first the descriptor file is extracted and then it is compiled with the javap program (that is part of the JDK). See in the following diagram the dynamic interaction between the client (development environment), the intermediary and the repositories where the intermediary locates the jar files of each module:
+The algorithm iterates the references to modules until reaching the closure or the level of depth defined in configuration. To know the dependencies of each module, first, the descriptor file is extracted and then it is decompiled with the javap program (that is part of the JDK). See in the following diagram the dynamic interaction between the client (development environment), the intermediary and the repositories, where the middleware locates the jar files of each module:
 
 
 
 Fig. 3 - Dynamic representation of the system.
 
-The JSON file has the paths to all the modules. This prototype uses a software component to extract compressed files from remote repositories. In order to optimize the response time to locate the modules, an algorithm that extracts portions of bytes from servers that implement RFC2616 was adapted to Java: https://www.codeproject.com/Articles/8688/Extracting-files-from-a-remote-ZIP-archive. In this way, only the portion of bytes contained in the module descriptor is transferred from the repositories to the intermediary. 
+The JSON file has all the paths to the modules. This prototype uses a software component to extract compressed files from remote repositories. In order to optimize the response time to locate modules, the service extracts portions of bytes from servers that implements RFC 2616. This software was ported to Java from: https://www.codeproject.com/Articles/8688/Extracting-files-from-a-remote-ZIP-archive. With this feature, only the portion of bytes that represents the module descriptor is transferred from the repositories to the middleware.
 
 ## Conclusions
 With this technology, the intermediary receives dependency resolution requests (modules) from a command-line client (CLI) and, after "visiting" the repositories in search for the required modules, it returns a list of paths to those dependencies in JSON format. In this version, there is no local repository of modules or classes as the intermediary only extracts the descriptors, analyzes its dependencies and recursively until the construction of the module tree is completed.
