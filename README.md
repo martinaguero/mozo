@@ -2,13 +2,13 @@
 Dependencies management
 
 ## Introduction
-This prototype is based on a thin client and a cloud service (middleware) for resolving and locating all the dependencies of a Java module. Basically, its functionality is to analyze modules descriptors and, from that information, solving and locating all the dependencies (other modules) required to compile.
+This prototype is based on a thin client and a cloud service (middleware) for resolving and locating all the dependencies of Java modules. The service analyze modules descriptors and, from that information, dynamically locates all the dependencies (other modules) required to compile.
 
 
 
 Fig. 1 – Basic architecture.
 
-With this technology, the development environment is decoupled from the repositories, the middleware is the entity that determines the location of the modules. This solution proposes that the client only requests direct dependencies, and the cloud service resolves the transitives and their locations.
+With this technology, the development environment (client) is decoupled from the repositories. The middleware search for the modules, not the client. It also resolves transitives dependencies and their locations.
 
 ## Technology
 Since Java 9 (Java Module System), each module must have a mandatory descriptor (module-info file), so, this avoids the need of adding an external descriptor, such as Maven, Ivy y Gradle requires. Analizing the "requires" attribute of the descriptor, is enough to know the dependencies of each module:
@@ -18,16 +18,16 @@ Since Java 9 (Java Module System), each module must have a mandatory descriptor 
 Fig. 2 - Relation between modules in a module-info descriptor.
 
 The service algorithm iterates the references to modules until reaching the closure or the level of depth established
-in configuration. To survey the dependencies of each module, first, the descriptor file is extracted remotely, and then, it is decompiled with the javap program (that is part of the JDK). See in the following diagram the dynamic interaction between the client (development environment), the middleware and the repositories:
+in the configuration. To survey the dependencies of each module, first, the descriptor file is extracted remotely, and then, it is decompiled with the javap program (part of the JDK). See in the following diagram the dynamic interaction between the client (development environment), the middleware and the repositories:
 
 
 
 Fig. 3 - Dynamic representation.
 
-The JSON file has all the paths to the modules. This service extracts compressed files from remote repositories with the [RemoteZip] subproject. In order to optimize the response time to locate modules, the service extracts portions of bytes from servers that implements RFC 2616. With this feature, only the portion of bytes that represents the module descriptor is transferred from the repositories to the middleware.
+This service extracts compressed files from remote repositories with the [RemoteZip] subproject. In order to optimize the response time to locate modules, the service extracts portions of bytes from servers that implements RFC 2616. With this feature, only the portion of bytes that represents the module descriptor is transferred from the repositories to the middleware.
 
 ## Summary
-With this technology, the service receives high-level dependency resolution requests (modules) from a thin client and, after "visiting" the repositories in search for all the required modules, it returns a list of paths to those dependencies. The middleware extracts the descriptors, analyzes its dependencies recursively, until the module tree is completed.
+With this technology, the service receives high-level dependency resolution requests (modules) from a thin client and, after "visiting" the repositories in search for all the required modules, it returns a list of paths to those dependencies (JSON). The middleware extracts the descriptors, analyzes its dependencies recursively, until the module tree is completed.
 Finally, with the dependencies tree and its paths, the client begins the transfer from the repositories.
 
 ### Conceptual advantages
