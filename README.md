@@ -7,11 +7,12 @@ Java modules dependencies management
 - [Summary](https://github.com/martinaguero/mozo/blob/master/README.md#summary)
   - [Conceptual advantages](https://github.com/martinaguero/mozo/blob/master/README.md#conceptual-advantages)
   - [Architectural advantages](https://github.com/martinaguero/mozo/blob/master/README.md#architectural-advantages)
-c
 - [Appendix](https://github.com/martinaguero/mozo/blob/master/README.md#appendix)
   - [Components](https://github.com/martinaguero/mozo/blob/master/README.md#components)
   - [Performance comparison](https://github.com/martinaguero/mozo/blob/master/README.md#performance-comparison)
   - [Use cases](https://github.com/martinaguero/mozo/blob/master/README.md#use-cases)
+    - [Example 1](https://github.com/martinaguero/mozo/blob/master/README.md#example-1)
+    - [Example 2](https://github.com/martinaguero/mozo/blob/master/README.md#example-2)
 
 ## Introduction
 This prototype is based on a thin client and a cloud service (middleware) for solving and locating the dependencies of Java modules. The service analyze modules descriptors and dynamically locates all the dependencies (other modules) required to compile.
