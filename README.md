@@ -1,4 +1,4 @@
-# Mozo
+# Mozo 0.3
 Java modules dependencies management
 
 ### Table of Contents  
@@ -96,9 +96,9 @@ http://trimatek.org/mozo/Mozo.class
 
 Then, it will display the result: a hierarchical tree of all the required modules and the paths.
 
-4. Finally, the user enters the **download-modules** command:
+4. Finally, the user enters the **download-modules** or the abbreviated version **dm** command:
 
-`mozo> download-modules res0`
+`mozo> dm res1`
 
 Resulting in:
 
