@@ -1,17 +1,18 @@
 # Mozo
-Dependencies management
+Java modules dependencies management
+
 
 ## Introduction
-This prototype is based on a thin client and a cloud service (middleware) for solving and locating the dependencies of Java modules. The service analyze modules descriptors and, from that information, dynamically locates all the dependencies (other modules) required to compile.
+This prototype is based on a thin client and a cloud service (middleware) for solving and locating the dependencies of Java modules. The service analyze modules descriptors and dynamically locates all the dependencies (other modules) required to compile.
 
 
 
 Fig. 1 – Basic architecture.
 
-With this technology, the development environment (client) is decoupled from the repositories. The middleware search for the modules, not the client. It also resolves transitives dependencies and their locations.
+With this technology, the development environment (client) is decoupled from the repositories. The middleware search for the modules, not the client. It also resolves transitives dependencies.
 
 ## Technology
-Since Java 9 (Java Module System), each module must have a mandatory descriptor (module-info file), so, this avoids the need of adding an external descriptor, such as Maven, Ivy y Gradle requires. Analizing the "requires" attribute of the descriptor, is enough to know the dependencies of each module:
+Since Java 9 (Java Module System), each module must have a mandatory descriptor (module-info file), so, this avoids the need of adding an external descriptor, such as Maven, Ivy and Gradle requires. Analizing the "requires" attribute of the descriptor, is enough to know the dependencies of each module:
 
 
 
