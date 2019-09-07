@@ -2,16 +2,16 @@
 Dependencies management
 
 ## Introduction
-This solution is based on a thin client and a cloud service (middleware) for resolving and locating all the dependencies of a Java module. Basically, its functionality consists in analyzing the descriptors and, from that information, solving and locating all the dependencies required to compile.
+This prototype is based on a thin client and a cloud service (middleware) for resolving and locating all the dependencies of a Java module. Basically, its functionality is to analyze modules descriptors and, from that information, solving and locating all the dependencies (other modules) required to compile.
 
 
 
-Fig. 1 – General architecture of the system.
+Fig. 1 – Basic architecture.
 
-With this technology, the development environment is decoupled from the repositories, being the middleware the entity that determines the location of the modules. This solution proposes that the client only requests direct dependencies, and the cloud service resolves the transitives and their locations.
+With this technology, the development environment is decoupled from the repositories, the middleware is the entity that determines the location of the modules. This solution proposes that the client only requests direct dependencies, and the cloud service resolves the transitives and their locations.
 
 ## Technology
-Since Java 9 version (Java Module System) each module is integrated by a mandatory descriptor (module-info file), thus avoiding the need of adding an external descriptor, such as the ones required by Maven, Ivy y Gradle. To analyze the ‘requires’ attribute is enough to know the dependencies of each module:
+Since Java 9 (Java Module System), each module must have a mandatory descriptor (module-info file), so, this avoids the need of adding an external descriptor, such as Maven, Ivy y Gradle requires. Analizing the ‘requires’ attribute of the descriptor, is enough to know the dependencies of each module:
 
 
 
