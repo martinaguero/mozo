@@ -49,14 +49,14 @@ Finally, with the dependencies tree and its paths, the client begins the transfe
 The middleware is a cloud service with 2 client communication modules (Port and Apollo), another one that communicates with the entities (Model), common use utilities (Tools), the remote file extractor (RemoteZip) and the Mozo module, as manager or resources.
 
 
-Fig. 6 – Mozo components.
+Fig. 4 – Mozo components.
 
 ### Performance comparison
 The prototype was tested by comparing its performance to Maven, Gradle and Ivy. The test case consisted of solving and downloading all the dependencies of the Quickstart class for [GeoTools], for which the corresponding descriptors were added to the 60 jars that integrate the closure, in order to have comparable dataset.  The result measured in time is as follows:
 
 
 
-Fig. 7 – Response time (less is better).
+Fig. 5 – Response time (less is better).
 
 
 ### Use cases
@@ -65,7 +65,7 @@ Fig. 7 – Response time (less is better).
 In this case, a statistics system requires the following modules to compile and execute: *com.stats.cli*, *com.stats.core*, *com.google.guava*, *org.apache.math* and *org.apache.rng* (Fig. 4).
 
 
-Fig. 4 - Module *com.stats.cli* and it dependencies.
+Fig. 6 - Module *com.stats.cli* and it dependencies.
 
 To download this module with all the dependencies, the actions that the user must execute are:
 
@@ -73,7 +73,7 @@ To download this module with all the dependencies, the actions that the user mus
 
 http://trimatek.org/mozo/Mozo.class
 
-2. Run it from the command interface with:
+2. Run it from the command line interface with:
 
 `$> java –cp . Mozo`
 
@@ -81,24 +81,27 @@ http://trimatek.org/mozo/Mozo.class
 
 `mozo> find-modules com.stats.cli`
 
-Then, it will display the hierarchical tree of the complete closing of dependencies by console.
+Then, it will display the result: a hierarchical tree of all the required modules and the paths.
 
-4. Lastly, the user enters the **download-modules** command:
+4. Finally, the user enters the **download-modules** command:
 
 `mozo> download-modules res0`
 
 Resulting in:
 
 
-Fig. 5 - Console output during module download.
+Fig. 7 - Modules download.
 
-Now, the user has the target module (com.stats.cli) and all its dependencies in his local environment.
+Now, the user has the target module (*com.stats.cli*) and all its dependencies in his local environment.
 
 
 #### Example 2
-To resolve and download the 60 modules required to compile and run Quickstart, the user must start the Mozo client (Mozo.class) and enter:
+To resolve and download the 60 modules required to compile and run the Quickstart class, the user must start the Mozo client (Mozo.class) and enter:
 
-`fm org.geotools.gt_shapefile,org.geotools.gt_swing` (fm is the abbreviated version of find-modules) as shown in Fig. 8:
+`fm org.geotools.gt_shapefile,org.geotools.gt_swing` (**fm** is the abbreviated version of **find-modules**) as shown in Fig. 8:
+
+
+Fig. 8 – Dependencies request of Quickstart with Mozo.
 
 [RemoteZip]:https://github.com/martinaguero/remotezip
 [GeoTools]:http://docs.geotools.org/latest/userguide/build/install/jdk.html
