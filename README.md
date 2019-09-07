@@ -45,18 +45,19 @@ Finally, with the dependencies tree and its paths, the client begins the transfe
 
 ## Appendix
 
-### Architecture of the middleware
-The middleware is a cloud service consisting of 2 client communication modules (Port and Apollo), another one that communicates with the entities (Model), one that concentrates common use utilities (Tools), the remote file extractor (RemoteZip) and the Mozo module, serving as the coordinator.
+### Components
+The middleware is a cloud service with 2 client communication modules (Port and Apollo), another one that communicates with the entities (Model), common use utilities (Tools), the remote file extractor (RemoteZip) and the Mozo module, as manager or resources.
 
 
-Fig. 6 – Mozo service components.
+Fig. 6 – Mozo components.
 
 ### Performance comparison
-The prototype was evaluated by comparing its performance to Maven, Gradle y Ivy. The test case consisted of solving and downloading the class Quickstart dependencies of GeoTools: http://docs.geotools.org/latest/userguide/build/install/jdk.html for which the corresponding descriptors were added to the 60 jars that integrate the closure, so that this proposal can be compared with current technologies.  The result measured in time is as follows:
+The prototype was tested by comparing its performance to Maven, Gradle and Ivy. The test case consisted of solving and downloading all the dependencies of the Quickstart class for [GeoTools], for which the corresponding descriptors were added to the 60 jars that integrate the closure, in order to have comparable dataset.  The result measured in time is as follows:
 
 
 
 Fig. 7 – Response time (less is better).
+
 
 ### Use cases
 
@@ -100,5 +101,6 @@ To resolve and download the 60 modules required to compile and run Quickstart, t
 `fm org.geotools.gt_shapefile,org.geotools.gt_swing` (fm is the abbreviated version of find-modules) as shown in Fig. 8:
 
 [RemoteZip]:https://github.com/martinaguero/remotezip
+[GeoTools]:http://docs.geotools.org/latest/userguide/build/install/jdk.html
 
 
