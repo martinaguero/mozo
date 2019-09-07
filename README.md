@@ -2,7 +2,7 @@
 Dependencies management
 
 ## Introduction
-This prototype is based on a thin client and a cloud service (middleware) for resolving and locating all the dependencies of Java modules. The service analyze modules descriptors and, from that information, dynamically locates all the dependencies (other modules) required to compile.
+This prototype is based on a thin client and a cloud service (middleware) for solving and locating the dependencies of Java modules. The service analyze modules descriptors and, from that information, dynamically locates all the dependencies (other modules) required to compile.
 
 
 
@@ -31,22 +31,22 @@ With this technology, the service receives high-level dependency resolution requ
 Finally, with the dependencies tree and its paths, the client begins the transfer from the repositories.
 
 ### Conceptual advantages
-* It is not an invasive solution, that is to say, it does not require adding metadata to the modules.
-* The resolution of the closure does not depend on the list of sources (repositories) defined in the descriptor file of the project/module. It is the intermediary who knows these sources. In this way, the software project is decoupled from the repositories. 
-* The intermediary can, transparently for the client, incorporate more sophisticated algorithms, such as cognitive computing tools.
+* It is not an invasive solution, it does not require adding metadata to the modules.
+* The closure does not depend on the list of sources (repositories) in the descriptor file of the project/module. It is the middleware who knows these sources, the software project is decoupled from the repositories. 
+* The middleware can, transparently for the client, incorporate more sophisticated algorithms, such as cognitive computing tools.
 
 ### Architecture advantages
 * The client always executes the latest version.
 * The paths to the modules are always verified.
 * The response time is acceptable, as only the descriptor file is transferred from the module to the intermediary.
-* Concentrating the solution on a cloud service allows permanent extensions and corrections without the need to update the client.
-* It would allow the user to easily create a web interface to download dependencies.
+* Concentrating the solution on a cloud service allows permanent enhancements without the need to update the client.
+* It would allow easily adding a web user interface for training new programmers.
 
 
 ## Appendix
 
 ### Components
-The middleware is a cloud service with 2 client communication modules (Port and Apollo), another one that communicates with the entities (Model), common use utilities (Tools), the remote file extractor (RemoteZip) and the Mozo module, as manager or resources.
+The middleware is a cloud service with two main communication modules (Port and Apollo), another one with the entities (Model), common use utilities (Tools), the remote file extractor (RemoteZip) and the Mozo module, as a manager of resources.
 
 
 Fig. 4 – Mozo components.
