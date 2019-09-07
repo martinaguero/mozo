@@ -42,42 +42,9 @@ Finally, with the dependencies tree and its routes, the client requests all the 
 * It would allow the user to easily create a web interface to download dependencies.
 
 
-# Appendix
+## Appendix
 
-## Example 1
-In this case, a statistics system requires the following modules to compile and execute: *com.stats.cli*, *com.stats.core*, *com.google.guava*, *org.apache.math* and *org.apache.rng* (Fig. 4).
-
-
-Fig. 4 - Module *com.stats.cli* and dependencies.
-
-To download this module with all it dependencies, the actions that the user must execute are:
-
-1. Download the client Mozo.class file from:
-
-http://trimatek.org/mozo/Mozo.class
-
-2. Run it from the command interface with:
-
-`$> java –cp . Mozo`
-
-3. Within the command console (prompt), the user enters:
-
-`mozo> find-modules com.stats.cli`
-
-Then, it will display the hierarchical tree of the complete closing of dependencies by console.
-
-4. Lastly, the user enters the command:
-
-`mozo> download-modules res0`
-
-Resulting in:
-
-
-Fig. 5 - Console output during module download.
-
-Now, the user has the target module (com.stats.cli) and all its dependencies in his local environment.
-
-## Architecture of the Middleware
+### Architecture of the Middleware
 The middleware is a cloud service consisting of 2 client communication modules (Port and Apollo), another one that communicates with the entities (Model), one that concentrates common use utilities (Tools), the remote file extractor (RemoteZip) and the Mozo module, serving as the coordinator.
 
 
@@ -90,12 +57,45 @@ The prototype was evaluated by comparing its performance to Maven, Gradle y Ivy.
 
 Fig. 7 – Response time (less is better).
 
+### Use Cases
 
-## Example 2
-To resolve and download the 60 modules necessary to run Quickstart, the user must start the Mozo client (Mozo.class) and enter:
-fm org.geotools.gt_shapefile,org.geotools.gt_swing (fm is the abbreviated version of find-modules) as shown in Fig. 8:
+#### Example 1
+In this case, a statistics system requires the following modules to compile and execute: *com.stats.cli*, *com.stats.core*, *com.google.guava*, *org.apache.math* and *org.apache.rng* (Fig. 4).
 
 
+Fig. 4 - Module *com.stats.cli* and it dependencies.
 
+To download this module with all the dependencies, the actions that the user must execute are:
+
+1. Download the client **Mozo.class** file from:
+
+http://trimatek.org/mozo/Mozo.class
+
+2. Run it from the command interface with:
+
+`$> java –cp . Mozo`
+
+3. Within the Mozo command prompt, the user enters the **find-modules** command:
+
+`mozo> find-modules com.stats.cli`
+
+Then, it will display the hierarchical tree of the complete closing of dependencies by console.
+
+4. Lastly, the user enters the **download-modules** command:
+
+`mozo> download-modules res0`
+
+Resulting in:
+
+
+Fig. 5 - Console output during module download.
+
+Now, the user has the target module (com.stats.cli) and all its dependencies in his local environment.
+
+
+#### Example 2
+To resolve and download the 60 modules required to compile and run Quickstart, the user must start the Mozo client (Mozo.class) and enter:
+
+`fm org.geotools.gt_shapefile,org.geotools.gt_swing` (fm is the abbreviated version of find-modules) as shown in Fig. 8:
 
 
