@@ -114,7 +114,7 @@ To resolve and download the 60 modules required to compile and run the Quickstar
 `fm org.geotools.gt_shapefile,org.geotools.gt_swing` (**fm** is the abbreviated version of **find-modules**) as shown in Fig. 8:
 
 ![Fig8](https://github.com/martinaguero/mozo/blob/master/org.trimatek.mozo.ui/icons/fig8.png)<br />
-Fig. 8 – Dependencies request of Quickstart with Mozo.
+<sub>Fig. 8 – Dependencies request of Quickstart with Mozo.</sub>
 
 [RemoteZip]:https://github.com/martinaguero/remotezip
 [GeoTools]:http://docs.geotools.org/latest/userguide/build/install/jdk.html
