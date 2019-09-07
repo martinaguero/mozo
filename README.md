@@ -27,15 +27,15 @@ With this technology, the development environment (client) is decoupled from the
 Since Java 9 (Java Module System), each module must have a mandatory descriptor (module-info file), so, this avoids the need of adding an external descriptor, such as Maven, Ivy and Gradle requires. Analizing the "requires" attribute of the descriptor, is enough to know the dependencies of each module:
 
 
-
-Fig. 2 – Relation between modules in a module-info descriptor.
+![Fig2](https://github.com/martinaguero/mozo/blob/master/org.trimatek.mozo.ui/icons/fig2.png)<br />
+<sub>Fig. 2 – Relation between modules in a module-info descriptor.</sub>
 
 The service algorithm iterates the references to modules until reaching the closure or the level of depth established
 in the configuration. To survey the dependencies of each module, first, the descriptor file is extracted remotely, and then, it is decompiled with the javap program (part of the JDK). See in the following diagram the dynamic interaction between the client (development environment), the middleware and the repositories:
 
 
-
-Fig. 3 – Dynamic representation.
+![Fig3](https://github.com/martinaguero/mozo/blob/master/org.trimatek.mozo.ui/icons/fig3.png)<br />
+<sub>Fig. 3 – Dynamic representation.</sub>
 
 This service extracts compressed files from remote repositories with the [RemoteZip] subproject. In order to optimize the response time to locate modules, the service extracts portions of bytes from servers that implements RFC 2616. With this feature, only the portion of bytes that represents the module descriptor is transferred from the repositories to the middleware.
 
@@ -55,7 +55,7 @@ Finally, with the dependencies tree and its paths, the client begins the transfe
 * Concentrating the solution on a cloud service allows permanent enhancements without the need to update the client.
 * It would allow easily adding a web user interface for training new programmers.
 
-
+<br />
 ## Appendix
 
 ### Components
