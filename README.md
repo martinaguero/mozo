@@ -2,13 +2,13 @@
 Dependencies management
 
 ## Summary
-This solution is based on a thin client and a cloud service for resolving and locating all the dependencies required by the devepment environment. Basically, its functionality consists in analyzing the descriptors of Java modules and, from that information, solving and locating all the dependencies required to compile.
+This solution is based on a thin client and a cloud service for resolving and locating all the dependencies of a Java module. Basically, its functionality consists in analyzing the descriptors and, from that information, solving and locating all the dependencies required to compile.
 
 
 
 Fig. 1 – General architecture of the system.
 
-With this technology, the development environment is decoupled from the repositories, being the middleware the entity that determines the location of the modules. This solution proposes that the client only sends the requests of direct dependencies to the cloud service to resolve closing and location.
+With this technology, the development environment is decoupled from the repositories, being the middleware the entity that determines the location of the modules. This solution proposes that the client only requests direct dependencies, and the cloud service resolves the transitives depedendencies and their locations.
 
 ## Technology
 Since Java 9 version (Java Module System) each module will be embedded by a mandatory (module-info), thus avoiding the need of adding an external descriptor, such as the ones used Maven, Ivy y Gradle. To analyze the ‘requires’ attribute is enough to know the dependencies of each module:
