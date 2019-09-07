@@ -3,8 +3,9 @@ Java modules dependencies management
 
 ## Table of Contents  
 - [Introduction](https://github.com/martinaguero/mozo/blob/master/README.md#introduction)  
-- [Technology](https://github.com/martinaguero/mozo/blob/master/README.md###technology)
-- [Summary](https://github.com/martinaguero/mozo/blob/master/README.md###summary)
+- [Technology](https://github.com/martinaguero/mozo/blob/master/README.md#technology)
+- [Summary](https://github.com/martinaguero/mozo/blob/master/README.md#summary)
+  - [Conceptual advantages](https://github.com/martinaguero/mozo/blob/master/README.md#conceptual-advantages)
 
 
 ## Introduction
