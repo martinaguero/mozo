@@ -80,7 +80,7 @@ In this case, a statistics system requires the following modules to compile and 
 ![Fig6](https://github.com/martinaguero/mozo/blob/master/org.trimatek.mozo.ui/icons/fig6.png)<br />
 <sub>Fig. 6 – Module *com.stats.cli* and it dependencies.</sub>
 
-To download this module with all the dependencies, the actions that the user must execute are:
+To download this module with all the dependencies, the user must:
 
 1. Download the client **Mozo.class** file from:
 
@@ -90,13 +90,13 @@ http://trimatek.org/mozo/Mozo.class
 
 `$> java –cp . Mozo`
 
-3. Within the Mozo command prompt, the user enters the **find-modules** command:
+3. Within the Mozo command prompt, enters the **find-modules** command:
 
 `mozo> find-modules com.stats.cli`
 
-Then, it will display the result: a hierarchical tree of all the required modules and the paths.
+Then, it will display the result in a hierarchical tree of all the required modules and the paths.
 
-4. Finally, the user enters the **download-modules** or the abbreviated version **dm** command:
+4. Finally, enters the **download-modules** or the abbreviated version **dm** command:
 
 `mozo> dm res1`
 
