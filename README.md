@@ -15,14 +15,14 @@ Since Java 9 (Java Module System), each module must have a mandatory descriptor 
 
 
 
-Fig. 2 - Relation between modules in a module-info descriptor.
+Fig. 2 – Relation between modules in a module-info descriptor.
 
 The service algorithm iterates the references to modules until reaching the closure or the level of depth established
 in the configuration. To survey the dependencies of each module, first, the descriptor file is extracted remotely, and then, it is decompiled with the javap program (part of the JDK). See in the following diagram the dynamic interaction between the client (development environment), the middleware and the repositories:
 
 
 
-Fig. 3 - Dynamic representation.
+Fig. 3 – Dynamic representation.
 
 This service extracts compressed files from remote repositories with the [RemoteZip] subproject. In order to optimize the response time to locate modules, the service extracts portions of bytes from servers that implements RFC 2616. With this feature, only the portion of bytes that represents the module descriptor is transferred from the repositories to the middleware.
 
@@ -65,7 +65,7 @@ Fig. 5 – Response time (less is better).
 In this case, a statistics system requires the following modules to compile and execute: *com.stats.cli*, *com.stats.core*, *com.google.guava*, *org.apache.math* and *org.apache.rng* (Fig. 4).
 
 
-Fig. 6 - Module *com.stats.cli* and it dependencies.
+Fig. 6 – Module *com.stats.cli* and it dependencies.
 
 To download this module with all the dependencies, the actions that the user must execute are:
 
@@ -90,7 +90,7 @@ Then, it will display the result: a hierarchical tree of all the required module
 Resulting in:
 
 
-Fig. 7 - Modules download.
+Fig. 7 – Modules download.
 
 Now, the user has the target module (*com.stats.cli*) and all its dependencies in his local environment.
 
