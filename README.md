@@ -2,7 +2,7 @@
 Java modules dependencies management
 
 ## Table of Contents  
-[Introduction](## Introduction)  
+[Introduction](https://github.com/martinaguero/mozo/blob/master/README.md#introduction)  
 [Technology](## Technology)  
 
 ## Introduction
