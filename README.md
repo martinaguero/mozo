@@ -116,7 +116,8 @@ To resolve and download the 60 modules required to compile and run the Quickstar
 ![Fig8](https://github.com/martinaguero/mozo/blob/master/org.trimatek.mozo.ui/icons/fig8.png)<br />
 <sub>Fig. 8 – Dependencies request of Quickstart with Mozo.</sub>
 <br />
-Last edit: AUG-08-2019
+<br />
+Last chang: AUG-08-2019
 
 [RemoteZip]:https://github.com/martinaguero/remotezip
 [GeoTools]:http://docs.geotools.org/latest/userguide/build/install/jdk.html
