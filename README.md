@@ -34,7 +34,7 @@ in the configuration. To survey the dependencies of each module, first, the desc
 ![Fig3](https://github.com/martinaguero/mozo/blob/master/org.trimatek.mozo.ui/icons/fig3.png)<br />
 <sub>Fig. 3 – Modules resolution workflow.</sub>
 
-This service extracts compressed files from remote repositories with the [RemoteZip] subproject. In order to optimize the response time to locate modules, the service extracts portions of bytes from servers that implements RFC 2616. With this feature, only the portion of bytes that represents the module descriptor is transferred from the repositories to the middleware.
+This service extracts compressed files from remote repositories with the [RemoteZip] subproject. In order to optimize the response time to locate modules, the service extracts portions of bytes from servers that implements partial content of the RFC 2616. With this feature, only the portion of bytes that represents the module descriptor is transferred from the repositories to the middleware.
 
 ## Summary
 With this technology, the service receives high-level dependency resolution requests (modules) from a thin client and, after "visiting" the repositories in search for all the required modules, it returns a list of paths to those dependencies (JSON). The middleware extracts the descriptors, analyzes its dependencies recursively, until the module tree is completed.
