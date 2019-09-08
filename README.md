@@ -1,7 +1,7 @@
 # Mozo 0.3
 Java modules dependencies management
 
-### Table of Contents  
+### Table of contents  
 - [Introduction](https://github.com/martinaguero/mozo/blob/master/README.md#introduction)  
 - [Technology](https://github.com/martinaguero/mozo/blob/master/README.md#technology)
 - [Summary](https://github.com/martinaguero/mozo/blob/master/README.md#summary)
