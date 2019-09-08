@@ -106,7 +106,7 @@ Now, the user has the target module (*com.stats.cli*) and all its dependencies i
 #### Example 2
 To resolve and download the 60 modules required to compile and run the Quickstart class, the user must start the Mozo client (Mozo.class) and enter:
 
-`fm org.geotools.gt_shapefile,org.geotools.gt_swing` (**fm** is the abbreviated version of **find-modules**) as shown in Fig. 8:
+`fm org.geotools.gt_shapefile,org.geotools.gt_swing` (**fm** is the abbreviated version of **find-modules**) as shown in Figure 8:
 
 ![Fig8](https://github.com/martinaguero/mozo/blob/master/org.trimatek.mozo.ui/icons/fig8.png)<br />
 <sub>Fig. 8 – Dependencies request of Quickstart with Mozo.</sub><br/>
