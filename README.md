@@ -51,7 +51,7 @@ Finally, with the dependencies tree and its paths, the client begins the transfe
 * The response time is acceptable, as only the descriptor file is transferred from the module to the intermediary.
 * Concentrating the solution on a cloud service allows permanent enhancements without the need to update the client.
 * It would allow easily adding a web user interface for training new programmers.
-&nbsp;
+    
 ## Appendix
 
 ### Components
@@ -65,7 +65,7 @@ The prototype was tested by comparing its performance to Maven, Gradle and Ivy. 
 
 ![Fig5](https://github.com/martinaguero/mozo/blob/master/org.trimatek.mozo.ui/icons/fig5.png)<br />
 <sub>Fig. 5 – Response time (less is better).</sub>
-&nbsp;
+  
 ### Use cases
 
 #### Example 1
