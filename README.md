@@ -116,7 +116,7 @@ And the result will be the dependencies tree:
 ![Fig9](https://github.com/martinaguero/mozo/blob/master/org.trimatek.mozo.ui/icons/fig9.png)<br />
 <sub>Fig. 9 – Result of find-modules command.</sub><br/>
 
-Finally, to copy the modules from the repositories to the local environment, the user must enter `dm res1` (**dm** is the abbreviated version of **download-modules**)
+Finally, to download the modules from the repositories to the local environment, the user must enter `dm res1` (**dm** is the abbreviated version of **download-modules**)
 
 <sub>Last update: SEP-08-2019</sub>
 
