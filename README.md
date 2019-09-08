@@ -32,7 +32,7 @@ The service algorithm iterates the references to modules until reaching the clos
 in the configuration. To survey the dependencies of each module, first, the descriptor file is extracted remotely, and then, it is decompiled with the javap program (part of the JDK). See in the following diagram the dynamic interaction between the client (development environment), the middleware and the repositories:
 
 ![Fig3](https://github.com/martinaguero/mozo/blob/master/org.trimatek.mozo.ui/icons/fig3.png)<br />
-<sub>Fig. 3 – Modules request and response.</sub>
+<sub>Fig. 3 – Modules resolution workflow.</sub>
 
 This service extracts compressed files from remote repositories with the [RemoteZip] subproject. In order to optimize the response time to locate modules, the service extracts portions of bytes from servers that implements RFC 2616. With this feature, only the portion of bytes that represents the module descriptor is transferred from the repositories to the middleware.
 
