@@ -75,8 +75,8 @@ In this case, a statistics system requires the following modules to compile and 
 <sub>Fig. 6 – Module *com.stats.cli* and it dependencies.</sub>
 
 <br />
-To download this module with all the dependencies, the user must:
-  <br />  
+To download this module with all the dependencies, the user must:  
+
 1. Download the client **Mozo.class** file from:
 
 http://trimatek.org/mozo/Mozo.class
