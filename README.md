@@ -17,22 +17,19 @@ Java modules dependencies management
 ## Introduction
 This prototype is based on a thin client and a cloud service (middleware) for solving and locating the dependencies of Java modules. The service analyze modules descriptors and dynamically locates all the dependencies (other modules) required to compile.
 
-
-
-Fig. 1 – Basic architecture.
+![Fig1](https://github.com/martinaguero/mozo/blob/master/org.trimatek.mozo.ui/icons/fig1.png)<br />
+<sub>Fig. 1 – Basic architecture.</sub>
 
 With this technology, the development environment (client) is decoupled from the repositories. The middleware search for the modules, not the client. It also resolves transitives dependencies.
 
 ## Technology
 Since Java 9 (Java Module System), each module must have a mandatory descriptor (module-info file), so, this avoids the need of adding an external descriptor, such as Maven, Ivy and Gradle requires. Analizing the "requires" attribute of the descriptor, is enough to know the dependencies of each module:
 
-
 ![Fig2](https://github.com/martinaguero/mozo/blob/master/org.trimatek.mozo.ui/icons/fig2.png)<br />
 <sub>Fig. 2 – Relation between modules in a module-info descriptor.</sub>
 
 The service algorithm iterates the references to modules until reaching the closure or the level of depth established
 in the configuration. To survey the dependencies of each module, first, the descriptor file is extracted remotely, and then, it is decompiled with the javap program (part of the JDK). See in the following diagram the dynamic interaction between the client (development environment), the middleware and the repositories:
-
 
 ![Fig3](https://github.com/martinaguero/mozo/blob/master/org.trimatek.mozo.ui/icons/fig3.png)<br />
 <sub>Fig. 3 – Dynamic representation.</sub>
@@ -115,7 +112,7 @@ To resolve and download the 60 modules required to compile and run the Quickstar
 ![Fig8](https://github.com/martinaguero/mozo/blob/master/org.trimatek.mozo.ui/icons/fig8.png)<br />
 <sub>Fig. 8 – Dependencies request of Quickstart with Mozo.</sub><br/>
 
-<sub>Last update: AUG-08-2019</sub>
+<sub>Last update: SEP-08-2019</sub>
 
 [RemoteZip]:https://github.com/martinaguero/remotezip
 [GeoTools]:http://docs.geotools.org/latest/userguide/build/install/jdk.html
