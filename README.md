@@ -86,7 +86,7 @@ http://trimatek.org/mozo/Mozo.class
 
 `$> java –cp . Mozo`
 
-3. Within the Mozo command prompt, enters the **find-modules** command:
+3. Within the Mozo command prompt, the user enters the **find-modules** command:
 
 `mozo> find-modules com.stats.cli`
 
