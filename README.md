@@ -111,7 +111,7 @@ To resolve and download the 60 modules required to compile and run the Quickstar
 ![Fig8](https://github.com/martinaguero/mozo/blob/master/org.trimatek.mozo.ui/icons/fig8.png)<br />
 <sub>Fig. 8 – Dependencies request of Quickstart with Mozo.</sub><br/>
 
-And the result will be the dependencies tree:
+The result is be the dependencies tree:
 
 ![Fig9](https://github.com/martinaguero/mozo/blob/master/org.trimatek.mozo.ui/icons/fig9.png)<br />
 <sub>Fig. 9 – Complete module dependencies and its paths.</sub><br/>
