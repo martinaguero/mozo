@@ -111,6 +111,13 @@ To resolve and download the 60 modules required to compile and run the Quickstar
 ![Fig8](https://github.com/martinaguero/mozo/blob/master/org.trimatek.mozo.ui/icons/fig8.png)<br />
 <sub>Fig. 8 – Dependencies request of Quickstart with Mozo.</sub><br/>
 
+And the result will be the dependencies tree:
+
+![Fig9](https://github.com/martinaguero/mozo/blob/master/org.trimatek.mozo.ui/icons/fig9.png)<br />
+<sub>Fig. 9 – Result of find-modules command.</sub><br/>
+
+Finally, to copy the modules from the repositories to the local environment, the user must enter `dm res1` (**dm** is the abbreviated version of **download-modules**)
+
 <sub>Last update: SEP-08-2019</sub>
 
 [RemoteZip]:https://github.com/martinaguero/remotezip
