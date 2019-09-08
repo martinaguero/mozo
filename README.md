@@ -52,7 +52,6 @@ Finally, with the dependencies tree and its paths, the client begins the transfe
 * Concentrating the solution on a cloud service allows permanent enhancements without the need to update the client.
 * It would allow easily adding a web user interface for training new programmers.
 
-<br />
 ## Appendix
 
 ### Components
