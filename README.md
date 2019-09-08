@@ -8,7 +8,7 @@ Java modules dependencies management
   - [Conceptual advantages](https://github.com/martinaguero/mozo/blob/master/README.md#conceptual-advantages)
   - [Architectural advantages](https://github.com/martinaguero/mozo/blob/master/README.md#architectural-advantages)
 - [Appendix](https://github.com/martinaguero/mozo/blob/master/README.md#appendix)
-  - [Components](https://github.com/martinaguero/mozo/blob/master/README.md#components)
+  - [Service](https://github.com/martinaguero/mozo/blob/master/README.md#service)
   - [Performance comparison](https://github.com/martinaguero/mozo/blob/master/README.md#performance-comparison)
   - [Use cases](https://github.com/martinaguero/mozo/blob/master/README.md#use-cases)
     - [Example 1](https://github.com/martinaguero/mozo/blob/master/README.md#example-1)
@@ -54,7 +54,7 @@ Finally, with the dependencies tree and its paths, the client begins the transfe
     
 ## Appendix
 
-### Components
+### Service
 The middleware is a cloud service with two main communication modules (Port and Apollo), another one with the entities (Model), common use utilities (Tools), the remote file extractor (RemoteZip) and the Mozo module, as a manager of resources.
 
 ![Fig4](https://github.com/martinaguero/mozo/blob/master/org.trimatek.mozo.ui/icons/fig4.png)<br />
