@@ -118,7 +118,7 @@ The result is the dependencies tree:
 
 Finally, to download the modules from the repositories to the local environment, the user must enter `dm res1` (**dm** is the abbreviated version of **download-modules**)
 
-<sub>Contact: trimatek.org@gmail.com</sub>
+<sub>Contact: trimatek.org@gmail.com</sub><br />
 <sub>Last update: SEP-08-2019</sub>
 
 [RemoteZip]:https://github.com/martinaguero/remotezip
