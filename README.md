@@ -55,7 +55,7 @@ Finally, with the dependencies tree and its paths, the client begins the transfe
 ## Appendix
 
 ### Service
-The middleware is a cloud service with two main communication modules (Port and Apollo), another one with the entities (Model), common use utilities (Tools), the remote file extractor (RemoteZip) and the Mozo module, as a manager of resources.
+The middleware is a cloud service with two main communication modules (Port and Apollo), another one with the entities (Model), common use utilities (Tools), the remote file extractor (RemoteZip) and the Mozo module, as a manager of resources:
 
 ![Fig4](https://github.com/martinaguero/mozo/blob/master/org.trimatek.mozo.ui/icons/fig4.png)<br />
 <sub>Fig. 4 – Mozo components.</sub>
@@ -119,7 +119,7 @@ The result is the dependencies tree:
 Finally, to download the modules from the repositories to the local environment, the user must enter `dm res1` (**dm** is the abbreviated version of **download-modules**)
 
 <sub>Contact: trimatek.org@gmail.com</sub><br />
-<sub>Last update: SEP-09-2019</sub>
+<sub>Last update: SEP-24-2019</sub>
 
 [RemoteZip]:https://github.com/martinaguero/remotezip
 [GeoTools]:http://docs.geotools.org/latest/userguide/build/install/jdk.html
