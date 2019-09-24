@@ -15,15 +15,15 @@ Java modules dependencies management
     - [Example 2](https://github.com/martinaguero/mozo/blob/master/README.md#example-2)
 
 ## Introduction
-This prototype is based on a thin client and a cloud service (middleware) for solving and locating the dependencies of Java modules. The service analyzes modules descriptors and dynamically locates all the dependencies (other modules) required to compile.
+This prototype is based on a thin client and a cloud service (middleware) for solving and locating the dependencies of Java modules. The service analyzes module descriptors and dynamically locates all the dependencies (other modules) required to compile.
 
 ![Fig1](https://github.com/martinaguero/mozo/blob/master/org.trimatek.mozo.ui/icons/fig1.png)<br />
 <sub>Fig. 1 – Basic architecture.</sub>
 
-With this technology, the development environment (client) is decoupled from the repositories. The middleware search for the modules, not the client. It also resolves transitives dependencies.
+With this technology, the development environment (client) is decoupled from the repositories. The middleware search for the modules, not the client. It also resolves transitive dependencies.
 
 ## Technology
-Since Java 9 (Java Module System), each module must have a mandatory descriptor (module-info file), so, this avoids the need of adding an external descriptor, such as Maven, Ivy and Gradle requires. Analizing the "requires" attribute of the descriptor, is enough to know the dependencies of each module:
+Since Java 9 (Java Module System), each module must have a mandatory descriptor (module-info file), so this avoids the need of adding an external descriptor, such as Maven, Ivy and Gradle requirements. Analyzing the "requires" attribute of the descriptor is enough to know the dependencies of each module:
 
 ![Fig2](https://github.com/martinaguero/mozo/blob/master/org.trimatek.mozo.ui/icons/fig2.png)<br />
 <sub>Fig. 2 – Relation between modules in a module-info descriptor.</sub>
@@ -34,15 +34,15 @@ in the configuration. To survey the dependencies of each module, first, the desc
 ![Fig3](https://github.com/martinaguero/mozo/blob/master/org.trimatek.mozo.ui/icons/fig3.png)<br />
 <sub>Fig. 3 – Modules resolution workflow.</sub>
 
-This service extracts compressed files from remote repositories with the [RemoteZip] subproject. In order to optimize the response time to locate modules, the service extracts portions of bytes from servers that implements partial content of the RFC 2616. With this feature, only the portion of bytes that represents the module descriptor is transferred from the repositories to the middleware.
+This service extracts compressed files from remote repositories with the [RemoteZip] subproject. In order to optimize the response time to locate modules, the service extracts portions of bytes from servers that implement Partial Content (RFC 2616). With this feature, only the portion of bytes that represents the module descriptor is transferred from the repositories to the middleware.
 
 ## Summary
-With this technology, the service receives high-level dependency resolution requests (modules) from a thin client and, after "visiting" the repositories in search for all the required modules, it returns a list of paths to those dependencies (JSON). The middleware extracts the descriptors, analyzes its dependencies recursively, until the module tree is completed.
+With this technology, the service receives high-level dependency resolution requests (modules) from a thin client and, after "visiting" the repositories in search for all the required modules, it returns a list of paths to those dependencies (JSON). The middleware extracts the descriptors and analyzes its dependencies recursively, until the module tree is completed.
 Finally, with the dependencies tree and its paths, the client begins the transfer from the repositories.
 
 ### Conceptual advantages
-* It is not an invasive solution, it does not require adding metadata to the modules.
-* The closure does not depend on the list of sources (repositories) in the descriptor file of the project/module. It is the middleware who knows these sources, the software project is decoupled from the repositories. 
+* It is not an invasive solution; it does not require adding metadata to the modules.
+* The closure does not depend on the list of sources (repositories) in the descriptor file of the project/module. It is the middleware that knows these sources; the software project is decoupled from the repositories. 
 * The middleware can, transparently for the client, incorporate more sophisticated algorithms, such as cognitive computing tools.
 
 ### Architectural advantages
@@ -92,11 +92,11 @@ http://trimatek.org/mozo/Mozo.class
 
 Then, it will display the result in a hierarchical tree of all the required modules and the paths.
 
-4. Finally, enters the **download-modules** or the abbreviated version **dm** command:
+4. Finally, enter the **download-modules** or the abbreviated version **dm** command:
 
 `mozo> dm res1`
 
-Resulting in:
+It will result in:
 
 ![Fig7](https://github.com/martinaguero/mozo/blob/master/org.trimatek.mozo.ui/icons/fig7.png)<br />
 <sub>Fig. 7 – Modules download.</sub>
