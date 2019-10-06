@@ -118,10 +118,12 @@ The result is the dependencies tree:
 
 Finally, to download the modules from the repositories to the local environment, the user must enter `dm res1` (**dm** is the abbreviated version of **download-modules**)
 
+<sub>Source</sub><br />
 <sub>Contact: trimatek.org@gmail.com</sub><br />
-<sub>Last update: SEP-28-2019</sub>
+<sub>Last update: OCT-05-2019</sub>
 
 [RemoteZip]:https://github.com/martinaguero/remotezip
 [GeoTools]:http://docs.geotools.org/latest/userguide/tutorial/quickstart/maven.html
+[Source]:http://sedici.unlp.edu.ar/handle/10915/65497
 
 
