@@ -118,7 +118,7 @@ The result is the dependencies tree:
 
 Finally, to download the modules from the repositories to the local environment, the user must enter `dm res1` (**dm** is the abbreviated version of **download-modules**)
 
-<sub>Source</sub><br />
+<sub>[Source]</sub><br />
 <sub>Contact: trimatek.org@gmail.com</sub><br />
 <sub>Last update: OCT-05-2019</sub>
 
