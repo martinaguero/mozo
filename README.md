@@ -1,4 +1,4 @@
-# Mozo 0.3
+# Mozo 0.31
 Java modules dependencies management
 
 ### Table of contents  
