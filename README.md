@@ -120,7 +120,7 @@ Finally, to download the modules from the repositories to the local environment,
 
 <sub>More info: [http://sedici.unlp.edu.ar/handle/10915/65497]</sub><br />
 <sub>Contact: trimatek.org@gmail.com</sub><br />
-<sub>Last update: OCT-05-2019</sub>
+<sub>Last update: FEB-26-2020</sub>
 
 [RemoteZip]:https://github.com/martinaguero/remotezip
 [GeoTools]:http://docs.geotools.org/latest/userguide/tutorial/quickstart/maven.html
